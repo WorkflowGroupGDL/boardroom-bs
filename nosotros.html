@@ -247,7 +247,7 @@ https://templatemo.com/tm-569-edu-meeting
   <!-- <section class="contact-us bg-dark" id="contact"> -->
   <section class="contact-us" id="contact">
     <div class="container position-relative">
-      <div class="row ">
+      <div class="row pt-5">
         <div class="col-lg-2 col-md-2 col-4">
           <h6 class="text-white text-sm">Conócenos</h6>
           <ul class="flex-column ms-n3 nav">
@@ -258,13 +258,13 @@ https://templatemo.com/tm-569-edu-meeting
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+              <a class="nav-link text-white opacity-8" href="historia.html" target="_blank">
                 Nuestra Historia
               </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+              <a class="nav-link text-white opacity-8" href="equipo.html" target="_blank">
                 Equipo Directivo
               </a>
             </li>
@@ -280,19 +280,20 @@ https://templatemo.com/tm-569-edu-meeting
           <h6 class="text-white text-sm">Programas</h6>
           <ul class="flex-column ms-n3 nav">
             <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+              <a class="nav-link text-white opacity-8" href="strategic-leadership-program.html" target="_blank">
                 Directivos
               </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+              <a class="nav-link text-white opacity-8" href="strategic-execution-people-leadership.html"
+                target="_blank">
                 Management
               </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+              <a class="nav-link text-white opacity-8" href="frontline-leadership-excellence.html" target="_blank">
                 Supervisores
               </a>
             </li>
@@ -305,7 +306,7 @@ https://templatemo.com/tm-569-edu-meeting
           </ul>
         </div>
         <div class="col-lg-2 col-md-2 col-4">
-          <h6 class="text-white text-sm">Pages</h6>
+          <h6 class="text-white text-sm">Paginas</h6>
           <ul class="flex-column ms-n3 nav">
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="#" target="_blank">
@@ -321,13 +322,7 @@ https://templatemo.com/tm-569-edu-meeting
 
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="#" target="_blank">
-                Jobs
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="#" target="_blank">
-                Press
+                Trabaja con Nosotros
               </a>
             </li>
 
@@ -343,17 +338,23 @@ https://templatemo.com/tm-569-edu-meeting
           <ul class="flex-column ms-n3 nav">
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="#" target="_blank">
-                Claim
+                Uso de Cookies
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="#" target="_blank">
-                Privacidad
+                Politica de Privacidad
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="#" target="_blank">
                 Terminos y Condiciones
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white opacity-8" href="#" target="_blank">
+                Press
               </a>
             </li>
           </ul>
@@ -381,22 +382,39 @@ https://templatemo.com/tm-569-edu-meeting
       </div>
       <hr class="horizontal light mb-4 mt-lg-4">
       <div class="row">
-        <div class="col-lg-6 text-start">
+        <div class="col-lg-12 text-start">
           <h6 class="text-white">Suscríbete a nuestros boletines informativos.</h6>
-          <p class="text-white opacity-8 mb-lg-0 mb-3">Recibe semanalmente en tu correo electrónico las últimas
+          <p class="text-white opacity-8 mb-lg-0 mb-3">Recibe en tu correo electrónico las últimas
             noticias, artículos y recursos.</p>
         </div>
-        <div class="col-lg-4 ms-auto text-end my-auto">
-          <div class="row">
-            <div class="col-md-8 col-7">
-              <div class="input-group input-group-outline">
-                <label class="form-label text-light">E-mail: &nbsp;</label>
-                <input class="form-control" type="email">
+        <div class="row">
+          <div class="col-lg-12 d-flex justify-content-center flex-column ms-auto">
+            <form role="form" id="custom-form">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="input-group input-group-outline mb-4">
+                    <label class="form-label text-light">Nombres...</label>
+                    <input class="form-control" type="text" id="firstname" name="firstname">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="input-group input-group-outline mb-4">
+                    <label class="form-label text-light">Apellidos...</label>
+                    <input class="form-control" type="text" id="lastname" name="lastname">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="input-group input-group-outline mb-4">
+                    <label class="form-label text-light">Tu Email...</label>
+                    <input class="form-control" type="text" id="email" name="email">
+                  </div>
+                </div>
+                <div class="col-sm-3 ps-0">
+                  <button type="submit" class="btn bg-light w-100" value="Enviar">Inscribir</button>
+                </div>
+                <div id="thankyou"></div>
               </div>
-            </div>
-            <div class="col-md-4 col-5 text-start ps-0">
-              <button type="button" class="btn btn-light mb-0">Suscribete</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
