@@ -471,7 +471,7 @@ header
   position: absolute;
   width: 200px;
   box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.06);
-  overflow: hidden;
+  /* overflow: hidden; */
   top: 40px;
   opacity: 0;
   transition: all .3s;
@@ -1604,6 +1604,35 @@ section.nosotros-page h2 {
   letter-spacing: 1px;
 }
 
+section.programas-page {
+  background-image: url(../images/programas.webp);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 230px;
+  padding-bottom: 110px;
+  text-align: center;
+}
+
+section.programas-page h6 {
+  margin-top: 0px;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+section.programas-page h2 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
 
 section.historia-page {
   background-image: url(../images/historia.webp);
@@ -2156,4 +2185,12 @@ html {
   text-align: center;
   color: #fff;
   padding: 40px;
+}
+
+.programas-i1 {
+  background-image: url(../images/programas/p-directivo.jpeg);
+}
+
+.programas-i1 .img {
+  background-image: url(../images/programas/p-directivo.jpeg);
 }
