@@ -1,0 +1,1 @@
+Notification.requestPermission().then((e=>{"granted"===e&&getToken()}));import{getToken}from"firebase/messaging";function getToken(){getToken(messaging,{vapidKey:"BO7ktUWPeipX7Jg1klk5fTBPlnSPJBwulguRngSHtrhhVq62BVCWR15vS-oxUxkFabA_ZHHUAiQMQVYaGa_bxX8"}).then((e=>{})).catch((e=>{}))}import{onMessage}from"firebase/messaging";onMessage(messaging,(e=>{}));
