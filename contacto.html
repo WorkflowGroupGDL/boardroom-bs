@@ -183,42 +183,120 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-8 mx-auto">
-                  <div class="card card-plain">
-                    <form id="contact-form" method="post" autocomplete="off">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="input-group input-group-static mb-4">
-                              <label>Nombre</label>
-                              <input type="email" class="form-control" placeholder="Nombre">
-                              <span class="input-group-text"><i class="fa fa-user"></i></span>
-                            </div>
-                          </div>
-                          <div class="col-md-6 ps-md-2">
-                            <div class="input-group input-group-static mb-4">
-                              <label>Email</label>
-                              <input type="email" class="form-control" placeholder="Email">
-                              <span class="input-group-text"><i class="fa fa-inbox"></i></span>
-                            </div>
+              <div class="row text-start">
+                <div class="col-lg-8 text-left">
+                  <form role="form" id="custom-form">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Nombres</label>
+                            <input class="form-control" aria-label="Nombres..." type="text" type="text" id="firstname"
+                              name="firstname" required>
                           </div>
                         </div>
-                        <div class="form-group mb-4 mt-md-0 mt-4">
-                          <div class="input-group input-group-static mb-4">
-                            <label>What can we help you?</label>
-                            <textarea name="message" class="form-control" id="message" rows="6"
-                              placeholder="Describe your problem in at least 250 characters"></textarea>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12 text-center">
-                            <button type="submit" class="btn bg-gradient-info mt-4">Send Message</button>
+                        <div class="col-md-6 ps-2">
+                          <div class="input-group input-group-dynamic">
+                            <label class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" placeholder="" aria-label="Apellidos..." type="text"
+                              id="lastname" name="lastname" required>
                           </div>
                         </div>
                       </div>
-                    </form>
-                  </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Correo</label>
+                            <input class="form-control" aria-label="Correo..." type="text" id="email" name="email"
+                              required>
+                          </div>
+                        </div>
+                        <div class="col-md-6 ps-2">
+                          <div class="input-group input-group-dynamic">
+                            <label class="form-label">Telefono</label>
+                            <input type="text" class="form-control" placeholder="" aria-label="Telefono..." type="text"
+                              id="mobilephone" name="mobilephone" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Ciudad</label>
+                            <input class="form-control" aria-label="Numero Ciudad..." type="text" id="city" name="city"
+                              required>
+                          </div>
+                        </div>
+                        <div class="col-md-6 ps-2">
+                          <div class="input-group input-group-dynamic">
+                            <label class="form-label">Estado</label>
+                            <input type="text" class="form-control" placeholder="" aria-label="Estado..." type="text"
+                              id="state" name="state" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Pais</label>
+                            <input class="form-control" aria-label="Pais..." type="text" id="country" name="country"
+                              required>
+                          </div>
+                        </div>
+                        <div class="col-md-6 ps-2">
+                          <div class="input-group input-group-dynamic">
+                            <label class="form-label">Empresa</label>
+                            <input type="text" class="form-control" aria-label="Empresa..." type="text" id="company"
+                              name="company" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="input-group mb-4 input-group-static">
+                        <label>Dejanos su mensaje aqui</label>
+                        <textarea name="cual_es_su_objetivo_" class="form-control" id="cual_es_su_objetivo_"
+                          rows="4"></textarea>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-check form-switch mb-4 d-flex align-items-center">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
+                            <label class="form-check-label ms-3 mb-0" for="flexSwitchCheckDefault">I agree to the <a
+                                href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a>.</label>
+                          </div>
+                        </div>
+                        <div class="cf-turnstile" data-sitekey="0x4AAAAAACBm_Bj46zJneKsn" data-theme="light"
+                          data-size="normal" data-callback="onSuccess"></div>
+                        <div class="col-md-12">
+                          <button type="submit" class="btn bg-gradient-dark w-100" value="Enviar">Send Message</button>
+                        </div>
+                        <div id="thankyou"></div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <p>
+                            Obtén una cotización hoy mismo. Llena el formulario y descubre cómo podemos potenciar tu
+                            negocio.
+                            <a href="https://form.jotform.com/260194548984875" class="text-bolder" target="_blank">clic
+                              aqui
+                              para abrir el
+                              formulario: </a>
+                          </p>
+                          <p class="blockquote text-md text-bolder text-info" style="padding-left: 20px;">En Vive Hoy
+                            trabajamos
+                            únicamente con
+                            personas y
+                            organizaciones comprometidas
+                            con procesos reales de transformación.
+                            No enviamos cotizaciones genéricas ni trabajamos por volumen.
+                            Cada propuesta se diseña con base en impacto, alcance y objetivos claros.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-lg-4 text-center">
+                  Trabajamos con empresas y clientes en toda Latinoamérica hispanohablante.
+                  <img src="assets/images/mapa.webp" class="img-fluid">
                 </div>
               </div>
             </div>
