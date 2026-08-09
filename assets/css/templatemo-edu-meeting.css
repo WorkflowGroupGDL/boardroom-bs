@@ -2304,3 +2304,15 @@ html {
   /* Opcional: Word suele bajar un punto el tamaño de la cita */
   font-size: 1rem;
 }
+
+.color-principal-blue {
+  background-color: #0A1631;
+}
+
+.color-principal-red {
+  background-color: #8A2525;
+}
+
+.color-principal-yellow {
+  background-color: #f5a425;
+}
