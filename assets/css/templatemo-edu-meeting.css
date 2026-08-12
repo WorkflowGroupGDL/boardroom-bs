@@ -1749,6 +1749,64 @@ section.becas-page h2 {
   letter-spacing: 1px;
 }
 
+section.por-que-page {
+  background-image: url(../images/por-que.webp);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 230px;
+  padding-bottom: 110px;
+  text-align: center;
+}
+
+section.por-que-page h6 {
+  margin-top: 0px;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+section.por-que-page h2 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #f0dddd;
+  letter-spacing: 1px;
+}
+
+section.claustro-page {
+  background-image: url(../images/claustro.webp);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 230px;
+  padding-bottom: 110px;
+  text-align: center;
+}
+
+section.claustro-page h6 {
+  margin-top: 0px;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+section.claustro-page h2 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
 
 section.historia-page {
   background-image: url(../images/historia.webp);
