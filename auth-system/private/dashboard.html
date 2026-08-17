@@ -358,7 +358,7 @@
         document.getElementById('user-location').innerText = [user.city, user.country].filter(Boolean).join(', ') || 'Ubicación no registrada';
 
         // Estado y Programa
-        document.getElementById('user-stage').innerText = user.jobtitle || 'Ejecutivo';
+        document.getElementById('user-stage').innerText = user.jobtitl || 'Ejecutivo';
         document.getElementById('user-status').innerText = user.hs_lead_status || 'Activo';
         document.getElementById('user-program').innerText = user.programa_inscrito || 'Sin programa asignado';
 
