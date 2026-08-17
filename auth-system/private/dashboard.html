@@ -115,7 +115,7 @@
   </header>
 
   <!-- Banner Superior del Dashboard -->
-  <section class="claustro-page header-text" id="top">
+  <section class="user-page header-text" id="top">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -347,11 +347,10 @@
       try {
         const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
         document.getElementById('user-info').innerText = `Sesión activa como ${fullName}`;
-
         // Datos Personales
-        document.getElementById('user-name').innerText = fullName || 'Usuario';
+        document.getElementById('user-name').innerText = fullName || '${ fullName }';
         document.getElementById('user-email').innerText = user.email || 'N/A';
-        document.getElementById('user-phone').innerText = user.phone || user.mobilephone || 'No registrado';
+        document.getElementById('user-phone').innerText = user.phone || user.mobilephone || `${user.mobilephone}`;
 
         // Datos Profesionales
         document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
@@ -359,7 +358,7 @@
         document.getElementById('user-location').innerText = [user.city, user.country].filter(Boolean).join(', ') || 'Ubicación no registrada';
 
         // Estado y Programa
-        document.getElementById('user-stage').innerText = user.lifecyclestage || 'Ejecutivo';
+        document.getElementById('user-stage').innerText = user.jobtitle || 'Ejecutivo';
         document.getElementById('user-status').innerText = user.hs_lead_status || 'Activo';
         document.getElementById('user-program').innerText = user.programa_inscrito || 'Sin programa asignado';
 
