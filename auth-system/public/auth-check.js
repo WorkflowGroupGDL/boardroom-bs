@@ -1,8 +1,8 @@
-// public/assets/js/auth-check.js o public/auth-check.js
-
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://127.0.0.1:3000' 
-  : '';
+const API_BASE_URL = (
+  window.BOARDROOM_API_BASE_URL ||
+  window.__BOARDROOM_CONFIG__?.apiBaseUrl ||
+  window.location.origin
+).replace(/\/$/, '');
 
 function getToken() {
   return localStorage.getItem('jwt_token');
@@ -56,15 +56,14 @@ function logout() {
 
 async function renderAuthNavigation(userData = null) {
   const navContainer = document.getElementById('auth-nav-container');
-  if (!navContainer) return; // Si no existe el contenedor en la vista actual, interrumpe silenciosamente
+  if (!navContainer) return;
 
-  // Si ya se proporcionó userData se usa; si no, se verifica la sesión
   const user = userData !== null ? userData : await checkAuth();
 
   if (user) {
-    const displayName = 
-      user.firstname || 
-      user.nombre || 
+    const displayName =
+      user.firstname ||
+      user.nombre ||
       (user.email ? user.email.split('@')[0] : 'Mi Cuenta');
 
     navContainer.innerHTML = `
@@ -88,7 +87,6 @@ async function renderAuthNavigation(userData = null) {
   }
 }
 
-// Exponer funciones clave al objeto global window para asegurar disponibilidad en todos los scripts
 window.getToken = getToken;
 window.setToken = setToken;
 window.removeToken = removeToken;
@@ -97,7 +95,6 @@ window.requireAuth = requireAuth;
 window.logout = logout;
 window.renderAuthNavigation = renderAuthNavigation;
 
-// Inicialización automática cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
   renderAuthNavigation();
 });
