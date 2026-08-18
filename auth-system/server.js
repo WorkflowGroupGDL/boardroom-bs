@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const app = express();
 
-// Middlewares
+// 1. MIDDLEWARES GLOBALES
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,11 +19,13 @@ const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// 1. SERVIR ARCHIVOS ESTÁTICOS
-// Configura la carpeta 'public' para servir HTML, JS y CSS
+// Clave secreta unificada para JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
+
+// Archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware de Verificación JWT para Rutas Protegidas
+// 2. MIDDLEWARE DE AUTENTICACIÓN (Único e Integrado)
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -32,39 +34,18 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ success: false, message: 'Acceso no autorizado. Falta token.' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026', (err, user) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ success: false, message: 'Token inválido o expirado.' });
     }
-    req.user = user;
+    req.user = decoded;
     next();
   });
 };
 
-// 2. RUTAS DE LA API (Definidas antes de los fallbacks)
-// server.js (Node.js / Express)
-app.get('/api/profile', (req, res) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+// 3. ENDPOINTS DE LA API
 
-  if (!token) {
-    return res.status(401).json({ success: false, message: 'Token requerido' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, user) => {
-    if (err) {
-      return res.status(403).json({ success: false, message: 'Token inválido o expirado' });
-    }
-    
-    // Retornar datos del usuario autenticado
-    res.json({
-      success: true,
-      user: user
-    });
-  });
-});
-
-// Endpoint de Autenticación (Login)
+// A. Endpoint de Autenticación (Login)
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -79,7 +60,7 @@ app.post('/api/login', async (req, res) => {
     let userVerified = false;
     let userData = null;
 
-    // A. Búsqueda en HubSpot
+    // Búsqueda en HubSpot
     if (process.env.HUBSPOT_ACCESS_TOKEN) {
       try {
         const PublicObjectSearchRequest = {
@@ -119,7 +100,7 @@ app.post('/api/login', async (req, res) => {
       }
     }
 
-    // B. Usuario de Respaldo / Pruebas Locales
+    // Usuario de Respaldo / Pruebas Locales
     if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
       userVerified = true;
       userData = {
@@ -135,12 +116,10 @@ app.post('/api/login', async (req, res) => {
       };
     }
 
-    // C. Generación del JWT y Respuesta
+    // Generación del JWT y Respuesta
     if (userVerified) {
-      const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
       const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
-
-      const token = jwt.sign(userData, secret, { expiresIn });
+      const token = jwt.sign(userData, JWT_SECRET, { expiresIn });
 
       return res.json({
         success: true,
@@ -165,7 +144,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Endpoint Protegido de Perfil para el Dashboard (Coincide con auth-check.js)
+// B. Endpoint Protegido de Perfil (Unificado para auth-check.js)
 app.get('/api/profile', authenticateToken, (req, res) => {
   res.json({
     success: true,
@@ -174,24 +153,7 @@ app.get('/api/profile', authenticateToken, (req, res) => {
   });
 });
 
-// Endpoint en tu Node.js server.js
-app.get('/api/profile', async (req, res) => {
-  try {
-    const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
-      headers: {
-        'Authorization': `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const data = await response.json();
-    return res.status(response.status).json(data);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error al consultar HubSpot', details: error.message });
-  }
-});
-
-// Alias por compatibilidad
+// C. Alias de Perfil por compatibilidad
 app.get('/api/user/profile', authenticateToken, (req, res) => {
   res.json({
     success: true,
@@ -200,9 +162,9 @@ app.get('/api/user/profile', authenticateToken, (req, res) => {
   });
 });
 
-// 3. ENRUTAMIENTO BASE / FALLBACK
-// Redirige la raíz '/' hacia public/index.html
-// Manejador para rutas /api/ no encontradas (evita devolver HTML)
+// 4. FALLBACKS Y MANEJO DE RUTAS
+
+// Control de rutas /api/ no encontradas (Devuelve JSON en lugar de HTML 404)
 app.use('/api/*', (req, res) => {
   res.status(404).json({
     success: false,
@@ -210,24 +172,16 @@ app.use('/api/*', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
+// Sirve la aplicación web estática para cualquier otra ruta
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Captura cualquier ruta no definida y sirve index.html
-app.get('/*path', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// 5. INICIALIZACIÓN DEL SERVIDOR
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor de Boardroom Business School corriendo en el puerto ${PORT}`);
 });
-
-const startServer = () => {
-  const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
-  });
-};
-
-if (require.main === module) {
-  startServer();
-}
 
 module.exports = app;
