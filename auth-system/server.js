@@ -153,6 +153,23 @@ app.get('/api/profile', authenticateToken, (req, res) => {
   });
 });
 
+// Endpoint en tu Node.js server.js
+app.get('/api/profile', async (req, res) => {
+  try {
+    const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
+      headers: {
+        'Authorization': `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Error al consultar HubSpot', details: error.message });
+  }
+});
+
 // Alias por compatibilidad
 app.get('/api/user/profile', authenticateToken, (req, res) => {
   res.json({

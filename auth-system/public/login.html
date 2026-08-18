@@ -355,8 +355,7 @@
         const errorMsg = document.getElementById('error-msg');
         const submitBtn = document.getElementById('submit-btn');
 
-        //const apiBase = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
-        const apiBase = 'https://api.hubapi.com/crm/v3/objects/contacts'
+        const apiBase = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
         const endpoint = `${apiBase || ''}${isRegisterMode ? '/api/register' : '/api/login'}`;
         const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
 
@@ -367,10 +366,12 @@
           // Usar ruta relativa para mantener consistencia de origen/dominio en localStorage
           // http://boardroom.vivehoy.com.mx:3000/api/login'
           // "https://api.hubapi.com/crm/v3/objects/contacts"
-          const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+          const response = await fetch('/api/profile', {
+            method: 'GET',
+            // headers: { 'Content-Type': 'application/json' },
+            // body: JSON.stringify(payload)
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // Tu JWT interno
           });
 
           const data = await response.json();
