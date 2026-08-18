@@ -356,6 +356,7 @@
         const submitBtn = document.getElementById('submit-btn');
 
         //const apiBase = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
+        const apiBase = 'https://api.hubapi.com/crm/v3/objects/contacts'
         const endpoint = `${apiBase || ''}${isRegisterMode ? '/api/register' : '/api/login'}`;
         const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
 
