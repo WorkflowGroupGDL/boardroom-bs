@@ -18,12 +18,11 @@ const hubspotClient = new Client({
 });
 
 // 1. SERVIR ARCHIVOS ESTÁTICOS
-// Configura la carpeta 'public' para servir HTML, JS y CSS
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 2. RUTAS DE LA API (Definidas antes de los fallbacks)
+// 2. RUTAS DE LA API
 
-// Endpoint de Autenticación
+// Endpoint de Autenticación / Login
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -52,7 +51,7 @@ app.post('/api/login', async (req, res) => {
             ]
           }
         ],
-        properties: ['firstname', 'lastname', 'email', 'programa_inscrito', 'estado_de_cuenta']
+        properties: ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'programa_inscrito', 'hs_lead_status']
       };
 
       const hubspotResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchFilter);
@@ -61,11 +60,15 @@ app.post('/api/login', async (req, res) => {
         userVerified = true;
         const props = hubspotResponse.results[0].properties;
         userData = {
+          id: hubspotResponse.results[0].id,
           email: props.email,
-          nombre: props.firstname || '',
-          apellido: props.lastname || '',
-          programa: props.programa_inscrito || 'Ejecutivo',
-          estadoCuenta: props.estado_de_cuenta || 'Al día'
+          firstname: props.firstname || '',
+          lastname: props.lastname || '',
+          phone: props.phone || '',
+          company: props.company || '',
+          jobtitle: props.jobtitle || '',
+          programa_inscrito: props.programa_inscrito || 'Programa Ejecutivo',
+          hs_lead_status: props.hs_lead_status || 'Activo'
         };
       }
     }
@@ -74,20 +77,23 @@ app.post('/api/login', async (req, res) => {
     if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
       userVerified = true;
       userData = {
+        id: 'mock-123',
         email: 'admin@boardroom.com',
-        nombre: 'James',
-        apellido: 'Lass',
-        programa: 'Programa Alta Dirección',
-        estadoCuenta: 'Al día'
+        firstname: 'James',
+        lastname: 'Lass',
+        phone: '+52 33 1064 6668',
+        company: 'Boardroom Business School',
+        jobtitle: 'Director Ejecutivo',
+        programa_inscrito: 'Programa Alta Dirección',
+        hs_lead_status: 'Activo'
       };
     }
 
-    // C. Respuesta según el resultado de la validación
+    // C. Respuesta
     if (userVerified) {
       const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
       const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
 
-      // Firma del Token JWT
       const token = jwt.sign(userData, secret, { expiresIn });
 
       return res.json({
@@ -112,37 +118,43 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Endpoint Protegido de Perfil para el Dashboard
-app.get('/api/user/profile', (req, res) => {
-  const authHeader = req.headers.authorization;
+// Middleware de verificación de token JWT
+function verifyTokenMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization || req.headers['authorization'];
   if (!authHeader) {
-    return res.status(401).json({ message: 'Acceso no autorizado. Falta token.' });
+    return res.status(401).json({ success: false, message: 'Acceso no autorizado. Falta token.' });
   }
 
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026'
-    );
-    return res.json({ success: true, profile: decoded });
+    const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
+    const decoded = jwt.verify(token, secret);
+    req.user = decoded;
+    next();
   } catch (err) {
-    return res.status(403).json({ message: 'Token inválido o expirado.' });
+    return res.status(403).json({ success: false, message: 'Token inválido o expirado.' });
   }
+}
+
+// Endpoints Protegidos de Perfil
+app.get('/api/user/profile', verifyTokenMiddleware, (req, res) => {
+  return res.json({ success: true, user: req.user, profile: req.user });
+});
+
+app.get('/api/profile', verifyTokenMiddleware, (req, res) => {
+  return res.json({ success: true, user: req.user, profile: req.user });
 });
 
 // 3. ENRUTAMIENTO BASE / FALLBACK
-// Redirige la raíz '/' hacia public/index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Captura cualquier otra ruta estática no encontrada y sirve index.html
-app.get('*', (req, res) => {
+// Fallback para Express 5
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Configuración de Puerto para Tencent Cloud / Entorno Local
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);

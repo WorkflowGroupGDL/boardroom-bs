@@ -427,7 +427,7 @@
               // Guardar el token en inicio de sesión
               if (data.token) {
                 localStorage.setItem('jwt_token', data.token);
-                window.location.href = '/private/dashboard.html';
+                window.location.href = '/dashboard.html';
               } else {
                 throw new Error('El servidor no devolvió un token válido.');
               }

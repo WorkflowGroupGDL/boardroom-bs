@@ -32,22 +32,18 @@ async function checkAuth() {
     if (!res.ok) throw new Error('Sesión no válida o expirada');
 
     const data = await res.json();
-    return data.user;
+    return data.user || data.profile || null;
   } catch (error) {
     console.error('Error en checkAuth:', error);
-    localStorage.removeItem('jwt_token');
+    removeToken();
     return null;
   }
 }
 
-/**
- * Protege páginas privadas (como /private/dashboard.html).
- */
 async function requireAuth() {
   const user = await checkAuth();
   if (!user) {
-    // CORRECCIÓN: Ruta absoluta hacia la carpeta public
-    window.location.href = '/login.html'; // o '/public/login.html' según tu servidor
+    window.location.href = '/login.html';
     return null;
   }
   return user;
@@ -55,21 +51,16 @@ async function requireAuth() {
 
 function logout() {
   removeToken();
-  // CORRECCIÓN: Ruta absoluta
   window.location.href = '/login.html';
 }
-
-// public/auth-check.js
 
 async function renderAuthNavigation(userData = null) {
   const navContainer = document.getElementById('auth-nav-container');
   if (!navContainer) return;
 
-  // Si no le pasamos los datos, los busca mediante checkAuth()
   const user = userData || await checkAuth();
 
   if (user) {
-    // Evaluación exhaustiva de todas las llaves posibles
     const displayName = 
       user.firstname || 
       user.first_name || 
@@ -79,7 +70,7 @@ async function renderAuthNavigation(userData = null) {
 
     navContainer.innerHTML = `
       <span class="d-inline-flex align-items-center gap-2">
-        <a href="/private/dashboard.html" target="_self" class="text-white fw-bold">
+        <a href="/dashboard.html" target="_self" class="text-white fw-bold">
           <i class="fa fa-user-circle"></i> ${displayName}
         </a>
         <a href="#" onclick="event.preventDefault(); logout();" class="text-white ms-2" title="Cerrar Sesión">
@@ -97,11 +88,7 @@ async function renderAuthNavigation(userData = null) {
   }
 }
 
-// Ejecución con tolerancia para librerías de plantillas (TemplateMo / Material Kit)
 document.addEventListener('DOMContentLoaded', () => {
-  // Ejecución inmediata
   renderAuthNavigation();
-
-  // Re-ejecución tras 300ms para sobreescribir cualquier limpieza realizada por custom.js
   setTimeout(renderAuthNavigation, 300);
 });
