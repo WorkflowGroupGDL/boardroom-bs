@@ -1,0 +1,20 @@
+{
+  "rootDir": "auth-system",
+  "outputDir": "public",
+  "installCommand": "npm install",
+  "buildCommand": "echo \"No build step required\"",
+  "nodeVersion": "18",
+  "cloudFunctions": {
+    "nodejs": {
+      "handler": "server.js",
+      "maxDuration": 10,
+      "externalNodeModules": [
+        "express",
+        "cors",
+        "jsonwebtoken",
+        "dotenv",
+        "@hubspot/api-client"
+      ]
+    }
+  }
+}

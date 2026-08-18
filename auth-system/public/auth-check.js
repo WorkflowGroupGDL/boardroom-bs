@@ -1,4 +1,4 @@
-// public/auth-check.js
+// public/assets/js/auth-check.js o public/auth-check.js
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://127.0.0.1:3000' 
@@ -32,7 +32,7 @@ async function checkAuth() {
     if (!res.ok) throw new Error('Sesión no válida o expirada');
 
     const data = await res.json();
-    return data.user || data.profile || null;
+    return data.user || data.profile;
   } catch (error) {
     console.error('Error en checkAuth:', error);
     removeToken();
@@ -63,8 +63,6 @@ async function renderAuthNavigation(userData = null) {
   if (user) {
     const displayName = 
       user.firstname || 
-      user.first_name || 
-      user.name || 
       user.nombre || 
       (user.email ? user.email.split('@')[0] : 'Mi Cuenta');
 

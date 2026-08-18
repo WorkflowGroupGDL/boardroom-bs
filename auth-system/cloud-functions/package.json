@@ -1,8 +1,9 @@
 {
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "name": "auth-system-cloud-functions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.js",
   "dependencies": {
     "@hubspot/api-client": "^14.0.1",
     "axios": "^1.19.0",

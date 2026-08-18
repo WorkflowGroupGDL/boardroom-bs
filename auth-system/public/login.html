@@ -330,83 +330,38 @@
   <script>
     let isRegisterMode = false;
 
-    // Alternar dinámicamente entre vista de Iniciar Sesión y Registro
     function toggleMode() {
       isRegisterMode = !isRegisterMode;
+      document.getElementById('form-title').textContent = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
+      document.getElementById('submit-btn').textContent = isRegisterMode ? 'Registrarse' : 'Entrar';
+      document.getElementById('toggle-mode').textContent = isRegisterMode ? '¿Ya tienes cuenta? Inicia Sesión' : '¿No tienes cuenta? Regístrate';
 
-      const formTitle = document.getElementById('form-title');
-      const submitBtn = document.getElementById('submit-btn');
-      const toggleBtn = document.getElementById('toggle-mode');
-      const firstnameContainer = document.getElementById('container-firstname');
-      const lastnameContainer = document.getElementById('container-lastname');
-      const txtLogin = document.getElementById('txtlogin');
-      const txtRegistro = document.getElementById('txtregistro');
-      const errorMsg = document.getElementById('error-msg');
-
-      if (errorMsg) {
-        errorMsg.textContent = '';
-        errorMsg.className = 'text-center small mb-3 fw-bold';
-      }
-
-      if (isRegisterMode) {
-        formTitle.textContent = 'Crear Cuenta';
-        submitBtn.textContent = 'Registrarse';
-        toggleBtn.textContent = '¿Ya tienes cuenta? Inicia Sesión';
-
-        firstnameContainer.classList.remove('d-none');
-        lastnameContainer.classList.remove('d-none');
-        txtLogin.classList.add('d-none');
-        txtRegistro.classList.remove('d-none');
-      } else {
-        formTitle.textContent = 'Iniciar Sesión';
-        submitBtn.textContent = 'Entrar';
-        toggleBtn.textContent = '¿No tienes cuenta? Regístrate';
-
-        firstnameContainer.classList.add('d-none');
-        lastnameContainer.classList.add('d-none');
-        txtLogin.classList.remove('d-none');
-        txtRegistro.classList.add('d-none');
-      }
+      document.getElementById('container-firstname').classList.toggle('d-none', !isRegisterMode);
+      document.getElementById('container-lastname').classList.toggle('d-none', !isRegisterMode);
+      document.getElementById('txtlogin').classList.toggle('d-none', isRegisterMode);
+      document.getElementById('txtregistro').classList.toggle('d-none', !isRegisterMode);
     }
 
-    // Asegurar ejecución una vez montado el DOM
     document.addEventListener('DOMContentLoaded', function () {
       const loginForm = document.getElementById('login-form');
 
-      if (!loginForm) {
-        console.error('No se encontró el formulario #login-form');
-        return;
-      }
-
       loginForm.addEventListener('submit', async function (e) {
-        // Prevenir la recarga de página y detener interferencias de otros JS
         e.preventDefault();
-        e.stopImmediatePropagation();
 
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
-        const firstnameEl = document.getElementById('firstname');
-        const lastnameEl = document.getElementById('lastname');
-        const firstname = firstnameEl ? firstnameEl.value.trim() : '';
-        const lastname = lastnameEl ? lastnameEl.value.trim() : '';
-        const submitBtn = document.getElementById('submit-btn');
+        const firstname = document.getElementById('firstname').value.trim();
+        const lastname = document.getElementById('lastname').value.trim();
         const errorMsg = document.getElementById('error-msg');
+        const submitBtn = document.getElementById('submit-btn');
 
-        if (errorMsg) {
-          errorMsg.textContent = '';
-          errorMsg.className = 'text-center small mb-3 fw-bold';
-        }
-
-        // Configuración del endpoint y payload según el modo activo
+        const BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:3000' : '';
         const endpoint = isRegisterMode ? '/api/register' : '/api/login';
-        const payload = isRegisterMode
-          ? { email, password, firstname, lastname }
-          : { email, password };
+        const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
 
         try {
-          if (submitBtn) submitBtn.disabled = true;
-
-          const response = await fetch(endpoint, {
+          submitBtn.disabled = true;
+          const response = await fetch(`${BASE_URL}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -414,38 +369,24 @@
 
           const data = await response.json();
 
-          if (response.ok) {
+          if (response.ok && data.success) {
             if (isRegisterMode) {
-              if (errorMsg) {
-                errorMsg.className = 'text-center small mb-3 fw-bold text-success';
-                errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
-              }
-              setTimeout(() => {
-                toggleMode();
-              }, 1800);
+              errorMsg.className = 'text-center small mb-3 fw-bold text-success';
+              errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
+              setTimeout(toggleMode, 1500);
             } else {
-              // Guardar el token en inicio de sesión
-              if (data.token) {
-                localStorage.setItem('jwt_token', data.token);
-                window.location.href = '/dashboard.html';
-              } else {
-                throw new Error('El servidor no devolvió un token válido.');
-              }
+              localStorage.setItem('jwt_token', data.token);
+              window.location.href = data.redirectUrl || '/dashboard.html';
             }
           } else {
-            if (errorMsg) {
-              errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-              errorMsg.textContent = data.error || data.message || 'Ocurrió un error. Inténtalo de nuevo.';
-            }
+            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
+            errorMsg.textContent = data.message || 'Error en la petición.';
           }
         } catch (err) {
-          console.error('Error de autenticación:', err);
-          if (errorMsg) {
-            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-            errorMsg.textContent = err.message || 'Error de conexión con el servidor.';
-          }
+          errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
+          errorMsg.textContent = 'Error de conexión con el servidor.';
         } finally {
-          if (submitBtn) submitBtn.disabled = false;
+          submitBtn.disabled = false;
         }
       });
     });
