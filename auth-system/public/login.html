@@ -349,23 +349,23 @@
       }
 
       if (isRegisterMode) {
-        formTitle.textContent = 'Crear Cuenta';
-        submitBtn.textContent = 'Registrarse';
-        toggleBtn.textContent = '¿Ya tienes cuenta? Inicia Sesión';
+        if (formTitle) formTitle.textContent = 'Crear Cuenta';
+        if (submitBtn) submitBtn.textContent = 'Registrarse';
+        if (toggleBtn) toggleBtn.textContent = '¿Ya tienes cuenta? Inicia Sesión';
 
-        firstnameContainer.classList.remove('d-none');
-        lastnameContainer.classList.remove('d-none');
-        txtLogin.classList.add('d-none');
-        txtRegistro.classList.remove('d-none');
+        if (firstnameContainer) firstnameContainer.classList.remove('d-none');
+        if (lastnameContainer) lastnameContainer.classList.remove('d-none');
+        if (txtLogin) txtLogin.classList.add('d-none');
+        if (txtRegistro) txtRegistro.classList.remove('d-none');
       } else {
-        formTitle.textContent = 'Iniciar Sesión';
-        submitBtn.textContent = 'Entrar';
-        toggleBtn.textContent = '¿No tienes cuenta? Regístrate';
+        if (formTitle) formTitle.textContent = 'Iniciar Sesión';
+        if (submitBtn) submitBtn.textContent = 'Entrar';
+        if (toggleBtn) toggleBtn.textContent = '¿No tienes cuenta? Regístrate';
 
-        firstnameContainer.classList.add('d-none');
-        lastnameContainer.classList.add('d-none');
-        txtLogin.classList.remove('d-none');
-        txtRegistro.classList.add('d-none');
+        if (firstnameContainer) firstnameContainer.classList.add('d-none');
+        if (lastnameContainer) lastnameContainer.classList.add('d-none');
+        if (txtLogin) txtLogin.classList.remove('d-none');
+        if (txtRegistro) txtRegistro.classList.add('d-none');
       }
     }
 
@@ -379,7 +379,7 @@
       }
 
       loginForm.addEventListener('submit', async function (e) {
-        // Prevenir la recarga de página y detener interferencias de otros JS
+        // Prevenir la recarga de página
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -406,15 +406,19 @@
         try {
           if (submitBtn) submitBtn.disabled = true;
 
-          const response = await fetch('/api/login', {
+          // CORRECCIÓN 1: Se usa la variable 'endpoint' en lugar de '/api/login' hardcodeado
+          const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
 
-          const data = await response.json();
+          // CORRECCIÓN 2: Validar si la respuesta es JSON antes de parsear
+          const contentType = response.headers.get("content-type");
+          const isJson = contentType && contentType.includes("application/json");
+          const data = isJson ? await response.json() : null;
 
-          if (response.ok) {
+          if (response.ok && data) {
             if (isRegisterMode) {
               if (errorMsg) {
                 errorMsg.className = 'text-center small mb-3 fw-bold text-success';
@@ -427,15 +431,18 @@
               // Guardar el token en inicio de sesión
               if (data.token) {
                 localStorage.setItem('jwt_token', data.token);
-                window.location.href = '/private/dashboard.html';
+                // Si el servidor envía redirectUrl, la usa; si no, '/dashboard.html'
+                window.location.href = data.redirectUrl || '/dashboard.html';
               } else {
                 throw new Error('El servidor no devolvió un token válido.');
               }
             }
           } else {
+            // Capturar mensaje de error del JSON o mensaje HTTP estándar en caso de HTML 404/500
+            const msg = (data && (data.error || data.message)) || `Error ${response.status}: El servidor no respondió adecuadamente.`;
             if (errorMsg) {
               errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-              errorMsg.textContent = data.error || data.message || 'Ocurrió un error. Inténtalo de nuevo.';
+              errorMsg.textContent = msg;
             }
           }
         } catch (err) {
