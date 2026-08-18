@@ -1,28 +1,20 @@
 {
   "rootDir": "auth-system",
+  "outputDir": "public",
   "installCommand": "npm install",
-  "redirects": [
-    { "source": "/", "destination": "/public/index.html", "statusCode": 301 },
-    { "source": "/index.html", "destination": "/public/index.html", "statusCode": 301 },
-    { "source": "/login", "destination": "/public/login.html", "statusCode": 301 },
-    { "source": "/login.html", "destination": "/public/login.html", "statusCode": 301 },
-    { "source": "/becas.html", "destination": "/public/becas.html", "statusCode": 301 },
-    { "source": "/claustro.html", "destination": "/public/claustro.html", "statusCode": 301 },
-    { "source": "/cohorte-cero.html", "destination": "/public/cohorte-cero.html", "statusCode": 301 },
-    { "source": "/contacto.html", "destination": "/public/contacto.html", "statusCode": 301 },
-    { "source": "/cookies.html", "destination": "/public/cookies.html", "statusCode": 301 },
-    { "source": "/diplomados.html", "destination": "/public/diplomados.html", "statusCode": 301 },
-    { "source": "/equipo.html", "destination": "/public/equipo.html", "statusCode": 301 },
-    { "source": "/frontline-leadership-excellence.html", "destination": "/public/frontline-leadership-excellence.html", "statusCode": 301 },
-    { "source": "/historia.html", "destination": "/public/historia.html", "statusCode": 301 },
-    { "source": "/meeting-details.html", "destination": "/public/meeting-details.html", "statusCode": 301 },
-    { "source": "/meetings.html", "destination": "/public/meetings.html", "statusCode": 301 },
-    { "source": "/nosotros.html", "destination": "/public/nosotros.html", "statusCode": 301 },
-    { "source": "/politica.html", "destination": "/public/politica.html", "statusCode": 301 },
-    { "source": "/por-que-boardroom.html", "destination": "/public/por-que-boardroom.html", "statusCode": 301 },
-    { "source": "/programas.html", "destination": "/public/programas.html", "statusCode": 301 },
-    { "source": "/strategic-execution-people-leadership.html", "destination": "/public/strategic-execution-people-leadership.html", "statusCode": 301 },
-    { "source": "/strategic-leadership-program.html", "destination": "/public/strategic-leadership-program.html", "statusCode": 301 },
-    { "source": "/terminos.html", "destination": "/public/terminos.html", "statusCode": 301 }
-  ]
+  "buildCommand": "echo \"No build step required\"",
+  "nodeVersion": "18",
+  "cloudFunctions": {
+    "nodejs": {
+      "handler": "server.js",
+      "maxDuration": 10,
+      "externalNodeModules": [
+        "express",
+        "cors",
+        "jsonwebtoken",
+        "dotenv",
+        "@hubspot/api-client"
+      ]
+    }
+  }
 }

@@ -1092,7 +1092,7 @@ section.upcoming-meetings .categories .main-button-red a {
 .meeting-item .down-content .date {
   float: left;
   text-align: center;
-  display: inline-block;
+  display: block;
   margin-right: 20px;
 }
 
