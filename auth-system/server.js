@@ -18,59 +18,13 @@ const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// 1. SERVIR ARCHIVOS ESTÁTICOS DESDE PUBLIC
+// 1. SERVIR ARCHIVOS ESTÁTICOS
+// Configura la carpeta 'public' para servir HTML, JS y CSS
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 2. MIDDLEWARE DE VERIFICACIÓN DE TOKEN
-function verifyToken(req, res, next) {
-  const authHeader = req.headers.authorization || req.headers['authorization'];
-  if (!authHeader) {
-    return res.status(401).json({ success: false, message: 'Acceso no autorizado. Falta token.' });
-  }
+// 2. RUTAS DE LA API (Definidas antes de los fallbacks)
 
-  const token = authHeader.split(' ')[1];
-  try {
-    const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
-    const decoded = jwt.verify(token, secret);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(403).json({ success: false, message: 'Token inválido o expirado.' });
-  }
-}
-
-// 3. RUTAS DE LA API
-
-// Endpoint: Registro
-app.post('/api/register', async (req, res) => {
-  const { email, password, firstname, lastname } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ success: false, message: 'Ingresa correo y contraseña.' });
-  }
-
-  try {
-    if (process.env.HUBSPOT_ACCESS_TOKEN) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await hubspotClient.crm.contacts.basicApi.create({
-        properties: {
-          email,
-          firstname: firstname || '',
-          lastname: lastname || '',
-          password_hash: hashedPassword
-        }
-      });
-      return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente.' });
-    } else {
-      return res.status(201).json({ success: true, message: 'Registro simulado en modo local.' });
-    }
-  } catch (error) {
-    console.error('Error en /api/register:', error?.body || error);
-    return res.status(500).json({ success: false, message: 'Error interno al registrar usuario.' });
-  }
-});
-
-// Endpoint: Autenticación / Login
+// Endpoint de Autenticación
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -83,10 +37,18 @@ app.post('/api/login', async (req, res) => {
 
     if (process.env.HUBSPOT_ACCESS_TOKEN) {
       const searchFilter = {
-        filterGroups: [{
-          filters: [{ propertyName: 'email', operator: 'EQ', value: email }]
-        }],
-        properties: ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'programa_inscrito', 'hs_lead_status']
+        filterGroups: [
+          {
+            filters: [
+              {
+                propertyName: 'email',
+                operator: 'EQ',
+                value: email
+              }
+            ]
+          }
+        ],
+        properties: ['firstname', 'lastname', 'email', 'programa_inscrito', 'estado_de_cuenta']
       };
 
       const hubspotResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchFilter);
@@ -122,9 +84,13 @@ app.post('/api/login', async (req, res) => {
       };
     }
 
-    if (userData) {
+    // C. Respuesta según el resultado de la validación
+    if (userVerified) {
       const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
-      const token = jwt.sign(userData, secret, { expiresIn: '8h' });
+      const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
+
+      // Firma del Token JWT
+      const token = jwt.sign(userData, secret, { expiresIn });
 
       return res.json({
         success: true,
@@ -142,17 +108,32 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Endpoint: Obtener Perfil (Sincronizado con auth-check.js)
-app.get('/api/profile', verifyToken, (req, res) => {
-  return res.json({ success: true, user: req.user });
+// Endpoint Protegido de Perfil para el Dashboard
+app.get('/api/user/profile', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Acceso no autorizado. Falta token.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026'
+    );
+    return res.json({ success: true, profile: decoded });
+  } catch (err) {
+    return res.status(403).json({ message: 'Token inválido o expirado.' });
+  }
 });
 
-// Endpoint alternativo de compatibilidad
-app.get('/api/user/profile', verifyToken, (req, res) => {
-  return res.json({ success: true, profile: req.user, user: req.user });
+// 3. ENRUTAMIENTO BASE / FALLBACK
+// Redirige la raíz '/' hacia public/index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Fallback de SPA / Enrutamiento Nginx
+// Captura cualquier otra ruta estática no encontrada y sirve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
