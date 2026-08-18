@@ -307,6 +307,6 @@ app.get('/*splat', (req, res) => {
 // 8. INICIALIZACIÓN DEL SERVIDOR
 // ==========================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
