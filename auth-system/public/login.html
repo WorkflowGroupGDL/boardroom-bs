@@ -364,7 +364,7 @@
           if (errorMsg) errorMsg.textContent = '';
 
           // Usar ruta relativa para mantener consistencia de origen/dominio en localStorage
-          const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
+          const response = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
