@@ -364,15 +364,30 @@
           if (errorMsg) errorMsg.textContent = '';
 
           // Usar ruta relativa para mantener consistencia de origen/dominio en localStorage
-          // http://boardroom.vivehoy.com.mx:3000/api/login'
-          // "https://api.hubapi.com/crm/v3/objects/contacts"
-          const response = await fetch('/api/profile', {
+          // const response = await fetch('/api/profile', {
+          //   method: 'GET',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify(payload)
+          // });
+
+          // login.html (alrededor de la línea 369)
+          const token = localStorage.getItem('token');
+
+          fetch('/api/profile', {
             method: 'GET',
-            // headers: { 'Content-Type': 'application/json' },
-            // body: JSON.stringify(payload)
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Tu JWT interno
-          });
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => {
+              if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+              return response.json();
+            })
+            .then(data => {
+              console.log('Perfil cargado:', data);
+            })
+            .catch(error => console.error('Error al cargar perfil:', error));
 
           const data = await response.json();
 

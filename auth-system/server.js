@@ -42,6 +42,27 @@ const authenticateToken = (req, res, next) => {
 };
 
 // 2. RUTAS DE LA API (Definidas antes de los fallbacks)
+// server.js (Node.js / Express)
+app.get('/api/profile', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Token requerido' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, message: 'Token inválido o expirado' });
+    }
+    
+    // Retornar datos del usuario autenticado
+    res.json({
+      success: true,
+      user: user
+    });
+  });
+});
 
 // Endpoint de Autenticación (Login)
 app.post('/api/login', async (req, res) => {
