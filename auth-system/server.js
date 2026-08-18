@@ -138,7 +138,8 @@ app.get('/', (req, res) => {
 });
 
 // Captura cualquier otra ruta estática no encontrada y sirve index.html
-app.get('*', (req, res) => {
+// (patrón compatible con Express 5 / path-to-regexp v8)
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
