@@ -7,21 +7,47 @@ const hubspot = require('@hubspot/api-client');
 const cors = require('cors');
 
 const app = express();
+const PORT = Number(process.env.PORT) || 3000;
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const DEFAULT_JWT_SECRET = 'boardroom_bs_executive_secret_key_2026';
+const isServerlessRuntime = !!(
+  process.env.VERCEL ||
+  process.env.NETLIFY ||
+  process.env.AWS_LAMBDA_FUNCTION_NAME ||
+  process.env.TENCENTCLOUD_RUN_ENV
+);
 
-// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    const configuredOrigins = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS || '')
+      .split(',')
+      .map(value => value.trim())
+      .filter(Boolean);
 
-// Archivos Estáticos
-app.use(express.static(path.join(__dirname, 'public')));
+    if (!origin) return callback(null, true);
 
-// Inicializar cliente de HubSpot
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    const isAllowed = configuredOrigins.includes('*') || configuredOrigins.includes(normalizedOrigin)
+      || configuredOrigins.some(item => item.includes('localhost') && normalizedOrigin.includes(item.replace(/\/$/, '')))
+      || ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:4173'].includes(normalizedOrigin);
+
+    if (isAllowed || process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Origen no autorizado por CORS.'));
+  },
+  credentials: true
+}));
+
+app.use(express.static(PUBLIC_DIR, { index: false }));
+
 const hubspotClient = new hubspot.Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// Middleware de Autenticación JWT
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -31,8 +57,7 @@ function verifyToken(req, res, next) {
   }
 
   try {
-    const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || DEFAULT_JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -40,7 +65,6 @@ function verifyToken(req, res, next) {
   }
 }
 
-// Endpoint de Registro
 app.post('/api/register', async (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
@@ -67,7 +91,6 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Endpoint de Actualización de Perfil en HubSpot
 app.put('/api/profile/update/:contactId', verifyToken, async (req, res) => {
   const { contactId } = req.params;
   const { firstname, lastname, phone, jobtitle, company } = req.body;
@@ -104,17 +127,21 @@ app.put('/api/profile/update/:contactId', verifyToken, async (req, res) => {
   }
 });
 
-// Endpoint de Consulta de Perfil
 app.get('/api/profile', verifyToken, (req, res) => {
   return res.json({ success: true, user: req.user, profile: req.user });
 });
 
-// Fallback de Express 5 para Frontend
-app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get('/*path', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ success: false, message: 'Ruta de API no encontrada.' });
+  }
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor activo en el puerto ${PORT}`);
-});
+if (!isServerlessRuntime) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor activo en el puerto ${PORT}`);
+  });
+}
+
+module.exports = app;

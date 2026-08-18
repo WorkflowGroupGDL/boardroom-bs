@@ -7,22 +7,53 @@ const { Client } = require('@hubspot/api-client');
 require('dotenv').config();
 
 const app = express();
+const PORT = Number(process.env.PORT) || 3000;
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const DEFAULT_JWT_SECRET = 'boardroom_bs_executive_secret_key_2026';
+const isServerlessRuntime = !!(
+  process.env.VERCEL ||
+  process.env.NETLIFY ||
+  process.env.AWS_LAMBDA_FUNCTION_NAME ||
+  process.env.TENCENTCLOUD_RUN_ENV
+);
 
-// Middlewares
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    const configuredOrigins = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS || '')
+      .split(',')
+      .map(value => value.trim())
+      .filter(Boolean);
+
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    const isAllowed = configuredOrigins.includes('*') || configuredOrigins.includes(normalizedOrigin)
+      || configuredOrigins.some(item => item.includes('localhost') && normalizedOrigin.includes(item.replace(/\/$/, '')))
+      || ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:4173'].includes(normalizedOrigin);
+
+    if (isAllowed) {
+      return callback(null, true);
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Origen no autorizado por CORS.'));
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Inicialización del cliente de HubSpot
 const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// 1. SERVIR ARCHIVOS ESTÁTICOS
-// Configura la carpeta 'public' para servir HTML, JS y CSS
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(PUBLIC_DIR, { index: false }));
 
-// Middleware de Verificación JWT para Rutas Protegidas
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -31,7 +62,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ success: false, message: 'Acceso no autorizado. Falta token.' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026', (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET || DEFAULT_JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(403).json({ success: false, message: 'Token inválido o expirado.' });
     }
@@ -40,9 +71,6 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// 2. RUTAS DE LA API (Definidas antes de los fallbacks)
-
-// Endpoint de Autenticación (Login)
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,7 +85,6 @@ app.post('/api/login', async (req, res) => {
     let userVerified = false;
     let userData = null;
 
-    // A. Búsqueda en HubSpot
     if (process.env.HUBSPOT_ACCESS_TOKEN) {
       try {
         const PublicObjectSearchRequest = {
@@ -97,7 +124,6 @@ app.post('/api/login', async (req, res) => {
       }
     }
 
-    // B. Usuario de Respaldo / Pruebas Locales
     if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
       userVerified = true;
       userData = {
@@ -113,16 +139,14 @@ app.post('/api/login', async (req, res) => {
       };
     }
 
-    // C. Generación del JWT y Respuesta
     if (userVerified) {
-      const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
+      const secret = process.env.JWT_SECRET || DEFAULT_JWT_SECRET;
       const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
-
       const token = jwt.sign(userData, secret, { expiresIn });
 
       return res.json({
         success: true,
-        token: token,
+        token,
         redirectUrl: '/dashboard.html',
         user: userData
       });
@@ -132,7 +156,6 @@ app.post('/api/login', async (req, res) => {
       success: false,
       message: 'Usuario no encontrado o credenciales inválidas.'
     });
-
   } catch (error) {
     console.error('Error no controlado en /api/login:', error);
     return res.status(500).json({
@@ -143,7 +166,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Endpoint Protegido de Perfil para el Dashboard (Coincide con auth-check.js)
 app.get('/api/profile', authenticateToken, (req, res) => {
   res.json({
     success: true,
@@ -152,7 +174,6 @@ app.get('/api/profile', authenticateToken, (req, res) => {
   });
 });
 
-// Alias por compatibilidad
 app.get('/api/user/profile', authenticateToken, (req, res) => {
   res.json({
     success: true,
@@ -161,18 +182,21 @@ app.get('/api/user/profile', authenticateToken, (req, res) => {
   });
 });
 
-// 3. ENRUTAMIENTO BASE / FALLBACK
-// Redirige la raíz '/' hacia public/index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-// Captura cualquier ruta no definida y sirve index.html
 app.get('/*path', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ success: false, message: 'Ruta de API no encontrada.' });
+  }
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
-});
+if (!isServerlessRuntime) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
+  });
+}
+
+module.exports = app;
