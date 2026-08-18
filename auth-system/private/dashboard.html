@@ -317,54 +317,19 @@
   <!-- Lógica Única de Carga del Perfil y Logout -->
   <script src="../public/assets/js/auth-check.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        // 1. Validar la sesión y obtener el objeto de usuario resuelto
-        const user = await requireAuth();
-
-        if (user) {
-          console.log('Objeto User recibido en Dashboard:', user);
-
-          // 2. Pasar directamente el objeto resuelto a la función de renderizado
-          renderAuthNavigation(user);
-        }
-      } catch (error) {
-        console.error('Error durante la validación de sesión:', error);
-      }
-    });
-  </script>
-  <script>
-    function logout() {
-      localStorage.removeItem('jwt_token');
-      window.location.href = '../login.html';
-    }
-
     async function loadUserProfile() {
-      // Usar requireAuth() para validar y redirigir si no hay sesión
       const user = await requireAuth();
-      if (!user) return; // Se redirecciona automáticamente en requireAuth
+      if (!user) return;
 
-      try {
-        const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
-        document.getElementById('user-info').innerText = `Sesión activa como ${fullName}`;
-        // Datos Personales
-        document.getElementById('user-name').innerText = fullName || '${ fullName }';
-        document.getElementById('user-email').innerText = user.email || 'N/A';
-        document.getElementById('user-phone').innerText = user.phone || user.mobilephone || `${user.mobilephone}`;
-
-        // Datos Profesionales
-        document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
-        document.getElementById('user-company').innerText = user.company || 'Empresa no registrada';
-        document.getElementById('user-location').innerText = [user.city, user.country].filter(Boolean).join(', ') || 'Ubicación no registrada';
-
-        // Estado y Programa
-        document.getElementById('user-stage').innerText = user.jobtitl || 'Ejecutivo';
-        document.getElementById('user-status').innerText = user.hs_lead_status || 'Activo';
-        document.getElementById('user-program').innerText = user.programa_inscrito || 'Sin programa asignado';
-
-      } catch (err) {
-        console.error('Error al poblar el perfil:', err);
-      }
+      const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
+      document.getElementById('user-info').innerText = `Sesión activa como ${fullName}`;
+      document.getElementById('user-name').innerText = fullName;
+      document.getElementById('user-email').innerText = user.email || 'N/A';
+      document.getElementById('user-phone').innerText = user.phone || 'No registrado';
+      document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
+      document.getElementById('user-company').innerText = user.company || 'Empresa no registrada';
+      document.getElementById('user-program').innerText = user.programa_inscrito || 'Sin programa asignado';
+      document.getElementById('user-status').innerText = user.hs_lead_status || 'Activo';
     }
 
     document.addEventListener('DOMContentLoaded', loadUserProfile);
