@@ -164,16 +164,16 @@ app.get('/api/user/profile', authenticateToken, (req, res) => {
 
 // 3. ENRUTAMIENTO BASE / FALLBACK
 // Redirige la raíz '/' hacia public/index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // Manejador para rutas /api/ no encontradas (evita devolver HTML)
 app.use('/api/*', (req, res) => {
   res.status(404).json({
     success: false,
     message: `Ruta de API no encontrada: ${req.originalUrl}`
   });
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Captura cualquier ruta no definida y sirve index.html
