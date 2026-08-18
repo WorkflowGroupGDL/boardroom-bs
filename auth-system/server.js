@@ -21,6 +21,10 @@ const hubspotClient = new Client({
 
 // Clave secreta unificada para JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
+const loginHandler = require('./api/login');
+
+// 2. Registrar la ruta
+app.post('/api/login', loginHandler);
 
 // Archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));

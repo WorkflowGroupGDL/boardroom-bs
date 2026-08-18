@@ -2,64 +2,30 @@
 const jwt = require('jsonwebtoken');
 const { Client } = require('@hubspot/api-client');
 
-// Inicializar cliente de HubSpot
 const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// Clave secreta unificada con server.js
 const JWT_SECRET = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
 
 module.exports = async (req, res) => {
-  // 1. Configuración de cabeceras CORS para peticiones desde el subdominio
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
-  );
+  const { email, password } = req.body || {};
 
-  // Manejar solicitud preflight (OPTIONS)
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // 2. Validar método HTTP
-  if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, message: 'Método no permitido' });
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: 'Por favor ingresa correo y contraseña.'
+    });
   }
 
   try {
-    // 3. Garantizar extracción de credenciales (Aun si req.body viene como String)
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const { email, password } = body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Por favor ingresa correo y contraseña.'
-      });
-    }
-
     let userVerified = false;
     let userData = null;
 
-    // 4. Búsqueda y Validación en HubSpot
     if (process.env.HUBSPOT_ACCESS_TOKEN) {
       try {
         const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-          filterGroups: [
-            {
-              filters: [
-                {
-                  propertyName: 'email',
-                  operator: 'EQ',
-                  value: email
-                }
-              ]
-            }
-          ],
+          filterGroups: [{ filters: [{ propertyName: 'email', operator: 'EQ', value: email }] }],
           properties: ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'programa_inscrito', 'hs_lead_status']
         });
 
@@ -83,7 +49,6 @@ module.exports = async (req, res) => {
       }
     }
 
-    // 5. Usuario de Respaldo / Pruebas
     if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
       userVerified = true;
       userData = {
@@ -99,7 +64,6 @@ module.exports = async (req, res) => {
       };
     }
 
-    // 6. Firma de Token JWT y Respuesta
     if (userVerified) {
       const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
       const token = jwt.sign(userData, JWT_SECRET, { expiresIn });
