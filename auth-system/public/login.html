@@ -355,7 +355,8 @@
         const errorMsg = document.getElementById('error-msg');
         const submitBtn = document.getElementById('submit-btn');
 
-        const endpoint = isRegisterMode ? '/api/register' : '/api/login';
+        const apiBase = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
+        const endpoint = `${apiBase || ''}${isRegisterMode ? '/api/register' : '/api/login'}`;
         const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
 
         try {

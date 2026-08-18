@@ -13,9 +13,10 @@ const app = express();
 // ==========================================
 app.use(express.json());
 app.use(cors({
-  origin: '*',
+  origin: true,
   credentials: true
 }));
+app.enable('trust proxy');
 
 // Inicializar cliente de HubSpot
 const hubspotClient = new hubspot.Client({
@@ -232,5 +233,12 @@ app.put('/api/user/profile/:contactId', verifyToken, async (req, res) => {
     });
   }
 });
+
+if (require.main === module) {
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor cloud activo en el puerto ${PORT}`);
+  });
+}
 
 module.exports = app;

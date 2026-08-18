@@ -11,7 +11,8 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
+app.enable('trust proxy');
 
 // Archivos Estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -114,7 +115,15 @@ app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor activo en el puerto ${PORT}`);
-});
+const startServer = () => {
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor activo en el puerto ${PORT}`);
+  });
+};
+
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = app;

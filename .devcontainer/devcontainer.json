@@ -34,7 +34,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"hoffs.dotnet-secret-explorer"
+				"hoffs.dotnet-secret-explorer",
+				"sharad28.secrets-manager"
 			]
 		}
 	}
