@@ -14,24 +14,24 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Favicons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="../public//apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../public//favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../public//favicon-16x16.png">
-  <link rel="manifest" href="../public//site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <!-- Additional CSS Files -->
-  <link rel="stylesheet" href="../public/assets/css/fontawesome.css">
-  <link rel="stylesheet" href="../public/assets/css/templatemo-edu-meeting.css">
-  <link rel="stylesheet" href="../public/assets/css/owl.css">
-  <link rel="stylesheet" href="../public/assets/css/lightbox.css">
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/templatemo-edu-meeting.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/lightbox.css">
 
   <!-- Fonts and icons -->
   <link rel="stylesheet" type="text/css"
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
 
   <!-- Nucleo Icons -->
-  <link href="../public/assets/css/nucleo-icons-min.css" rel="stylesheet" />
-  <link href="../public/assets/css/nucleo-svg-min.css" rel="stylesheet" />
+  <link href="assets/css/nucleo-icons-min.css" rel="stylesheet" />
+  <link href="assets/css/nucleo-svg-min.css" rel="stylesheet" />
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -39,7 +39,7 @@
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
-  <link id="pagestyle" href="../public/assets/css/material-kit.min.css" rel="stylesheet" />
+  <link id="pagestyle" href="assets/css/material-kit.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -75,8 +75,7 @@
         <div class="col-12">
           <nav class="main-nav">
             <a target="_self" href="../index.html" class="logo">
-              <img src="../public/assets/images/logo/boardroom-horizontal_175x75.webp"
-                alt="Boardroom Business School Logo">
+              <img src="assets/images/logo/boardroom-horizontal_175x75.webp" alt="Boardroom Business School Logo">
             </a>
             <ul class="nav">
               <li><a target="_self" href="../index.html" class="active">Inicio</a></li>
@@ -309,30 +308,38 @@
   </section>
 
   <!-- Scripts -->
-  <script src="../public/vendor/jquery/jquery.min.js"></script>
-  <script src="../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-  <script src="../public/assets/js/custom.js"></script>
+  <script src="assets/js/custom.js"></script>
 
   <!-- Lógica Única de Carga del Perfil y Logout -->
-  <script src="../public/assets/js/auth-check.js"></script>
+  <script src="auth-check.js"></script>
   <script>
-    async function loadUserProfile() {
+    document.addEventListener('DOMContentLoaded', async function () {
+      // Una sola verificación de sesión centralizada
       const user = await requireAuth();
-      if (!user) return;
+      if (!user) return; // Si auth-check.js maneja la redirección, detiene la ejecución aquí
 
+      console.log('Sesión activa para:', user);
+
+      // Llenado de información del perfil en la interfaz
       const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
-      document.getElementById('user-info').innerText = `Sesión activa como ${fullName}`;
-      document.getElementById('user-name').innerText = fullName;
-      document.getElementById('user-email').innerText = user.email || 'N/A';
-      document.getElementById('user-phone').innerText = user.phone || 'No registrado';
-      document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
-      document.getElementById('user-company').innerText = user.company || 'Empresa no registrada';
-      document.getElementById('user-program').innerText = user.programa_inscrito || 'Sin programa asignado';
-      document.getElementById('user-status').innerText = user.hs_lead_status || 'Activo';
-    }
 
-    document.addEventListener('DOMContentLoaded', loadUserProfile);
+      const setElementText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+      };
+
+      setElementText('user-info', `Sesión activa como ${fullName}`);
+      setElementText('user-name', fullName);
+      setElementText('user-email', user.email || 'N/A');
+      setElementText('user-phone', user.phone || 'No registrado');
+      setElementText('user-job', user.jobtitle || 'Puesto no registrado');
+      setElementText('user-company', user.company || 'Empresa no registrada');
+      setElementText('user-program', user.programa_inscrito || 'Sin programa asignado');
+      setElementText('user-status', user.hs_lead_status || 'Activo');
+    });
   </script>
 </body>
 

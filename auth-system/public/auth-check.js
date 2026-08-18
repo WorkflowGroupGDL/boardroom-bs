@@ -29,10 +29,10 @@ async function checkAuth() {
       cache: 'no-store'
     });
 
-    if (!res.ok) throw new Error('Sesión no válida o expirada');
+    if (!res.ok) throw new Error(`Sesión no válida (${res.status})`);
 
     const data = await res.json();
-    return data.user || data.profile;
+    return data.user || data.profile || (data.email ? data : null);
   } catch (error) {
     console.error('Error en checkAuth:', error);
     removeToken();
@@ -56,9 +56,10 @@ function logout() {
 
 async function renderAuthNavigation(userData = null) {
   const navContainer = document.getElementById('auth-nav-container');
-  if (!navContainer) return;
+  if (!navContainer) return; // Si no existe el contenedor en la vista actual, interrumpe silenciosamente
 
-  const user = userData || await checkAuth();
+  // Si ya se proporcionó userData se usa; si no, se verifica la sesión
+  const user = userData !== null ? userData : await checkAuth();
 
   if (user) {
     const displayName = 
@@ -68,10 +69,10 @@ async function renderAuthNavigation(userData = null) {
 
     navContainer.innerHTML = `
       <span class="d-inline-flex align-items-center gap-2">
-        <a href="/dashboard.html" target="_self" class="text-white fw-bold">
+        <a href="/dashboard.html" target="_self" class="text-white fw-bold text-decoration-none">
           <i class="fa fa-user-circle"></i> ${displayName}
         </a>
-        <a href="#" onclick="event.preventDefault(); logout();" class="text-white ms-2" title="Cerrar Sesión">
+        <a href="#" onclick="event.preventDefault(); logout();" class="text-white ms-2 text-decoration-none" title="Cerrar Sesión">
           <i class="fa fa-sign-out-alt"></i> Salir
         </a>
       </span>
@@ -79,14 +80,24 @@ async function renderAuthNavigation(userData = null) {
     navContainer.style.display = 'inline-block';
   } else {
     navContainer.innerHTML = `
-      <a href="/login.html" target="_self" class="text-white">
+      <a href="/login.html" target="_self" class="text-white text-decoration-none">
         <i class="fa fa-user"></i> Iniciar Sesión
       </a>
     `;
+    navContainer.style.display = 'inline-block';
   }
 }
 
+// Exponer funciones clave al objeto global window para asegurar disponibilidad en todos los scripts
+window.getToken = getToken;
+window.setToken = setToken;
+window.removeToken = removeToken;
+window.checkAuth = checkAuth;
+window.requireAuth = requireAuth;
+window.logout = logout;
+window.renderAuthNavigation = renderAuthNavigation;
+
+// Inicialización automática cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
   renderAuthNavigation();
-  setTimeout(renderAuthNavigation, 300);
 });

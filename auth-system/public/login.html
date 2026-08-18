@@ -350,18 +350,20 @@
 
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
-        const firstname = document.getElementById('firstname').value.trim();
-        const lastname = document.getElementById('lastname').value.trim();
+        const firstname = document.getElementById('firstname') ? document.getElementById('firstname').value.trim() : '';
+        const lastname = document.getElementById('lastname') ? document.getElementById('lastname').value.trim() : '';
         const errorMsg = document.getElementById('error-msg');
         const submitBtn = document.getElementById('submit-btn');
 
-        const BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:3000' : '';
         const endpoint = isRegisterMode ? '/api/register' : '/api/login';
         const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
 
         try {
           submitBtn.disabled = true;
-          const response = await fetch(`${BASE_URL}${endpoint}`, {
+          if (errorMsg) errorMsg.textContent = '';
+
+          // Usar ruta relativa para mantener consistencia de origen/dominio en localStorage
+          const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -371,20 +373,28 @@
 
           if (response.ok && data.success) {
             if (isRegisterMode) {
-              errorMsg.className = 'text-center small mb-3 fw-bold text-success';
-              errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
+              if (errorMsg) {
+                errorMsg.className = 'text-center small mb-3 fw-bold text-success';
+                errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
+              }
               setTimeout(toggleMode, 1500);
             } else {
+              // Guardar token JWT y redirigir
               localStorage.setItem('jwt_token', data.token);
               window.location.href = data.redirectUrl || '/dashboard.html';
             }
           } else {
-            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-            errorMsg.textContent = data.message || 'Error en la petición.';
+            if (errorMsg) {
+              errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
+              errorMsg.textContent = data.message || 'Error en la petición.';
+            }
           }
         } catch (err) {
-          errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-          errorMsg.textContent = 'Error de conexión con el servidor.';
+          console.error('Error durante la petición:', err);
+          if (errorMsg) {
+            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
+            errorMsg.textContent = 'Error de conexión con el servidor.';
+          }
         } finally {
           submitBtn.disabled = false;
         }
