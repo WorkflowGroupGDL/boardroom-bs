@@ -1,14 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Client } = require('@hubspot/api-client');
-require('dotenv').config();
 
 const app = express();
 
-// 1. MIDDLEWARES GLOBALES
+// Middlewares
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,18 +19,11 @@ const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// Clave secreta unificada para JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
-const loginHandler = require('./api/login');
-
-// 2. Registrar la ruta
-app.post('/api/login', loginHandler);
-
-// Archivos estáticos desde la carpeta 'public'
+// Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 2. MIDDLEWARE DE AUTENTICACIÓN (Único e Integrado)
-const authenticateToken = (req, res, next) => {
+// Middleware de Verificación JWT para Rutas Protegidas
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -38,18 +31,19 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ success: false, message: 'Acceso no autorizado. Falta token.' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+  const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
+  jwt.verify(token, secret, (err, user) => {
     if (err) {
       return res.status(403).json({ success: false, message: 'Token inválido o expirado.' });
     }
-    req.user = decoded;
+    req.user = user;
     next();
   });
 };
 
-// 3. ENDPOINTS DE LA API
+// --- RUTAS DE LA API ---
 
-// A. Endpoint de Autenticación (Login)
+// 1. Endpoint de Autenticación (Login)
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -64,10 +58,9 @@ app.post('/api/login', async (req, res) => {
     let userVerified = false;
     let userData = null;
 
-    // Búsqueda en HubSpot
     if (process.env.HUBSPOT_ACCESS_TOKEN) {
       try {
-        const PublicObjectSearchRequest = {
+        const searchRequest = {
           filterGroups: [
             {
               filters: [
@@ -82,7 +75,7 @@ app.post('/api/login', async (req, res) => {
           properties: ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'programa_inscrito', 'hs_lead_status']
         };
 
-        const hubspotResponse = await hubspotClient.crm.contacts.searchApi.doSearch(PublicObjectSearchRequest);
+        const hubspotResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
 
         if (hubspotResponse && hubspotResponse.results && hubspotResponse.results.length > 0) {
           userVerified = true;
@@ -104,7 +97,7 @@ app.post('/api/login', async (req, res) => {
       }
     }
 
-    // Usuario de Respaldo / Pruebas Locales
+    // Credenciales de respaldo/desarrollo local
     if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
       userVerified = true;
       userData = {
@@ -120,10 +113,10 @@ app.post('/api/login', async (req, res) => {
       };
     }
 
-    // Generación del JWT y Respuesta
     if (userVerified) {
+      const secret = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
       const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
-      const token = jwt.sign(userData, JWT_SECRET, { expiresIn });
+      const token = jwt.sign(userData, secret, { expiresIn });
 
       return res.json({
         success: true,
@@ -148,44 +141,98 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// B. Endpoint Protegido de Perfil (Unificado para auth-check.js)
-app.get('/api/profile', authenticateToken, (req, res) => {
-  res.json({
-    success: true,
-    user: req.user,
-    profile: req.user
-  });
+// 2. Endpoint de Registro
+app.post('/api/register', async (req, res) => {
+  const { email, password, firstname, lastname } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Correo y contraseña requeridos.' });
+  }
+
+  try {
+    if (process.env.HUBSPOT_ACCESS_TOKEN) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await hubspotClient.crm.contacts.basicApi.create({
+        properties: {
+          email,
+          firstname: firstname || '',
+          lastname: lastname || '',
+          password_hash: hashedPassword
+        }
+      });
+    }
+    return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente.' });
+  } catch (error) {
+    console.error('Error en /api/register:', error?.body || error.message);
+    return res.status(500).json({ success: false, message: 'Error al registrar el contacto.' });
+  }
 });
 
-// C. Alias de Perfil por compatibilidad
-app.get('/api/user/profile', authenticateToken, (req, res) => {
-  res.json({
-    success: true,
-    user: req.user,
-    profile: req.user
-  });
+// 3. Endpoint de Actualización de Perfil
+app.put('/api/profile/update/:contactId', verifyToken, async (req, res) => {
+  const { contactId } = req.params;
+  const { firstname, lastname, phone, jobtitle, company } = req.body;
+
+  if (!contactId) {
+    return res.status(400).json({ success: false, error: 'Se requiere el ID del contacto de HubSpot.' });
+  }
+
+  const propertiesToUpdate = {};
+  if (firstname !== undefined) propertiesToUpdate.firstname = firstname;
+  if (lastname !== undefined) propertiesToUpdate.lastname = lastname;
+  if (phone !== undefined) propertiesToUpdate.phone = phone;
+  if (jobtitle !== undefined) propertiesToUpdate.jobtitle = jobtitle;
+  if (company !== undefined) propertiesToUpdate.company = company;
+
+  if (Object.keys(propertiesToUpdate).length === 0) {
+    return res.status(400).json({ success: false, error: 'Debes proporcionar al menos un campo para actualizar.' });
+  }
+
+  try {
+    const apiResponse = await hubspotClient.crm.contacts.basicApi.update(
+      contactId,
+      { properties: propertiesToUpdate }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Perfil actualizado exitosamente en HubSpot.',
+      contact: apiResponse,
+    });
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error?.body || error.message);
+    return res.status(500).json({ success: false, error: 'Error al actualizar en el CRM.' });
+  }
 });
 
-// 4. FALLBACKS Y MANEJO DE RUTAS
-
-// Control de rutas /api/ no encontradas (Devuelve JSON en lugar de HTML 404)
-app.use('/api/*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Ruta de API no encontrada: ${req.originalUrl}`
-  });
+// 4. Endpoints de Consulta de Perfil (Compatibilidad frontend)
+app.get('/api/profile', verifyToken, (req, res) => {
+  res.json({ success: true, user: req.user, profile: req.user });
 });
 
-// Sirve la aplicación web estática para cualquier otra ruta
-app.get('/*', (req, res) => {
+app.get('/api/user/profile', verifyToken, (req, res) => {
+  res.json({ success: true, user: req.user, profile: req.user });
+});
+
+// --- ENRUTAMIENTO BASE / FALLBACK FRONTEND ---
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// 5. INICIALIZACIÓN DEL SERVIDOR
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor de Boardroom Business School corriendo en el puerto ${PORT}`);
+app.get('/*path', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// Inicialización del Servidor
+const startServer = () => {
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
+  });
+};
+
+if (require.main === module) {
+  startServer();
+}
 
 module.exports = app;

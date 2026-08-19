@@ -1,5 +1,3 @@
-// public/assets/js/auth-check.js o public/auth-check.js
-
 const API_BASE_URL = (() => {
   const configured = (window.BOARDROOM_API_BASE_URL || '').replace(/\/$/, '');
   if (configured) return configured;

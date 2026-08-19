@@ -328,85 +328,78 @@
 
   <!-- Lógica de Formulario e Interacción JS -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('jwt_token');
+    let isRegisterMode = false;
 
-      // 1. Verificación preliminar de sesión al cargar la página
-      if (token) {
-        fetch('/api/profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(async (res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(data => {
-            if (data && (data.user || data.profile)) {
-              window.location.replace('/dashboard.html');
-            }
-          })
-          .catch(err => {
-            console.warn('Sesión no activa o endpoint inaccesible:', err.message);
+    function toggleMode() {
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('form-title').textContent = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
+      document.getElementById('submit-btn').textContent = isRegisterMode ? 'Registrarse' : 'Entrar';
+      document.getElementById('toggle-mode').textContent = isRegisterMode ? '¿Ya tienes cuenta? Inicia Sesión' : '¿No tienes cuenta? Regístrate';
+
+      document.getElementById('container-firstname').classList.toggle('d-none', !isRegisterMode);
+      document.getElementById('container-lastname').classList.toggle('d-none', !isRegisterMode);
+      document.getElementById('txtlogin').classList.toggle('d-none', isRegisterMode);
+      document.getElementById('txtregistro').classList.toggle('d-none', !isRegisterMode);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const loginForm = document.getElementById('login-form');
+
+      loginForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const firstname = document.getElementById('firstname') ? document.getElementById('firstname').value.trim() : '';
+        const lastname = document.getElementById('lastname') ? document.getElementById('lastname').value.trim() : '';
+        const errorMsg = document.getElementById('error-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        const apiBase = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
+        const endpoint = `${apiBase || ''}${isRegisterMode ? '/api/register' : '/api/login'}`;
+        const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
+
+        try {
+          submitBtn.disabled = true;
+          if (errorMsg) errorMsg.textContent = '';
+
+          // Usar ruta relativa para mantener consistencia de origen/dominio en localStorage
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
           });
-      }
 
-      // 2. Manejo del formulario de inicio de sesión
-      const loginForm = document.getElementById('login-form') || document.querySelector('form');
+          const data = await response.json();
 
-      if (loginForm) {
-        loginForm.addEventListener('submit', async function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          const emailInput = document.getElementById('email');
-          const passwordInput = document.getElementById('password');
-          const errorMsg = document.getElementById('error-msg');
-          const submitBtn = document.getElementById('submit-btn');
-
-          if (!emailInput || !passwordInput) return;
-
-          const email = emailInput.value.trim();
-          const password = passwordInput.value.trim();
-
-          try {
-            if (submitBtn) submitBtn.disabled = true;
-            if (errorMsg) errorMsg.textContent = '';
-
-            // Definición explícita de 'res' (evita ReferenceError)
-            const res = await fetch('/api/login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password })
-            });
-
-            const data = await res.json();
-
-            if (res.ok && data.success) {
-              localStorage.setItem('jwt_token', data.token);
-              window.location.replace(data.redirectUrl || '/dashboard.html');
-            } else {
+          if (response.ok && data.success) {
+            if (isRegisterMode) {
               if (errorMsg) {
-                errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-                errorMsg.textContent = data.message || 'Credenciales inválidas.';
+                errorMsg.className = 'text-center small mb-3 fw-bold text-success';
+                errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
               }
+              setTimeout(toggleMode, 1500);
+            } else {
+              // Guardar token JWT y redirigir
+              localStorage.setItem('jwt_token', data.token);
+              window.location.href = data.redirectUrl || '/dashboard.html';
             }
-          } catch (err) {
-            console.error('Error durante la petición:', err);
+          } else {
             if (errorMsg) {
               errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-              errorMsg.textContent = 'Error de conexión con el servidor.';
+              errorMsg.textContent = data.message || 'Error en la petición.';
             }
-          } finally {
-            if (submitBtn) submitBtn.disabled = false;
           }
-        });
-      }
+        } catch (err) {
+          console.error('Error durante la petición:', err);
+          if (errorMsg) {
+            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
+            errorMsg.textContent = 'Error de conexión con el servidor.';
+          }
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
     });
   </script>
 </body>
