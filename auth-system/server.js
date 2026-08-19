@@ -44,6 +44,18 @@ const verifyToken = (req, res, next) => {
 // --- RUTAS DE LA API ---
 
 // 1. Endpoint de Autenticación (Login)
+// Aceptar la ruta /api/login incluso si el Gateway le antepone prefijos o variables
+app.use((req, res, next) => {
+  // Si la petición termina en /api/login pero incluye prefijos internos, normalizar
+  if (req.url.endsWith('/api/login') && req.method === 'POST') {
+    req.url = '/api/login';
+  }
+  if (req.url.endsWith('/api/register') && req.method === 'POST') {
+    req.url = '/api/register';
+  }
+  next();
+});
+
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 

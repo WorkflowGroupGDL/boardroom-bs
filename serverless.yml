@@ -1,21 +1,16 @@
-{
-  "rootDir": "auth-system",
-  "outputDir": "public",
-  "installCommand": "npm install",
-  "buildCommand": "echo \"No build step required\"",
-  "nodeVersion": "18",
-  "cloudFunctions": {
-    "nodejs": {
-      "handler": "server.js",
-      "maxDuration": 10,
-      "externalNodeModules": [
-        "express",
-        "cors",
-        "jsonwebtoken",
-        "dotenv",
-        "@hubspot/api-client",
-        "bcryptjs"
-      ]
-    }
-  }
-}
+component: scf
+name: boardroom-backend
+
+inputs:
+  src: ./
+  handler: server.main_handler
+  runtime: Nodejs18
+  region: ap-guangzhou # Cambia a tu región si es distinta (ej. ap-hongkong, ap-shanghai)
+  events:
+    - apigw:
+        parameters:
+          endpoints:
+            - path: /
+              method: ANY
+            - path: /{proxy+} # Esto equivale al comodín /* para capturar /api/login, etc.
+              method: ANY
