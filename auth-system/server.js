@@ -8,19 +8,38 @@ const { Client } = require('@hubspot/api-client');
 
 const app = express();
 
-// Middlewares
+// ==========================================
+// 1. MIDDLEWARES BASE Y PARSERS (PRIMERO)
+// ==========================================
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.enable('trust proxy');
+
+// Diagnóstico de entrada: Loggear todas las peticiones entrantes
+app.use((req, res, next) => {
+  console.log(`[REQUEST RECEIVED] Method: ${req.method} | URL: ${req.url} | OriginalUrl: ${req.originalUrl}`);
+  next();
+});
 
 // Inicialización del cliente de HubSpot
 const hubspotClient = new Client({
   accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
 });
 
-// Servir archivos estáticos desde la carpeta 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+// ==========================================
+// 2. NORMALIZADOR DE RUTAS DE TENCENT GATEWAY
+// ==========================================
+app.use((req, res, next) => {
+  // Reescribir la URL si Tencent Gateway o el proxy le anteponen prefijos
+  if ((req.url.endsWith('/api/login') || req.originalUrl?.endsWith('/api/login')) && req.method === 'POST') {
+    req.url = '/api/login';
+  }
+  if ((req.url.endsWith('/api/register') || req.originalUrl?.endsWith('/api/register')) && req.method === 'POST') {
+    req.url = '/api/register';
+  }
+  next();
+});
 
 // Middleware de Verificación JWT para Rutas Protegidas
 const verifyToken = (req, res, next) => {
@@ -41,21 +60,11 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// --- RUTAS DE LA API ---
+// ==========================================
+// 3. RUTAS API DINÁMICAS (SEGUNDO)
+// ==========================================
 
 // 1. Endpoint de Autenticación (Login)
-// Aceptar la ruta /api/login incluso si el Gateway le antepone prefijos o variables
-app.use((req, res, next) => {
-  // Si la petición termina en /api/login pero incluye prefijos internos, normalizar
-  if (req.url.endsWith('/api/login') && req.method === 'POST') {
-    req.url = '/api/login';
-  }
-  if (req.url.endsWith('/api/register') && req.method === 'POST') {
-    req.url = '/api/register';
-  }
-  next();
-});
-
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -217,7 +226,7 @@ app.put('/api/profile/update/:contactId', verifyToken, async (req, res) => {
   }
 });
 
-// 4. Endpoints de Consulta de Perfil (Compatibilidad frontend)
+// 4. Endpoints de Consulta de Perfil
 app.get('/api/profile', verifyToken, (req, res) => {
   res.json({ success: true, user: req.user, profile: req.user });
 });
@@ -226,16 +235,21 @@ app.get('/api/user/profile', verifyToken, (req, res) => {
   res.json({ success: true, user: req.user, profile: req.user });
 });
 
-// --- ENRUTAMIENTO BASE / FALLBACK FRONTEND ---
-app.get('/', (req, res) => {
+// ==========================================
+// 4. ARCHIVOS ESTÁTICOS Y FALLBACK (TERCERO)
+// ==========================================
+
+// Servir activos de la carpeta public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Enrutamiento SPA/Fallback HTML (Excluye expresamente cualquier llamada /api/)
+app.get(/^(?!\/api\/).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/*path', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Inicialización del Servidor
+// ==========================================
+// 5. INICIALIZACIÓN DEL SERVIDOR
+// ==========================================
 const startServer = () => {
   const PORT = Number(process.env.PORT) || 3000;
   app.listen(PORT, '0.0.0.0', () => {

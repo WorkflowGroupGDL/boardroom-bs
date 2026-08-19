@@ -1,92 +1,38 @@
-// api/login.js
-const jwt = require('jsonwebtoken');
-const { Client } = require('@hubspot/api-client');
+// Middleware de enrutamiento resiliente para Login y Registro
+app.use(async (req, res, next) => {
+  const isLogin = req.url.includes('login') || req.originalUrl.includes('login');
+  const isRegister = req.url.includes('register') || req.originalUrl.includes('register');
 
-const hubspotClient = new Client({
-  accessToken: process.env.HUBSPOT_ACCESS_TOKEN || ''
+  if (req.method === 'POST' && (isLogin || isRegister)) {
+    if (isLogin) {
+      // Ejecutar lógica de Login
+      return handleLogin(req, res);
+    } else if (isRegister) {
+      // Ejecutar lógica de Registro
+      return handleRegister(req, res);
+    }
+  }
+  next();
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'boardroom_bs_executive_secret_key_2026';
-
-module.exports = async (req, res) => {
-  const { email, password } = req.body || {};
-
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'Por favor ingresa correo y contraseña.'
-    });
-  }
-
+// Extrae tu lógica de login a una función independiente
+async function handleLogin(req, res) {
   try {
-    let userVerified = false;
-    let userData = null;
-
-    if (process.env.HUBSPOT_ACCESS_TOKEN) {
-      try {
-        const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({
-          filterGroups: [{ filters: [{ propertyName: 'email', operator: 'EQ', value: email }] }],
-          properties: ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'programa_inscrito', 'hs_lead_status']
-        });
-
-        if (searchResponse && searchResponse.results && searchResponse.results.length > 0) {
-          userVerified = true;
-          const props = searchResponse.results[0].properties;
-          userData = {
-            id: searchResponse.results[0].id,
-            email: props.email,
-            firstname: props.firstname || '',
-            lastname: props.lastname || '',
-            phone: props.phone || '',
-            company: props.company || '',
-            jobtitle: props.jobtitle || '',
-            programa_inscrito: props.programa_inscrito || 'Programa Ejecutivo',
-            hs_lead_status: props.hs_lead_status || 'Activo'
-          };
-        }
-      } catch (hsError) {
-        console.error('Error consultando API de HubSpot:', hsError.message || hsError);
-      }
-    }
-
-    if (!userVerified && email === 'admin@boardroom.com' && password === '123456') {
-      userVerified = true;
-      userData = {
-        id: 'mock-123',
-        email: 'admin@boardroom.com',
-        firstname: 'James',
-        lastname: 'Lass',
-        phone: '+52 33 1064 6668',
-        company: 'Boardroom Business School',
-        jobtitle: 'Director Ejecutivo',
-        programa_inscrito: 'Programa Alta Dirección',
-        hs_lead_status: 'Activo'
-      };
-    }
-
-    if (userVerified) {
-      const expiresIn = process.env.JWT_EXPIRES_IN || '8h';
-      const token = jwt.sign(userData, JWT_SECRET, { expiresIn });
-
-      return res.status(200).json({
-        success: true,
-        token: token,
-        redirectUrl: '/dashboard.html',
-        user: userData
-      });
-    }
-
-    return res.status(401).json({
-      success: false,
-      message: 'Usuario no encontrado o credenciales inválidas.'
-    });
-
+    const { email, password } = req.body;
+    // ... Tu lógica existente de validación y JWT ...
+    return res.json({ success: true, token: 'YOUR_JWT_TOKEN', redirectUrl: '/dashboard.html' });
   } catch (error) {
-    console.error('Error no controlado en login API:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Error interno en el servidor de autenticación.',
-      error: error.message
-    });
+    return res.status(500).json({ success: false, message: error.message });
   }
-};
+}
+
+// Extrae tu lógica de registro a una función independiente
+async function handleRegister(req, res) {
+  try {
+    const { email, password, firstname, lastname } = req.body;
+    // ... Tu lógica existente de registro ...
+    return res.json({ success: true, message: 'Usuario registrado' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+}
