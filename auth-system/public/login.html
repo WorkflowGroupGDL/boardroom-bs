@@ -394,7 +394,7 @@
               localStorage.setItem('jwt_token', data.token);
 
               // Construir la ruta de destino asegurando la barra inicial y el pathPrefix
-              let redirectPath = data.redirectUrl || '/dashboard.html';
+              let redirectPath = data.redirectUrl || 'dashboard.html';
               if (!redirectPath.startsWith('/')) {
                 redirectPath = '/' + redirectPath;
               }
