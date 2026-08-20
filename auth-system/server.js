@@ -5,6 +5,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Client } = require('@hubspot/api-client');
+const HubSpot = require('@hubspot/api-client');
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,7 @@ const PORT = 3000;
 // ==========================================
 // 1. MIDDLEWARES BASE Y PARSERS (PRIMERO)
 // ==========================================
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
