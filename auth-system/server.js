@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs');
 const { Client } = require('@hubspot/api-client');
 
 const app = express();
+const PORT = 3000;
 
 // ==========================================
 // 1. MIDDLEWARES BASE Y PARSERS (PRIMERO)
@@ -252,7 +253,7 @@ app.get(/^(?!\/api\/).*/, (req, res) => {
 // ==========================================
 const startServer = () => {
   const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, () => {
     console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
   });
 };
