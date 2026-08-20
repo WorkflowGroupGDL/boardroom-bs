@@ -347,6 +347,7 @@
 
       loginForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        e.stopPropagation(); // Evita que extensiones de terceros intercepten el evento submit
 
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
