@@ -265,3 +265,7 @@ if (require.main === module) {
 }
 
 module.exports = app;
+// Expose a handler named `handler` so EdgeOne / serverless platforms can invoke the Express app
+// directly without the app trying to listen on a socket. This keeps compatibility with both
+// local development (node server.js) and cloud function invocation.
+module.exports.handler = app;

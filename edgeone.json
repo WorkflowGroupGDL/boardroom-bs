@@ -2,11 +2,12 @@
   "rootDir": "auth-system",
   "outputDir": "public",
   "installCommand": "npm install",
-  "buildCommand": "echo \"No build step required\"",
+  "buildCommand": "npm run build",
   "nodeVersion": "18",
   "cloudFunctions": {
     "nodejs": {
       "handler": "server.js",
+      "handlerExport": "handler",
       "maxDuration": 10,
       "externalNodeModules": [
         "express",
