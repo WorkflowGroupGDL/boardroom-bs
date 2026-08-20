@@ -243,11 +243,11 @@ app.get('/api/user/profile', verifyToken, (req, res) => {
 // ==========================================
 
 // Servir activos de la carpeta public
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname + 'public')));
 
 // Enrutamiento SPA/Fallback HTML (Excluye expresamente cualquier llamada /api/)
 app.get(/^(?!\/api\/).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname + 'public', 'index.html'));
 });
 
 // ==========================================

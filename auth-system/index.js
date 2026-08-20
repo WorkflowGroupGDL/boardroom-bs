@@ -16,7 +16,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.enable('trust proxy');
 
 // Archivos Estáticos
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname + 'public')));
 
 // Inicializar cliente de HubSpot
 const hubspotClient = new hubspot.Client({
@@ -113,7 +113,7 @@ app.get('/api/profile', verifyToken, (req, res) => {
 
 // Fallback de Express 5 para Frontend
 app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname + 'public', 'index.html'));
 });
 
 const startServer = () => {
