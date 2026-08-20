@@ -390,9 +390,16 @@
               }
               setTimeout(toggleMode, 1500);
             } else {
-              // Guardar token JWT y redirigir considerando el prefijo del entorno
+              // Guardar token JWT en localStorage
               localStorage.setItem('jwt_token', data.token);
-              const redirectPath = data.redirectUrl || 'dashboard.html';
+
+              // Construir la ruta de destino asegurando la barra inicial y el pathPrefix
+              let redirectPath = data.redirectUrl || '/dashboard.html';
+              if (!redirectPath.startsWith('/')) {
+                redirectPath = '/' + redirectPath;
+              }
+
+              // Redirigir al dashboard
               window.location.href = `${pathPrefix}${redirectPath}`;
             }
           } else {
