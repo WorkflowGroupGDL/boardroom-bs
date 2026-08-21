@@ -347,7 +347,7 @@
 
       loginForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        e.stopPropagation(); // Evita que extensiones de terceros intercepten el evento submit
+        e.stopPropagation();
 
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -380,10 +380,13 @@
             body: JSON.stringify(payload)
           });
 
-          // Captura segura del cuerpo JSON ante respuestas HTTP de error (404, 500, etc.)
+          // Captura segura del cuerpo JSON
           const data = await response.json().catch(() => null);
 
-          if (response.ok && data && data.success) {
+          // Evaluar si la respuesta de login o registro fue exitosa
+          const isSuccess = response.ok && data && (data.success === true || Boolean(data.token));
+
+          if (isSuccess) {
             if (isRegisterMode) {
               if (errorMsg) {
                 errorMsg.className = 'text-center small mb-3 fw-bold text-success';
@@ -394,8 +397,8 @@
               // Guardar token JWT en localStorage
               localStorage.setItem('jwt_token', data.token);
 
-              // Construir la ruta de destino asegurando la barra inicial y el pathPrefix
-              let redirectPath = data.redirectUrl || 'dashboard.html';
+              // Construir la ruta de destino asegurando la barra inicial
+              let redirectPath = data.redirectUrl || '/dashboard.html';
               if (!redirectPath.startsWith('/')) {
                 redirectPath = '/' + redirectPath;
               }
@@ -404,9 +407,12 @@
               window.location.href = `${pathPrefix}${redirectPath}`;
             }
           } else {
+            // Si las credenciales son incorrectas o no existe el usuario
             if (errorMsg) {
               errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-              errorMsg.textContent = (data && data.message) ? data.message : `Error en la petición (${response.status}).`;
+              errorMsg.textContent = (data && data.message)
+                ? data.message
+                : 'Usuario no encontrado o credenciales inválidas.';
             }
           }
         } catch (err) {

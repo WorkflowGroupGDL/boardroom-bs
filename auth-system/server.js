@@ -5,15 +5,12 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Client } = require('@hubspot/api-client');
-const HubSpot = require('@hubspot/api-client');
 
 const app = express();
-const PORT = 3000;
 
 // ==========================================
 // 1. MIDDLEWARES BASE Y PARSERS (PRIMERO)
 // ==========================================
-
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -255,7 +252,7 @@ app.get(/^(?!\/api\/).*/, (req, res) => {
 // ==========================================
 const startServer = () => {
   const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor de Boardroom Business School activo en el puerto ${PORT}`);
   });
 };
@@ -265,7 +262,3 @@ if (require.main === module) {
 }
 
 module.exports = app;
-// Expose a handler named `handler` so EdgeOne / serverless platforms can invoke the Express app
-// directly without the app trying to listen on a socket. This keeps compatibility with both
-// local development (node server.js) and cloud function invocation.
-module.exports.handler = app;
