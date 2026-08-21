@@ -86,3 +86,61 @@ app.post('/api/login', async (req, res) => {
     });
   }
 });
+
+// Archivo: api/login.js
+
+export default async function handler(req, res) {
+  // 1. Configurar encabezados CORS y de Control de Caché
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+  // 2. Manejar la petición Pre-flight de CORS (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  // 3. Validar que el método sea estrictamente POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: `Método ${req.method} no permitido. Debe ser POST.` });
+  }
+
+  try {
+    const { email } = req.body;
+    const hubspotToken = process.env.HUBSPOT_TOKEN;
+
+    if (!email) {
+      return res.status(400).json({ error: 'El campo email es obligatorio.' });
+    }
+
+    // 4. Llamada a la API de HubSpot
+    const hubspotRes = await fetch(
+      `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${hubspotToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const hubspotData = await hubspotRes.json();
+
+    // 5. Responder con estado 200 y formato JSON
+    return res.status(200).json({
+      success: true,
+      message: 'Login procesado correctamente',
+      hubspotData: hubspotData,
+    });
+  } catch (error) {
+    console.error('Error en /api/login:', error);
+    return res.status(500).json({ error: 'Error interno del servidor', details: error.message });
+  }
+}
