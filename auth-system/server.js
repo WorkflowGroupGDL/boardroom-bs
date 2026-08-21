@@ -74,3 +74,12 @@ app.post('/api/login', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor activo y listo en el puerto http://localhost:${PORT}`);
 });
+
+// Al final de tu server.js
+module.exports = app;
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor activo en http://localhost:${PORT}`);
+  });
+}
