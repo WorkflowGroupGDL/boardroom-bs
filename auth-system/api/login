@@ -36,3 +36,29 @@ async function handleRegister(req, res) {
     return res.status(500).json({ success: false, message: error.message });
   }
 }
+
+app.post('/api/login', (req, res) => {
+  // 1. Configurar encabezados para evitar caché pública o privada
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
+  // 2. Definir el tipo de contenido como JSON
+  res.setHeader('Content-Type', 'application/json');
+
+  // 3. Lógica de autenticación
+  const { email, password } = req.body;
+
+  if (autenticacionExitosa) {
+    return res.status(200).json({
+      success: true,
+      token: "TU_JWT_TOKEN_AQUI",
+      user: { id: 1, email: email }
+    });
+  } else {
+    return res.status(401).json({
+      success: false,
+      message: "Credenciales inválidas"
+    });
+  }
+});
