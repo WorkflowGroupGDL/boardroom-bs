@@ -59,7 +59,6 @@ app.post('/api/login', async (req, res) => {
 });
 
 // EXPORTAR APP PARA VERCEL (OBLIGATORIO)
-export default app;
 
 // Solo escuchar puerto si se ejecuta localmente (npm start)
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
@@ -68,3 +67,4 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     console.log(`Servidor local corriendo en http://localhost:${PORT}`);
   });
 }
+export default app;
