@@ -176,7 +176,7 @@
               </div>
 
               <!-- Formulario Único para Auth -->
-              <form id="login-form">
+              <form id="loginForm">
 
                 <!-- Campo Nombre (Oculto en Login) -->
                 <div class="form-floating mb-3 d-none" id="container-firstname">
@@ -206,11 +206,13 @@
 
                 <!-- Botón Submit -->
                 <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-semibold shadow-sm mb-3"
-                  id="submit-btn">
+                  id="submitBtn">
                   Entrar
                 </button>
 
               </form>
+              <!-- ESTE ELEMENTO DEBE EXISTIR CON EL ID "result" -->
+              <div id="result"></div>
 
               <!-- Mensajes de Respuesta -->
               <div class="text-center small mb-3 fw-bold" id="error-msg"></div>
@@ -327,106 +329,7 @@
   <script src="assets/js/custom.js"></script>
 
   <!-- Lógica de Formulario e Interacción JS -->
-  <script>
-    let isRegisterMode = false;
-
-    function toggleMode() {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('form-title').textContent = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
-      document.getElementById('submit-btn').textContent = isRegisterMode ? 'Registrarse' : 'Entrar';
-      document.getElementById('toggle-mode').textContent = isRegisterMode ? '¿Ya tienes cuenta? Inicia Sesión' : '¿No tienes cuenta? Regístrate';
-
-      document.getElementById('container-firstname').classList.toggle('d-none', !isRegisterMode);
-      document.getElementById('container-lastname').classList.toggle('d-none', !isRegisterMode);
-      document.getElementById('txtlogin').classList.toggle('d-none', isRegisterMode);
-      document.getElementById('txtregistro').classList.toggle('d-none', !isRegisterMode);
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const loginForm = document.getElementById('login-form');
-
-      loginForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-        const firstname = document.getElementById('firstname') ? document.getElementById('firstname').value.trim() : '';
-        const lastname = document.getElementById('lastname') ? document.getElementById('lastname').value.trim() : '';
-        const errorMsg = document.getElementById('error-msg');
-        const submitBtn = document.getElementById('submit-btn');
-
-        // 1. Detectar prefijo de entorno de Tencent API Gateway (/release o /test)
-        const pathPrefix = window.location.pathname.startsWith('/release') ? '/release' :
-          window.location.pathname.startsWith('/test') ? '/test' : '';
-
-        // 2. Construir la URL del endpoint sin perder la etapa del API Gateway
-        const baseOrigin = (window.BOARDROOM_API_BASE_URL || window.location.origin || '').replace(/\/$/, '');
-        const route = isRegisterMode ? '/api/register' : '/api/login';
-        const endpoint = `${baseOrigin}${pathPrefix}${route}`;
-
-        const payload = isRegisterMode ? { email, password, firstname, lastname } : { email, password };
-
-        try {
-          submitBtn.disabled = true;
-          if (errorMsg) {
-            errorMsg.textContent = '';
-            errorMsg.className = 'text-center small mb-3 fw-bold';
-          }
-
-          const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          // Captura segura del cuerpo JSON
-          const data = await response.json().catch(() => null);
-
-          // Evaluar si la respuesta de login o registro fue exitosa
-          const isSuccess = response.ok && data && (data.success === true || Boolean(data.token));
-
-          if (isSuccess) {
-            if (isRegisterMode) {
-              if (errorMsg) {
-                errorMsg.className = 'text-center small mb-3 fw-bold text-success';
-                errorMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
-              }
-              setTimeout(toggleMode, 1500);
-            } else {
-              // Guardar token JWT en localStorage
-              localStorage.setItem('jwt_token', data.token);
-
-              // Construir la ruta de destino asegurando la barra inicial
-              let redirectPath = data.redirectUrl || '/dashboard.html';
-              if (!redirectPath.startsWith('/')) {
-                redirectPath = '/' + redirectPath;
-              }
-
-              // Redirigir al dashboard
-              window.location.href = `${pathPrefix}${redirectPath}`;
-            }
-          } else {
-            // Si las credenciales son incorrectas o no existe el usuario
-            if (errorMsg) {
-              errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-              errorMsg.textContent = (data && data.message)
-                ? data.message
-                : 'Usuario no encontrado o credenciales inválidas.';
-            }
-          }
-        } catch (err) {
-          console.error('Error durante la petición:', err);
-          if (errorMsg) {
-            errorMsg.className = 'text-center small mb-3 fw-bold text-danger';
-            errorMsg.textContent = 'Error de conexión con el servidor.';
-          }
-        } finally {
-          submitBtn.disabled = false;
-        }
-      });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 
 </html>
