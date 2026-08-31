@@ -128,6 +128,7 @@
   </header>
 
 
+
   <section class="contacto-page header-text" id="top">
     <div class="container">
       <div class="row">
@@ -138,9 +139,9 @@
       </div>
     </div>
   </section>
-  <section class="meetings-page" id="meetings">
+  <section class="contact-us" id="contact">
     <div class="container">
-      <div class="container  bg-light ">
+      <div class="container bg-white rounded-5">
         <div class="row bg-white rounded-top-4">
           <nav aria-label="breadcrumb text-light">
             <ol class="breadcrumb bg-white">
@@ -153,7 +154,7 @@
         </div>
       </div>
       <div class="pt-5 bg-white">
-        <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-4">
+        <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
           <div class="container">
             <div class="row mt-sm-0 mt-5">
               <div class="col-lg-3 col-md-4 position-relative ms-lg-auto">
@@ -188,117 +189,94 @@
               </div>
             </div>
           </div>
-          <section class="py-md-7 py-5">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-lg-8 col-10 mx-auto text-center">
-                  <div class="mb-md-5">
-                    <h3>Contactanos</h3>
-                    <p>
-                      Para más preguntas, incluidas oportunidades de colaboración, envíe un correo electrónico a <a
-                        href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                        data-cfemail="cca4a9a0a0a38cafbea9adb8a5baa9e1b8a5a1e2afa3a1">[email&#160;protected]</a>
-                      o
-                      comuníquese mediante nuestro formulario de contacto.
-                    </p>
-                  </div>
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-8 col-10 mx-auto text-center">
+                <div class="mb-md-5">
+                  <h3>Contactanos</h3>
+                  <p>
+                    Para más preguntas, incluidas oportunidades de colaboración, envíe un correo electrónico a <a
+                      href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                      data-cfemail="cca4a9a0a0a38cafbea9adb8a5baa9e1b8a5a1e2afa3a1">[email&#160;protected]</a>
+                    o
+                    comuníquese mediante nuestro formulario de contacto.
+                  </p>
                 </div>
               </div>
-              <div class="row text-start">
-                <div class="col-lg-8 text-left">
-                  <form role="form" id="custom-form">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="input-group input-group-dynamic mb-4">
-                            <label class="form-label">Nombres</label>
-                            <input class="form-control" aria-label="Nombres..." type="text" type="text" id="firstname"
-                              name="firstname" required>
-                          </div>
-                        </div>
-                        <div class="col-md-6 ps-2">
-                          <div class="input-group input-group-dynamic">
-                            <label class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" placeholder="" aria-label="Apellidos..." type="text"
-                              id="lastname" name="lastname" required>
-                          </div>
-                        </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-left">
+                <form id="contact" action="" method="post">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="name" type="text" id="firstname" placeholder="NOMBRES...*" required>
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="name" type="text" id="lastname" placeholder="APELLIDOS...*" required>
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="email" type="email" id="email" placeholder="CORREO ELECTRONICO...*" required="">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="telefono" type="text" id="telefono" placeholder="TELEFONO...*" required>
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="company" type="text" id="company" placeholder="CARGO / EMPRESA...*" required>
+                        </fieldset>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <div class="input-group input-group-dynamic mb-4">
-                            <label class="form-label">Correo</label>
-                            <input class="form-control" aria-label="Correo..." type="text" id="email" name="email"
-                              required>
-                          </div>
+                          <fieldset>
+                            <input name="city" type="text" id="city" placeholder="CIUDAD...*" required>
+                          </fieldset>
                         </div>
                         <div class="col-md-6 ps-2">
-                          <div class="input-group input-group-dynamic">
-                            <label class="form-label">Telefono</label>
-                            <input type="text" class="form-control" placeholder="" aria-label="Telefono..." type="text"
-                              id="mobilephone" name="mobilephone" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="input-group input-group-dynamic mb-4">
-                            <label class="form-label">Ciudad</label>
-                            <input class="form-control" aria-label="Numero Ciudad..." type="text" id="city" name="city"
-                              required>
-                          </div>
-                        </div>
-                        <div class="col-md-6 ps-2">
-                          <div class="input-group input-group-dynamic">
-                            <label class="form-label">Estado</label>
-                            <input type="text" class="form-control" placeholder="" aria-label="Estado..." type="text"
-                              id="state" name="state" required>
-                          </div>
+                          <fieldset>
+                            <input name="state" type="text" id="state" placeholder="ESTADO...*" required>
+                          </fieldset>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <div class="input-group input-group-dynamic mb-4">
-                            <label class="form-label">Pais</label>
-                            <input class="form-control" aria-label="Pais..." type="text" id="country" name="country"
-                              required>
-                          </div>
-                        </div>
-                        <div class="col-md-6 ps-2">
-                          <div class="input-group input-group-dynamic">
-                            <label class="form-label">Empresa</label>
-                            <input type="text" class="form-control" aria-label="Empresa..." type="text" id="company"
-                              name="company" required>
-                          </div>
+                          <fieldset>
+                            <input name="country" type="text" id="country" placeholder="PAIS...*" required>
+                          </fieldset>
                         </div>
                       </div>
-                      <div class="input-group mb-4 input-group-static">
-                        <label>Dejanos su mensaje aqui</label>
-                        <textarea name="cual_es_su_objetivo_" class="form-control" id="cual_es_su_objetivo_"
-                          rows="4"></textarea>
+                      <div class="col-lg-12">
+                        <fieldset>
+                          <textarea name="cual_es_su_objetivo_" type="text" class="form-control"
+                            id="cual_es_su_objetivo_"
+                            placeholder="CUÉNTANOS TU PRINCIPAL RETO Y PORQUE QUIERES PARTICIPAR EN EL PROGRAMA ELEGIDO O DE TU INTERÉS PRINCIPAL..."
+                            required=""></textarea>
+                        </fieldset>
                       </div>
                       <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-check form-switch mb-4 d-flex align-items-center">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
-                            <label class="form-check-label ms-3 mb-0" for="flexSwitchCheckDefault">I agree to the <a
-                                href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a>.</label>
-                          </div>
-                        </div>
                         <div class="cf-turnstile" data-sitekey="0x4AAAAAACBm_Bj46zJneKsn" data-theme="light"
                           data-size="normal" data-callback="onSuccess"></div>
                         <div class="col-md-12">
-                          <button type="submit" class="btn bg-gradient-dark w-100" value="Enviar">Send Message</button>
+                          <button type="submit" class="btn bg-gradient-dark w-100" value="Enviar">Send
+                            Message</button>
                         </div>
                         <div id="thankyou"></div>
                       </div>
                     </div>
-                  </form>
-                </div>
-                <div class="col-lg-4 text-center">
-                  Trabajamos con empresas y clientes en toda Latinoamérica hispanohablante.
-                  <img src="assets/images/mapa.webp" class="img-fluid">
-                </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-12 text-center">
+                Trabajamos con empresas y clientes en todo el mundo hispanohablante.
+                <img src="assets/images/worldmap.webp" class="img-fluid">
               </div>
             </div>
             <!-- Botón Scroll to Top sin JS -->
@@ -308,12 +286,12 @@
             </a>
             <br><br>
             <!-- END Teams w/ 4 cards w/ image on left & descriptio/social link on right -->
+          </div>
+          <br><br>
         </div>
-        <br><br>
       </div>
     </div>
   </section>
-
 
   <!-- ---- START FOOTER 2 dark w/ bg image 5 cols & subscribe area & social---- -->
   <!-- <section class="contact-us bg-dark" id="contact"> -->
@@ -492,6 +470,60 @@
                 <div id="thankyou"></div>
               </div>
             </form>
+            <script>
+              document.getElementById('custom-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+
+                const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                const portalId = '44884955'; // Reemplaza con tu ID de portal
+                const formGuid = 'e0cb0ee0-8837-48f6-9ef9-efdff4202720'; // Reemplaza con el GUID de tu formulario
+                const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+
+
+                const formData = new FormData(this);
+                const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
+
+
+                const jsonPayload = {
+                  fields: data,
+                  context: {
+                    pageUri: window.location.href,
+                    pageName: document.title,
+                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
+                  }
+                };
+
+
+                fetch(submitURL, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(jsonPayload)
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.inlineMessage) {
+                      document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                    }
+                  })
+                  .catch(error => console.error('Error:', error));
+              });
+
+
+              // Función para obtener cookies
+              function getCookie(name) {
+                let cookieArr = document.cookie.split(";");
+                for (let i = 0; i < cookieArr.length; i++) {
+                  let cookiePair = cookieArr[i].split("=");
+                  if (name === cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                  }
+                }
+                return null;
+              }
+            </script>
           </div>
         </div>
       </div>

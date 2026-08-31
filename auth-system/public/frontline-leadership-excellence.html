@@ -668,34 +668,137 @@
                       </div>
                       <div class="col-lg-4">
                         <fieldset>
-                          <input name="name" type="text" id="name" placeholder="NOMBRE COMPLETO...*" required="">
+                          <input name="name" type="text" id="firstname" placeholder="NOMBRES...*" required>
                         </fieldset>
                       </div>
                       <div class="col-lg-4">
                         <fieldset>
-                          <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*"
-                            placeholder="CORREO EJECUTIVO...*" required="">
+                          <input name="name" type="text" id="lastname" placeholder="APELLIDOS...*" required>
                         </fieldset>
                       </div>
                       <div class="col-lg-4">
                         <fieldset>
-                          <input name="subject" type="text" id="subject" placeholder="CARGO / EMPRESA...*" required="">
+                          <input name="email" type="email" id="email" placeholder="CORREO ELECTRONICO...*" required="">
                         </fieldset>
                       </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="telefono" type="text" id="telefono" placeholder="TELEFONO...*" required>
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-4">
+                        <fieldset>
+                          <input name="company" type="text" id="company" placeholder="CARGO / EMPRESA...*" required>
+                        </fieldset>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <fieldset>
+                            <input name="city" type="text" id="city" placeholder="CIUDAD...*" required>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-6 ps-2">
+                          <fieldset>
+                            <input name="state" type="text" id="state" placeholder="ESTADO...*" required>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <fieldset>
+                            <input name="country" type="text" id="country" placeholder="PAIS...*" required>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                          <fieldset>
+                            <select name="field_of_study" id="field_of_study" class="form-input" required>
+                              <option value="" disabled selected hidden>SELECCIONA UNA OPCIÓN...*</option>
+                              <option value="PROGRAMA COHORTE-CERO PARA FUNDADORES">PROGRAMA COHORTE-CERO PARA
+                                FUNDADORES
+                              </option>
+                              <option value="STRATEGIC LEADERSHIP PROGRAM -
+                              DIRECTORE">STRATEGIC LEADERSHIP PROGRAM -
+                                DIRECTORES</option>
+                              <option value="STRATEGIC EXECUTION & PEOPLE LEADERSHIP PROGRAM - MANAGEMENT">STRATEGIC
+                                EXECUTION & PEOPLE LEADERSHIP PROGRAM - MANAGEMENT
+                              </option>
+                              <option value="FRONTLINE LEADERSHIP
+                              EXCELLENCE PROGRAM - SUPERVISORES">FRONTLINE LEADERSHIP
+                                EXCELLENCE PROGRAM - SUPERVISORES</option>
+                            </select>
+                          </fieldset>
+                        </div>
+                      </div>
+
                       <div class="col-lg-12">
                         <fieldset>
-                          <textarea name="message" type="text" class="form-control" id="message"
-                            placeholder="CUÉNTANOS TU PRINCIPAL RETO DE LIDERAZGO O INTERÉS EN LA COHORTE CERO..."
+                          <textarea name="cual_es_su_objetivo_" type="text" class="form-control"
+                            id="cual_es_su_objetivo_"
+                            placeholder="CUÉNTANOS TU PRINCIPAL RETO Y PORQUE QUIERES PARTICIPAR EN EL PROGRAMA ELEGIDO O DE TU INTERÉS PRINCIPAL..."
                             required=""></textarea>
                         </fieldset>
                       </div>
-                      <div class="col-lg-12">
-                        <fieldset>
-                          <button type="submit" id="form-submit" class="button">ENVIAR POSTULACIÓN</button>
-                        </fieldset>
+                      <div class="row">
+                        <div class="cf-turnstile" data-sitekey="0x4AAAAAACBm_Bj46zJneKsn" data-theme="light"
+                          data-size="normal" data-callback="onSuccess"></div>
+                        <div class="col-md-12">
+                          <button type="submit" id="form-submit" class="button" value="Enviar">ENVIAR
+                            POSTULACIÓN</button>
+                        </div>
+                        <div id="thankyou"></div>
                       </div>
+
                     </div>
                   </form>
+                  <script>
+                    document.getElementById('custom-form').addEventListener('submit', function (event) {
+                      event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+                      const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                      const portalId = '44884955'; // Reemplaza con tu ID de portal
+                      const formGuid = 'a7fbb4ee-be4e-4608-8e4a-5e320f24c52d'; // Reemplaza con el GUID de tu formulario
+                      const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+
+                      const formData = new FormData(this);
+                      const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
+
+                      const jsonPayload = {
+                        fields: data,
+                        context: {
+                          pageUri: window.location.href,
+                          pageName: document.title,
+                          hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
+                        }
+                      };
+
+                      fetch(submitURL, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonPayload)
+                      })
+                        .then(response => response.json())
+                        .then(data => {
+                          if (data.inlineMessage) {
+                            document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                          }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    });
+
+                    // Función para obtener cookies
+                    function getCookie(name) {
+                      let cookieArr = document.cookie.split(";");
+                      for (let i = 0; i < cookieArr.length; i++) {
+                        let cookiePair = cookieArr[i].split("=");
+                        if (name === cookiePair[0].trim()) {
+                          return decodeURIComponent(cookiePair[1]);
+                        }
+                      }
+                      return null;
+                    }
+                  </script>
                 </div>
               </div>
             </div>
@@ -707,16 +810,16 @@
                     <span>+52 33 1064 6668</span>
                   </li>
                   <li>
-                    <h6>Correo Electrónico</h6>
-                    <span>admision@boardroom.com</span>
+                    <h6>Modalidad</h6>
+                    <span>En línea</span>
                   </li>
                   <li>
                     <h6>Ubicación / Sede</h6>
                     <span>Guadalajara, Jalisco, México</span>
                   </li>
                   <li>
-                    <h6>Sitio Web Oficial</h6>
-                    <span>www.boardroom.com</span>
+                    <h6>Pista de aprendizaje</h6>
+                    <span>Certificado + DC-3 STPS</span>
                   </li>
                 </ul>
 
@@ -725,7 +828,11 @@
           </div>
           <br><br>
         </div>
-
+        <!-- Botón Scroll to Top sin JS -->
+        <a target="_self" href="#top" class="btn btn-danger btn-lg rounded-circle" id="btn-back-to-top"
+          title="Volver arriba">
+          ↑
+        </a>
       </section>
       <!-- GRUPO 5 -->
 
@@ -963,6 +1070,60 @@
                 <div id="thankyou"></div>
               </div>
             </form>
+            <script>
+              document.getElementById('custom-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+
+                const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                const portalId = '44884955'; // Reemplaza con tu ID de portal
+                const formGuid = 'e0cb0ee0-8837-48f6-9ef9-efdff4202720'; // Reemplaza con el GUID de tu formulario
+                const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+
+
+                const formData = new FormData(this);
+                const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
+
+
+                const jsonPayload = {
+                  fields: data,
+                  context: {
+                    pageUri: window.location.href,
+                    pageName: document.title,
+                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
+                  }
+                };
+
+
+                fetch(submitURL, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(jsonPayload)
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.inlineMessage) {
+                      document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                    }
+                  })
+                  .catch(error => console.error('Error:', error));
+              });
+
+
+              // Función para obtener cookies
+              function getCookie(name) {
+                let cookieArr = document.cookie.split(";");
+                for (let i = 0; i < cookieArr.length; i++) {
+                  let cookiePair = cookieArr[i].split("=");
+                  if (name === cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                  }
+                }
+                return null;
+              }
+            </script>
           </div>
         </div>
       </div>
