@@ -35,8 +35,23 @@ export async function onRequestPost(context) {
       );
     }
 
-    // Consulta directa a la API de HubSpot desde la Edge Network de Cloudflare
-    const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email`;
+    // 1. Definimos las propiedades que queremos traer de vuelta
+    const propertiesNeeded = [
+      'firstname',
+      'lastname',
+      'email',
+      'phone',
+      'jobtitle',
+      'company',
+      'program',
+      'userstatus',
+      'token'
+    ];
+    const propertiesQuery = propertiesNeeded.join(',');
+
+    // 2. CORRECCIÓN: Unimos todo en la URL real del fetch con "&properties="
+    const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
+    
     const hubspotRes = await fetch(hubspotUrl, {
       method: 'GET',
       headers: {
@@ -44,21 +59,6 @@ export async function onRequestPost(context) {
         'Content-Type': 'application/json'
       }
     });
-
-        const propertiesNeeded = [
-  'firstname',
-  'lastname',
-  'email',
-  'phone',
-  'jobtitle',
-  'company',
-  'program',
-  'userstatus',
-  'token'
-    ];
-    
-    const propertiesQuery = propertiesNeeded.join(',');
-    const hubspotUrl2 = `https://hubapi.com{contactId}?properties=${propertiesQuery}`;
 
     const data = await hubspotRes.json();
 
@@ -73,22 +73,22 @@ export async function onRequestPost(context) {
       );
     }
 
-    // Respuesta exitosa al cliente
+    // Respuesta exitosa al cliente con todas las propiedades solicitadas
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Login exitoso',
         contact: {
-        id: data.id,
-        firstname: data.properties?.firstname || '',
-        lastname: data.properties?.lastname || '',
-        email: data.properties?.email || email,
-        phone: data.properties?.phone || '',
-        jobtitle: data.properties?.jobtitle || '',
-        company: data.properties?.company || '',
-        program: data.properties?.program || '',
-        userstatus: data.properties?.userstatus || '',
-        token: data.properties?.token || ''
+          id: data.id,
+          firstname: data.properties?.firstname || '',
+          lastname: data.properties?.lastname || '',
+          email: data.properties?.email || email,
+          phone: data.properties?.phone || '',
+          jobtitle: data.properties?.jobtitle || '',
+          company: data.properties?.company || '',
+          program: data.properties?.program || '',
+          userstatus: data.properties?.userstatus || '',
+          token: data.properties?.token || ''
         }
       }),
       { status: 200, headers: corsHeaders }
