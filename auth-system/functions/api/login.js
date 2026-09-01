@@ -89,7 +89,8 @@ export async function onRequestPost(context) {
           company: data.properties?.company || '',
           program: data.properties?.program || '',
           userstatus: data.properties?.userstatus || '',
-          token: data.properties?.token || ''
+          token: data.properties?.token || '',
+          matricula: data.properties?.matricula || ''
         }
       }),
       { status: 200, headers: corsHeaders }
