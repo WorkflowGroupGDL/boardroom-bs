@@ -65,6 +65,21 @@ async function handleRequest(request) {
         }
       });
 
+          const propertiesNeeded = [
+  'firstname',
+  'lastname',
+  'email',
+  'phone',
+  'jobtitle',
+  'company',
+  'program',
+  'userstatus',
+  'token'
+    ];
+    
+    const propertiesQuery = propertiesNeeded.join(',');
+    const hubspotUrl2 = `https://hubapi.com{contactId}?properties=${propertiesQuery}`;
+
       const data = await hubspotRes.json();
 
       if (!hubspotRes.ok) {

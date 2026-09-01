@@ -32,6 +32,21 @@ app.post('/api/login', async (req, res) => {
       }
     });
 
+    const propertiesNeeded = [
+  'firstname',
+  'lastname',
+  'email',
+  'phone',
+  'jobtitle',
+  'company',
+  'program',
+  'userstatus',
+  'token'
+    ];
+    
+    const propertiesQuery = propertiesNeeded.join(',');
+    const hubspotUrl = `https://hubapi.com{contactId}?properties=${propertiesQuery}`;
+
     const data = await response.json();
 
     if (!response.ok) {
