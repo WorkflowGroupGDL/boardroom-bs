@@ -48,7 +48,12 @@ app.post('/api/login', async (req, res) => {
         id: data.id,
         firstname: data.properties?.firstname || '',
         lastname: data.properties?.lastname || '',
-        email: data.properties?.email || email
+        email: data.properties?.email || email,
+        phone: data.properties?.phone || '',
+        jobtitle: data.properties?.jobtitle || '',
+        company: data.properties?.company || '',
+        program: data.properties?.program || '',
+        userstatus: data.properties?.userstatus || ''
       }
     });
 
