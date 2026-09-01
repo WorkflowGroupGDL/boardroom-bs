@@ -56,7 +56,7 @@ async function handleRequest(request) {
       }
 
       // Consulta a la API de HubSpot
-      const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email`;
+      const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
       const hubspotRes = await fetch(hubspotUrl, {
         method: 'GET',
         headers: {
@@ -79,7 +79,6 @@ async function handleRequest(request) {
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
-    const hubspotUrl2 = `https://hubapi.com{contactId}?properties=${propertiesQuery}`;
 
       const data = await hubspotRes.json();
 

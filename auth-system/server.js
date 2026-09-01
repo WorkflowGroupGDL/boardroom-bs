@@ -46,7 +46,7 @@ app.post('/api/login', async (req, res) => {
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
-    const hubspotUrl = `https://hubapi.com{contactId}?properties=${propertiesQuery}`;
+    const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
 
     const data = await response.json();
 
