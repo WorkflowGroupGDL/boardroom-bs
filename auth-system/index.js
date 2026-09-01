@@ -75,7 +75,7 @@ async function handleRequest(request) {
       'program',
       'userstatus',
       'token',
-      'matricula'
+      'matricula_escolar'
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
@@ -106,7 +106,7 @@ async function handleRequest(request) {
         program: data.properties?.program || '',
         userstatus: data.properties?.userstatus || '',
         token: data.properties?.token || '',
-        matricula: data.properties?.matricula || '' 
+        matricula_escolar: data.properties?.matricula_escolar || '' 
         }
       }), {
         status: 200,

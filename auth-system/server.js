@@ -42,7 +42,7 @@ app.post('/api/login', async (req, res) => {
   'program',
   'userstatus',
   'token',
-      'matricula'
+      'matricula_escolar'
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
@@ -71,7 +71,7 @@ app.post('/api/login', async (req, res) => {
         program: data.properties?.program || '',
         userstatus: data.properties?.userstatus || '',
         token: data.properties?.token || '',
-        matricula: data.properties?.matricula || ''
+        matricula_escolar: data.properties?.matricula_escolar || ''
       }
     });
 
