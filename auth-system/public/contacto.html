@@ -525,48 +525,59 @@
               </div>
             </form>
             <script>
-              document.getElementById('custom-form').addEventListener('submit', function (event) {
-                event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+              // 1. Esperamos a que todo el HTML esté cargado en el navegador
+              document.addEventListener('DOMContentLoaded', function () {
 
+                // 2. Ahora sí podemos buscar el formulario de HubSpot de forma segura
+                const formElement = document.getElementById('custom-form');
 
-                const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-                const portalId = '44884955'; // Reemplaza con tu ID de portal
-                const formGuid = 'e0cb0ee0-8837-48f6-9ef9-efdff4202720'; // Reemplaza con el GUID de tu formulario
-                const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+                // Verificación de seguridad por si acaso el ID cambia en el futuro
+                if (formElement) {
+                  formElement.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
 
+                    const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                    const portalId = '44884955'; // Reemplaza con tu ID de portal
+                    const formGuid = 'a7fbb4ee-be4e-4608-8e4a-5e320f24c52d'; // Reemplaza con el GUID de tu formulario
+                    const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
 
-                const formData = new FormData(this);
-                const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
+                    const formData = new FormData(this);
+                    const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
 
+                    const jsonPayload = {
+                      fields: data,
+                      context: {
+                        pageUri: window.location.href,
+                        pageName: document.title,
+                        hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
+                      }
+                    };
 
-                const jsonPayload = {
-                  fields: data,
-                  context: {
-                    pageUri: window.location.href,
-                    pageName: document.title,
-                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
-                  }
-                };
+                    fetch(submitURL, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(jsonPayload)
+                    })
+                      .then(response => response.json())
+                      .then(data => {
+                        if (data.inlineMessage) {
+                          const thankYouElement = document.getElementById('thankyou');
+                          if (thankYouElement) {
+                            thankYouElement.innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                          }
+                        }
+                      })
+                      .catch(error => console.error('Error:', error));
+                  });
+                } else {
+                  console.warn("No se encontró ningún elemento con el ID 'custom-form' en esta página.");
+                }
 
-
-                fetch(submitURL, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(jsonPayload)
-                })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.inlineMessage) {
-                      document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
-                    }
-                  })
-                  .catch(error => console.error('Error:', error));
               });
 
-
-              // Función para obtener cookies
+              // Función para obtener cookies (puede quedar afuera del DOMContentLoaded)
               function getCookie(name) {
                 let cookieArr = document.cookie.split(";");
                 for (let i = 0; i < cookieArr.length; i++) {
