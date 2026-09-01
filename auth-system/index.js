@@ -81,10 +81,16 @@ async function handleRequest(request) {
       return new Response(JSON.stringify({
         success: true,
         contact: {
-          id: data.id,
-          firstname: data.properties?.firstname || '',
-          lastname: data.properties?.lastname || '',
-          email: data.properties?.email || email
+        id: data.id,
+        firstname: data.properties?.firstname || '',
+        lastname: data.properties?.lastname || '',
+        email: data.properties?.email || email,
+        phone: data.properties?.phone || '',
+        jobtitle: data.properties?.jobtitle || '',
+        company: data.properties?.company || '',
+        program: data.properties?.program || '',
+        userstatus: data.properties?.userstatus || '',
+        token: data.properties?.token || ''
         }
       }), {
         status: 200,

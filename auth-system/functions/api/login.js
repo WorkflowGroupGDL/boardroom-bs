@@ -64,7 +64,7 @@ export async function onRequestPost(context) {
         success: true,
         message: 'Login exitoso',
         contact: {
-          id: data.id,
+        id: data.id,
         firstname: data.properties?.firstname || '',
         lastname: data.properties?.lastname || '',
         email: data.properties?.email || email,
