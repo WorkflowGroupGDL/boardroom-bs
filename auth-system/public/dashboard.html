@@ -168,6 +168,7 @@
                     <p class="mb-2"><strong>Nombre:</strong> <span id="user-name">Cargando...</span></p>
                     <p class="mb-2"><strong>Correo:</strong> <span id="user-email">-</span></p>
                     <p class="mb-0"><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
+                    <p class="mb-0"><strong>Matrícula:</strong> <span id="user-matricula">-</span></p>
                   </div>
                 </div>
 
@@ -340,6 +341,7 @@
       setElementText('user-program', user.programa_inscrito || 'Sin programa asignado');
       setElementText('user-status', user.hs_lead_status || 'Activo');
       setElementText('user-token', user.token || 'Activo');
+      setElementText('user-matricula', user.matricula || 'Sin Matrícula');
     });
   </script>
 </body>

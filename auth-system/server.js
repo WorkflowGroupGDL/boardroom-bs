@@ -41,7 +41,8 @@ app.post('/api/login', async (req, res) => {
   'company',
   'program',
   'userstatus',
-  'token'
+  'token',
+      'matricula'
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
@@ -69,7 +70,8 @@ app.post('/api/login', async (req, res) => {
         company: data.properties?.company || '',
         program: data.properties?.program || '',
         userstatus: data.properties?.userstatus || '',
-        token: data.properties?.token || ''
+        token: data.properties?.token || '',
+        matricula: data.properties?.matricula || ''
       }
     });
 

@@ -45,7 +45,8 @@ export async function onRequestPost(context) {
       'company',
       'program',
       'userstatus',
-      'token'
+      'token',
+      'matricula'
     ];
     const propertiesQuery = propertiesNeeded.join(',');
 

@@ -66,15 +66,16 @@ async function handleRequest(request) {
       });
 
           const propertiesNeeded = [
-  'firstname',
-  'lastname',
-  'email',
-  'phone',
-  'jobtitle',
-  'company',
-  'program',
-  'userstatus',
-  'token'
+      'firstname',
+      'lastname',
+      'email',
+      'phone',
+      'jobtitle',
+      'company',
+      'program',
+      'userstatus',
+      'token',
+      'matricula'
     ];
     
     const propertiesQuery = propertiesNeeded.join(',');
@@ -105,7 +106,8 @@ async function handleRequest(request) {
         company: data.properties?.company || '',
         program: data.properties?.program || '',
         userstatus: data.properties?.userstatus || '',
-        token: data.properties?.token || ''
+        token: data.properties?.token || '',
+        matricula: data.properties?.matricula || '' 
         }
       }), {
         status: 200,
