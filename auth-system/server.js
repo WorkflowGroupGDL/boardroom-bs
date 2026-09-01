@@ -53,7 +53,8 @@ app.post('/api/login', async (req, res) => {
         jobtitle: data.properties?.jobtitle || '',
         company: data.properties?.company || '',
         program: data.properties?.program || '',
-        userstatus: data.properties?.userstatus || ''
+        userstatus: data.properties?.userstatus || '',
+        token: data.properties?.token || ''
       }
     });
 
