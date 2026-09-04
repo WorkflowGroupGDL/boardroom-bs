@@ -165,7 +165,7 @@
               </div>
 
               <!-- Formulario Único para Auth -->
-              <form id="loginForm">
+              <form id="registroForm">
 
                 <!-- Campo Nombre -->
                 <div class="form-floating mb-3">
@@ -346,70 +346,75 @@
   <!-- Lógica de Formulario e Interacción JS -->
   <!-- <script src="app.js"></script> -->
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async function (event) {
-      // 1. Evita que el formulario se envíe automáticamente
+    document.getElementById('registroForm').addEventListener('submit', async function (event) {
       event.preventDefault();
 
-      // 2. Obtener los valores de los inputs
+      // 1. Capturar elementos de la interfaz para controlar el estado de carga
+      const botonSubmit = event.target.querySelector('button[type="submit"]');
       const pass1 = document.getElementById('inputPassword').value;
       const pass2 = document.getElementById('confirmPassword').value;
       const errorContainer = document.getElementById('errorPassword');
 
-      // Limpiar mensajes de error previos
+      // Limpieza inicial de errores
       errorContainer.style.display = 'none';
       errorContainer.textContent = '';
 
-      // 3. Regla 1: Validar que no estén vacías y longitud mínima (ej. 6 caracteres)
-      if (pass1.length < 6) {
-        errorContainer.textContent = 'La contraseña debe tener al menos 6 caracteres.';
-        errorContainer.style.display = 'block';
-        return; // Detiene la ejecución aquí
-      }
-
-      // 4. Regla 2: Validar que ambos campos sean exactamente iguales
+      // 2. Validaciones previas de contraseñas en el cliente
       if (pass1 !== pass2) {
-        errorContainer.textContent = 'Las contraseñas no coinciden. Por favor, verifica.';
+        errorContainer.textContent = 'Las contraseñas no coinciden.';
         errorContainer.style.display = 'block';
-        return; // Detiene la ejecución e impide el fetch al servidor
+        return;
       }
 
-      // 5. Si pasa las validaciones, procedemos a armar el objeto y enviarlo a Tencent Cloud
+      // 3. DESHABILITAR EL BOTÓN (Previene múltiples envíos accidentales)
+      const textoOriginalBoton = botonSubmit.textContent;
+      botonSubmit.disabled = true;
+      botonSubmit.textContent = 'Procesando registro...';
+
+      // 4. Recolectar datos del formulario
       const datosFormulario = {
         firstname: document.getElementById('inputNombre').value,
         lastname: document.getElementById('inputApellido').value,
         email: document.getElementById('inputEmail').value,
-        phone: document.getElementById('inputTelefono').value,
-        jobtitle: document.getElementById('inputCargo').value,
-        company: document.getElementById('inputEmpresa').value,
-        // program: document.getElementById('selectPrograma').value,
-        password: document.getElementById('inputPassword').value // Contraseña normal
+        password: pass1
       };
 
       try {
-        // 5. Envío de datos al endpoint del servidor
-        // Si Nginx sirve el HTML y la API juntos, usa '/api/register'. 
-        // Si la API corre en otro puerto/dominio separado, usa 'http://IP_DE_TENCENT/api/register'
+        // 5. Envío al backend Express en Tencent Cloud
         const response = await fetch('/api/register', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(datosFormulario)
         });
 
         const resultado = await response.json();
 
-        // 6. Procesar la respuesta que viene de HubSpot/Express
         if (resultado.success) {
-          alert('¡Registro exitoso! ' + resultado.message);
-          window.location.href = 'login.html'; // Redirigir al formulario de login
+          // OPCIÓN A: Iniciar sesión automáticamente (Recomendada para mejor UX)
+          if (resultado.contact) {
+            localStorage.setItem('usuario_boardroom', JSON.stringify(resultado.contact));
+            window.location.href = 'dashboard.html';
+          } else {
+            // OPCIÓN B: Flujo tradicional si tu backend no retorna el objeto contacto
+            alert('¡Registro completado con éxito!');
+            window.location.href = 'login.html';
+          }
         } else {
-          alert('Error en el registro: ' + resultado.message);
+          // Mostrar el error exacto que regresó tu backend o HubSpot (Ej: cuenta ya activa)
+          alert(`No se pudo registrar: ${resultado.message}`);
+
+          // REHABILITAR EL BOTÓN si hubo un error para que el usuario pueda corregir los datos
+          botonSubmit.disabled = false;
+          botonSubmit.textContent = textoOriginalBoton;
         }
 
       } catch (error) {
         console.error('Error en la petición:', error);
-        alert('No se pudo establecer conexión con el servidor en la nube.');
+        alert('Error de red: No se pudo conectar con el servidor de Boardroom.');
+
+        // REHABILITAR EL BOTÓN en caso de falla de conexión catastrófica
+        botonSubmit.disabled = false;
+        botonSubmit.textContent = textoOriginalBoton;
       }
     });
   </script>
