@@ -1,4 +1,4 @@
-// /api/register (Solución al error de respuesta de HubSpot)
+// /api/register (Diagnóstico para error 400 de HubSpot)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -18,9 +18,10 @@ export async function onRequestPost(context) {
     const lastname = body.lastname ? body.lastname.trim() : '';
     const password = body.password || '';
 
+    // Si tu propio frontend manda datos vacíos, esto activa el 400 local
     if (!email || !password) {
       return new Response(
-        JSON.stringify({ success: false, message: 'El correo y la contraseña son requeridos.' }),
+        JSON.stringify({ success: false, message: 'El correo y la contraseña son obligatorios en el formulario.' }),
         { status: 400, headers: corsHeaders }
       );
     }
@@ -39,20 +40,20 @@ export async function onRequestPost(context) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // 2. Encabezados obligatorios para las peticiones a HubSpot
     const hubspotHeaders = {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
-      'Accept': 'application/json', // OBLIGA A HUBSPOT A RESPONDER JSON Y NO HTML
-      'User-Agent': 'Boardroom-Portal/1.0' // Evita bloqueos de seguridad de HubSpot
+      'Accept': 'application/json',
+      'User-Agent': 'Boardroom-Portal/1.0'
     };
 
-    // 3. Buscar si el contacto existe
-    const searchUrl = 'https://api.hubapi.com/crm/v3/objects/contacts/search';
+    // 2. Buscar si el contacto existe
+    const searchUrl = 'https://hubapi.com';
     const searchPayload = {
       filterGroups: [{
         filters: [{ propertyName: 'email', operator: 'EQ', value: email }]
       }],
+      // Si el error 400 persiste, una de estas propiedades no existe de forma interna en tu HubSpot
       properties: ['password_hash', 'firstname', 'lastname', 'email', 'phone', 'jobtitle', 'company', 'program', 'userstatus']
     };
 
@@ -62,17 +63,29 @@ export async function onRequestPost(context) {
       body: JSON.stringify(searchPayload)
     });
 
-    // Control para evitar el crash si HubSpot responde HTML
     const contentTypeSearch = searchRes.headers.get('content-type') || '';
     if (!contentTypeSearch.includes('application/json')) {
       const textError = await searchRes.text();
       return new Response(
-        JSON.stringify({ success: false, message: `HubSpot Search no devolvió JSON (Código ${searchRes.status}).`, details: textError.substring(0, 200) }),
+        JSON.stringify({ success: false, message: 'HubSpot devolvió un HTML inválido en la búsqueda.', details: textError.substring(0, 200) }),
         { status: 502, headers: corsHeaders }
       );
     }
 
     const searchData = await searchRes.json();
+
+    // NUEVA VALIDACIÓN: Si HubSpot responde 400 en la búsqueda, nos dirá el motivo exacto aquí
+    if (!searchRes.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          message: `HubSpot rechazó la consulta (Error ${searchRes.status}). Revisa si las propiedades personalizadas existen en el CRM.`, 
+          details: searchData 
+        }),
+        { status: searchRes.status, headers: corsHeaders }
+      );
+    }
+
     const existingContact = searchData.results && searchData.results.length > 0 ? searchData.results[0] : null;
 
     // -------------------------------------------------------------
@@ -109,18 +122,10 @@ export async function onRequestPost(context) {
         body: JSON.stringify(updatePayload)
       });
 
-      const contentTypeUpdate = updateRes.headers.get('content-type') || '';
-      if (!contentTypeUpdate.includes('application/json')) {
-        return new Response(
-          JSON.stringify({ success: false, message: `HubSpot Update no devolvió JSON.` }),
-          { status: 502, headers: corsHeaders }
-        );
-      }
-
       if (!updateRes.ok) {
         const errData = await updateRes.json();
         return new Response(
-          JSON.stringify({ success: false, message: 'Error al activar tu cuenta existente.', details: errData }),
+          JSON.stringify({ success: false, message: 'Error al actualizar tu cuenta existente en HubSpot.', details: errData }),
           { status: updateRes.status, headers: corsHeaders }
         );
       }
@@ -158,20 +163,11 @@ export async function onRequestPost(context) {
       }
     };
 
-    const createRes = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
+    const createRes = await fetch('https://hubapi.com', {
       method: 'POST',
       headers: hubspotHeaders,
       body: JSON.stringify(createPayload)
     });
-
-    const contentTypeCreate = createRes.headers.get('content-type') || '';
-    if (!contentTypeCreate.includes('application/json')) {
-      const textError = await createRes.text();
-      return new Response(
-        JSON.stringify({ success: false, message: `HubSpot Create no devolvió JSON (Código ${createRes.status}).`, details: textError.substring(0, 200) }),
-        { status: 502, headers: corsHeaders }
-      );
-    }
 
     const createData = await createRes.json();
 
@@ -203,7 +199,7 @@ export async function onRequestPost(context) {
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ success: false, message: `Error del servidor en registro: ${error.message}` }),
+      JSON.stringify({ success: false, message: `Error crítico del servidor: ${error.message}` }),
       { status: 500, headers: corsHeaders }
     );
   }
