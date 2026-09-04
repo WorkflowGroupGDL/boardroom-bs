@@ -167,49 +167,34 @@
               <!-- Formulario Único para Auth -->
               <form id="registroForm">
 
-                <!-- Campo Nombre -->
+                <!-- Campo Correo Electrónico -->
                 <div class="form-floating mb-3">
-                  <input type="text" class="form-control rounded-3 bg-light" id="inputNombre" placeholder="Nombre"
-                    required>
-                  <label for="inputNombre">Nombre</label>
-                </div>
-
-                <!-- Campo Apellido -->
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control rounded-3 bg-light" id="inputApellido" placeholder="Apellido"
-                    required>
-                  <label for="inputApellido">Apellido</label>
-                </div>
-
-                <!-- Campo Correo Electrónico (NUEVO) -->
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-3 bg-light" id="inputEmail"
+                  <input type="email" class="form-control rounded-3 bg-light text-dark ps-3" id="inputEmail"
                     placeholder="name@example.com" required>
-                  <label for="inputEmail">Correo Electrónico</label>
+                  <label for="inputEmail">Correo Electrónico registrado</label>
                 </div>
 
-                <!-- Campo Contraseña (NUEVO) -->
+                <!-- Campo Contraseña -->
                 <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-3 bg-light" id="inputPassword"
+                  <input type="password" class="form-control rounded-3 bg-light text-dark ps-3" id="inputPassword"
                     placeholder="Contraseña" required minlength="6">
-                  <label for="inputPassword">Contraseña</label>
+                  <label for="inputPassword">Nueva Contraseña</label>
                 </div>
 
-                <!-- Campo Confirmar Contraseña (NUEVO) -->
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-3 bg-light" id="confirmPassword"
+                <!-- Campo Confirmar Contraseña -->
+                <div class="form-floating mb-4">
+                  <input type="password" class="form-control rounded-3 bg-light text-dark ps-3" id="confirmPassword"
                     placeholder="Confirmar Contraseña" required>
                   <label for="confirmPassword">Confirmar Contraseña</label>
-                  <!-- Contenedor para mostrar errores en rojo debajo del campo -->
-                  <div id="errorPassword" class="text-danger small mt-1" style="display: none; font-weight: bold;">
-                  </div>
+                  <!-- Contenedor dinámico de errores -->
+                  <div id="errorPassword" class="text-danger small mt-1" style="display: none; font-weight: 500;"></div>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit"
-                  id="btnSubmit">Registrarse</button>
+                <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit" id="btnSubmit">Activar Mi
+                  Cuenta</button>
 
                 <hr class="my-4">
-                <p class="text-center text-muted small">¿Ya tienes cuenta? <a href="login.html"
+                <p class="text-center text-muted small">¿Ya la activaste? <a href="login.html"
                     class="text-primary fw-bold">Inicia
                     Sesión</a></p>
               </form>
@@ -333,86 +318,56 @@
   <!-- Lógica de Formulario e Interacción JS -->
   <!-- <script src="app.js"></script> -->
   <!-- Asegúrate de colocar este script al final del archivo register.html, antes del cierre de </body> -->
+
   <script>
-    document.getElementById('registroForm').addEventListener('submit', async function (event) {
-      event.preventDefault(); // Detiene la recarga automática de la página
-
-      const botonSubmit = document.getElementById('btnSubmit');
-      const pass1 = document.getElementById('inputPassword').value;
-      const pass2 = document.getElementById('confirmPassword').value;
-      const errorContainer = document.getElementById('errorPassword');
-
-      // Limpieza de mensajes de error anteriores
-      errorContainer.style.display = 'none';
-      errorContainer.textContent = '';
-
-      // 1. Validación de contraseñas idénticas en el cliente
-      if (pass1 !== pass2) {
-        errorContainer.textContent = 'Las contraseñas no coinciden.';
-        errorContainer.style.display = 'block';
-        return;
-      }
-
-      // 2. Bloqueo visual del botón para evitar clics duplicados
-      const textoOriginal = botonSubmit.textContent;
-      botonSubmit.disabled = true;
-      botonSubmit.textContent = 'Procesando registro...';
-
-      // 3. Recolección de la información de los inputs del formulario
-      const datosFormulario = {
-        firstname: document.getElementById('inputNombre').value.trim(),
-        lastname: document.getElementById('inputApellido').value.trim(),
-        email: document.getElementById('inputEmail').value.trim(),
-        password: pass1
-      };
-
-      try {
-        // 4. CONEXIÓN DIRECTA CON RUTA RELATIVA
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            firstname: document.getElementById('inputNombre').value,
-            lastname: document.getElementById('inputApellido').value,
-            email: document.getElementById('inputEmail').value,
-            password: pass1
-          })
-        });
-
-        const resultado = await response.json();
-
-        // 5. Procesamiento de la respuesta JSON del servidor
-        if (resultado.success) {
-          // Si el servidor devuelve el objeto del contacto, iniciamos sesión al instante
-          if (resultado.contact) {
-            localStorage.setItem('usuario_boardroom', JSON.stringify(resultado.contact));
-          }
-          alert('¡Registro exitoso! Bienvenido a Boardroom.');
-          window.location.href = 'dashboard.html'; // Redirección al área privada
-        } else {
-          alert('Error en el registro: ' + resultado.message);
-
-          // Imprimir detalles técnicos en consola en caso de errores de HubSpot
-          if (resultado.details) {
-            console.error('Detalles del error del servidor:', resultado.details);
-          }
-
-          // Reactivar el botón para permitir corregir datos
-          botonSubmit.disabled = false;
-          botonSubmit.textContent = textoOriginal;
+      < script >
+      document.getElementById('registroForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Detiene la recarga estándar de la página
+        const botonSubmit = document.getElementById('btnSubmit');
+        const emailValue = document.getElementById('inputEmail').value.trim();
+        const pass1 = document.getElementById('inputPassword').value;
+        const pass2 = document.getElementById('confirmPassword').value;
+        const errorContainer = document.getElementById('errorPassword');// Resetear estados visuales
+        errorContainer.style.display = 'none'; errorContainer.textContent = '';
+        // 1. Validar que las contraseñas coincidan
+        if (pass1 !== pass2) {
+          errorContainer.textContent = 'Las contraseñas no coinciden. Por favor verifica.';
+          errorContainer.style.display = 'block'; return;
         }
+        // 2. Control de carga visual del botón submit
+        const textoOriginal = botonSubmit.textContent;
+        botonSubmit.disabled = true;
+        botonSubmit.textContent = 'Guardando contraseña...'; try {
+          // 3. Envío de datos por RUTA RELATIVA directa a Tencent EdgeOne
+          const response = await fetch('/api/register', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailValue, password: pass1 })
+          });
+          const resultado = await response.json();
+          // 4. Procesar respuesta de éxito o error devuelta por el Backend
+          if (resultado.success) {
+            // Loguear de forma automática al usuario guardando su perfil en el navegador
+            if (resultado.contact) {
+              localStorage.setItem('usuario_boardroom',
+                JSON.stringify(resultado.contact));
+            }
+            alert('¡Cuenta activada con éxito! Bienvenido al portal directivo.');
+            window.location.href = 'dashboard.html';
+            // Transferencia automática
+          }
+          else {
+            alert(resultado.message);
+            if (resultado.debug) { console.error('Debug del servidor:', resultado.debug); }
+            botonSubmit.disabled = false; botonSubmit.textContent = textoOriginal;
+          }
+        }
+        catch (error) {
+          console.error('Error de red en el fetch relativo:', error);
+          alert('No se pudo establecer contacto con la función de Tencent Cloud.');
+          botonSubmit.disabled = false; botonSubmit.textContent = textoOriginal;
+        }
+      });
 
-      } catch (error) {
-        console.error('Error de red en el fetch relativo:', error);
-        alert('No se pudo establecer conexión con el endpoint local del servidor.');
-
-        // Reactivar el botón en caso de una falla de red
-        botonSubmit.disabled = false;
-        botonSubmit.textContent = textoOriginal;
-      }
-    });
   </script>
 
 </body>
