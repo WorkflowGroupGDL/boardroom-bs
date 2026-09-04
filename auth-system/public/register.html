@@ -212,9 +212,9 @@
                 </div>
 
                 <!-- Campo Contraseña 2 (Confirmación) -->
-                <div class="mb-3">
-                  <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-                  <input type="password" class="form-control" id="confirmPassword" required>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control rounded-3 bg-light" id="confirmPassword" required>
+                  <label for="confirmPassword">Confirmar Contraseña</label>
                   <!-- Contenedor para mostrar el error en rojo -->
                   <div id="errorPassword" class="text-danger small mt-1" style="display: none;"></div>
                 </div>
@@ -389,7 +389,7 @@
         // 5. Envío de datos al endpoint del servidor
         // Si Nginx sirve el HTML y la API juntos, usa '/api/register'. 
         // Si la API corre en otro puerto/dominio separado, usa 'http://IP_DE_TENCENT/api/register'
-        const response = await fetch('//api/register', {
+        const response = await fetch('/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
