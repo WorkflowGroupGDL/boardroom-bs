@@ -1,10 +1,17 @@
-// /api/register (Estructura correcta para Cloudflare Pages / Serverless)
-import bcrypt from 'bcryptjs'; // Nota: En entornos serverless edge se recomienda bcryptjs
+// /api/register (Optimizada para Cloudflare Edge con Web Crypto API)
+
+// Función interna para encriptar la contraseña usando SHA-256 de forma nativa
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  // Encabezados CORS obligatorios
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -15,7 +22,6 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json();
     
-    // Extracción y limpieza de los datos del formulario
     const email = body.email ? body.email.trim() : '';
     const firstname = body.firstname ? body.firstname.trim() : '';
     const lastname = body.lastname ? body.lastname.trim() : '';
@@ -36,11 +42,10 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 1. Encriptar la contraseña (Generar el Hash)
-    // Usamos saltRounds = 10 de forma asíncrona
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // 1. Encriptación nativa sin librerías externas
+    const hashedPassword = await hashPassword(password);
 
-    // 2. BUSCAR si el contacto ya existe en HubSpot mediante la API de Búsqueda (Search)
+    // 2. Buscar si el contacto existe en HubSpot
     const searchUrl = 'https://hubapi.com';
     const searchPayload = {
       filterGroups: [{
@@ -61,14 +66,11 @@ export async function onRequestPost(context) {
     const searchData = await searchRes.json();
     const existingContact = searchData.results && searchData.results.length > 0 ? searchData.results[0] : null;
 
-    // -------------------------------------------------------------
     // ESCENARIO A: El usuario YA EXISTE en HubSpot
-    // -------------------------------------------------------------
     if (existingContact) {
       const currentHash = existingContact.properties?.password_hash;
       const contactId = existingContact.id;
 
-      // Caso A.1: Ya tiene una contraseña asignada
       if (currentHash) {
         return new Response(
           JSON.stringify({ 
@@ -79,7 +81,7 @@ export async function onRequestPost(context) {
         );
       }
 
-      // Caso A.2: Existe en el CRM pero no tiene contraseña (Actualizamos e inyectamos el Hash)
+      // Actualizar el contacto existente (inyectar contraseña)
       const updateUrl = `https://hubapi.com{contactId}`;
       const updatePayload = {
         properties: {
@@ -107,7 +109,6 @@ export async function onRequestPost(context) {
         );
       }
 
-      // Responder con éxito devolviendo el formato de contacto limpio
       return new Response(
         JSON.stringify({ 
           success: true, 
@@ -128,18 +129,12 @@ export async function onRequestPost(context) {
       );
     }
 
-    // -------------------------------------------------------------
-    // ESCENARIO B: El usuario NO EXISTE (Registro tradicional nuevo)
-    // -------------------------------------------------------------
+    // ESCENARIO B: El usuario NO EXISTE (Registro nuevo)
     const createPayload = {
       properties: {
         email: email,
         firstname: firstname,
         lastname: lastname,
-        phone: phone,
-        jobtitle: jobtitle,
-        company: company,
-        program: program,
         userstatus: 'Activo',
         password_hash: hashedPassword
       }
@@ -190,7 +185,6 @@ export async function onRequestPost(context) {
   }
 }
 
-// Soporte obligatorio para peticiones de validación CORS (OPTIONS)
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
