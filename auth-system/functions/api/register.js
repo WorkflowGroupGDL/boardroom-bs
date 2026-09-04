@@ -1,4 +1,4 @@
-// /api/register (Blindaje absoluto contra errores HTML/JSON de HubSpot en Edge)
+// /api/register (Diagnóstico absoluto de rechazos de HubSpot)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -12,7 +12,6 @@ export async function onRequestPost(context) {
 
   try {
     const body = await request.json();
-    
     const email = body.email ? body.email.trim() : '';
     const firstname = body.firstname ? body.firstname.trim() : '';
     const lastname = body.lastname ? body.lastname.trim() : '';
@@ -20,7 +19,7 @@ export async function onRequestPost(context) {
 
     if (!email || !password) {
       return new Response(
-        JSON.stringify({ success: false, message: 'El correo y la contraseña son requeridos.' }),
+        JSON.stringify({ success: false, message: 'Correo y contraseña requeridos.' }),
         { status: 400, headers: corsHeaders }
       );
     }
@@ -28,26 +27,24 @@ export async function onRequestPost(context) {
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
-        JSON.stringify({ success: false, message: 'Error interno: HUBSPOT_TOKEN no configurado en Tencent EdgeOne.' }),
+        JSON.stringify({ success: false, message: 'HUBSPOT_TOKEN no definido en variables de entorno.' }),
         { status: 500, headers: corsHeaders }
       );
     }
 
-    // 1. Encriptación nativa SHA-256
+    // Hash nativo SHA-256
     const msgUint8 = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
+    // CLAVE: Encabezados estrictos para evitar bloqueos de bots
     const hubspotHeaders = {
       'Authorization': `Bearer ${token.trim()}`,
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' // Simula navegador para saltar firewalls
+      'Accept': 'application/json'
     };
 
-    // 2. Intentar crear el contacto directamente
-    const createUrl = 'https://hubapi.com';
     const createPayload = {
       properties: {
         email: email,
@@ -58,127 +55,47 @@ export async function onRequestPost(context) {
       }
     };
 
-    const createRes = await fetch(createUrl, {
+    // Petición directa a HubSpot
+    const createRes = await fetch('https://hubapi.com', {
       method: 'POST',
       headers: hubspotHeaders,
       body: JSON.stringify(createPayload)
     });
 
-    // LEER RESPUESTA COMO TEXTO PRIMERO (Evita el crash del token '<')
     const createRawData = await createRes.text();
-    let createData = {};
-    
-    const contentType = createRes.headers.get('content-type') || '';
-    if (contentType.includes('application/json')) {
-      createData = JSON.parse(createRawData);
-    }
 
-    // -------------------------------------------------------------
-    // ESCENARIO A: El usuario YA EXISTE en HubSpot (Código 409)
-    // -------------------------------------------------------------
-    if (createRes.status === 409) {
-      let contactId = null;
-      const messageText = createData.message || createRawData;
-      
-      const match = messageText.match(/Existing ID:\s*(\d+)/i);
-      if (match && match[1]) {
-        contactId = match[1];
-      }
-
-      if (!contactId) {
-        return new Response(
-          JSON.stringify({ success: false, message: 'El correo ya existe, pero no se pudo extraer el ID del conflicto.', raw: messageText.substring(0, 200) }),
-          { status: 409, headers: corsHeaders }
-        );
-      }
-
-      // Validar si posee contraseña (GET)
-      const verifyUrl = `https://hubapi.com/${contactId}?properties=password_hash`;
-      const verifyRes = await fetch(verifyUrl, { method: 'GET', headers: hubspotHeaders });
-      
-      if (verifyRes.ok) {
-        const verifyRaw = await verifyRes.text();
-        if (verifyRes.headers.get('content-type')?.includes('application/json')) {
-          const verifyData = JSON.parse(verifyRaw);
-          if (verifyData.properties?.password_hash) {
-            return new Response(
-              JSON.stringify({ success: false, message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' }),
-              { status: 409, headers: corsHeaders }
-            );
-          }
-        }
-      }
-
-      // Inyectar contraseña mediante PATCH
-      const updateUrl = `https://hubapi.com/${contactId}`;
-      const updatePayload = {
-        properties: {
-          firstname: firstname || undefined,
-          lastname: lastname || undefined,
-          userstatus: 'Activo',
-          password_hash: hashedPassword
-        }
-      };
-
-      const updateRes = await fetch(updateUrl, {
-        method: 'PATCH',
-        headers: hubspotHeaders,
-        body: JSON.stringify(updatePayload)
-      });
-
-      if (!updateRes.ok) {
-        const updateErr = await updateRes.text();
-        return new Response(
-          JSON.stringify({ success: false, message: 'Error al asignar las claves de acceso a la cuenta existente.', debug: updateErr.substring(0, 150) }),
-          { status: updateRes.status, headers: corsHeaders }
-        );
-      }
-
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: 'Tu cuenta preexistente ha sido activada con éxito.',
-          contact: { id: contactId, firstname, lastname, email, userstatus: 'Activo' }
-        }),
-        { status: 200, headers: corsHeaders }
-      );
-    }
-
-    // -------------------------------------------------------------
-    // ESCENARIO B: Error General de HubSpot (No devolvió 201)
-    // -------------------------------------------------------------
+    // SI HUBSPOT RESPONDE ERROR (Cualquiera diferente a 200/201)
     if (!createRes.ok) {
+      // Intentar ver si es un JSON de error de HubSpot o un HTML de bloqueo
+      let errorDetalle = createRawData;
+      if (createRes.headers.get('content-type')?.includes('application/json')) {
+        errorDetalle = JSON.parse(createRawData);
+      }
+
       return new Response(
-        JSON.stringify({ 
-          success: false, 
-          message: `HubSpot denegó la operación (Código ${createRes.status}).`, 
-          details: createRawData.substring(0, 300) // Te mostrará el texto HTML o JSON del error real
+        JSON.stringify({
+          success: false,
+          message: `HubSpot rechazó la creación del contacto. Código de estado del CRM: ${createRes.status}`,
+          diagnostico: errorDetalle
         }),
-        { status: createRes.status, headers: corsHeaders }
+        { status: 400, headers: corsHeaders }
       );
     }
 
-    // -------------------------------------------------------------
-    // ESCENARIO C: Registro exitoso desde cero (Código 201 Created)
-    // -------------------------------------------------------------
+    // Si llegó aquí, se guardó con éxito en el CRM
+    const createData = JSON.parse(createRawData);
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Usuario registrado exitosamente.',
-        contact: {
-          id: createData.id || 'nuevo',
-          firstname: createData.properties?.firstname || firstname,
-          lastname: createData.properties?.lastname || lastname,
-          email: createData.properties?.email || email,
-          userstatus: 'Activo'
-        }
+        message: 'Usuario registrado con éxito en HubSpot.',
+        contact: { id: createData.id, email }
       }),
       { status: 201, headers: corsHeaders }
     );
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ success: false, message: `Falla interna crítica en la ejecución: ${error.message}` }),
+      JSON.stringify({ success: false, message: `Falla crítica en Edge: ${error.message}` }),
       { status: 500, headers: corsHeaders }
     );
   }
