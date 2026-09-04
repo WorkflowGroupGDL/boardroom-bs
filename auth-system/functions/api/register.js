@@ -1,9 +1,8 @@
-// /api/register (Código final corregido sin fallas internas)
+// /api/register (Solución al error de respuesta de HubSpot)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  // Encabezados CORS obligatorios
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -34,14 +33,22 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 1. ENCRIPTACIÓN CORREGIDA: Integrada directamente en el flujo asíncrono
+    // 1. Encriptación nativa SHA-256
     const msgUint8 = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // 2. Buscar si el contacto existe en HubSpot mediante su API de búsqueda
-    const searchUrl = 'https://hubapi.com';
+    // 2. Encabezados obligatorios para las peticiones a HubSpot
+    const hubspotHeaders = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json', // OBLIGA A HUBSPOT A RESPONDER JSON Y NO HTML
+      'User-Agent': 'Boardroom-Portal/1.0' // Evita bloqueos de seguridad de HubSpot
+    };
+
+    // 3. Buscar si el contacto existe
+    const searchUrl = 'https://api.hubapi.com/crm/v3/objects/contacts/search';
     const searchPayload = {
       filterGroups: [{
         filters: [{ propertyName: 'email', operator: 'EQ', value: email }]
@@ -51,12 +58,19 @@ export async function onRequestPost(context) {
 
     const searchRes = await fetch(searchUrl, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: hubspotHeaders,
       body: JSON.stringify(searchPayload)
     });
+
+    // Control para evitar el crash si HubSpot responde HTML
+    const contentTypeSearch = searchRes.headers.get('content-type') || '';
+    if (!contentTypeSearch.includes('application/json')) {
+      const textError = await searchRes.text();
+      return new Response(
+        JSON.stringify({ success: false, message: `HubSpot Search no devolvió JSON (Código ${searchRes.status}).`, details: textError.substring(0, 200) }),
+        { status: 502, headers: corsHeaders }
+      );
+    }
 
     const searchData = await searchRes.json();
     const existingContact = searchData.results && searchData.results.length > 0 ? searchData.results[0] : null;
@@ -78,7 +92,7 @@ export async function onRequestPost(context) {
         );
       }
 
-      // Actualizar el contacto existente para inyectar su nueva contraseña
+      // Actualizar el contacto existente (inyectar contraseña)
       const updateUrl = `https://hubapi.com{contactId}`;
       const updatePayload = {
         properties: {
@@ -91,12 +105,17 @@ export async function onRequestPost(context) {
 
       const updateRes = await fetch(updateUrl, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: hubspotHeaders,
         body: JSON.stringify(updatePayload)
       });
+
+      const contentTypeUpdate = updateRes.headers.get('content-type') || '';
+      if (!contentTypeUpdate.includes('application/json')) {
+        return new Response(
+          JSON.stringify({ success: false, message: `HubSpot Update no devolvió JSON.` }),
+          { status: 502, headers: corsHeaders }
+        );
+      }
 
       if (!updateRes.ok) {
         const errData = await updateRes.json();
@@ -139,14 +158,20 @@ export async function onRequestPost(context) {
       }
     };
 
-    const createRes = await fetch('https://hubapi.com', {
+    const createRes = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: hubspotHeaders,
       body: JSON.stringify(createPayload)
     });
+
+    const contentTypeCreate = createRes.headers.get('content-type') || '';
+    if (!contentTypeCreate.includes('application/json')) {
+      const textError = await createRes.text();
+      return new Response(
+        JSON.stringify({ success: false, message: `HubSpot Create no devolvió JSON (Código ${createRes.status}).`, details: textError.substring(0, 200) }),
+        { status: 502, headers: corsHeaders }
+      );
+    }
 
     const createData = await createRes.json();
 
@@ -184,7 +209,6 @@ export async function onRequestPost(context) {
   }
 }
 
-// Soporte para peticiones pre-flight CORS (OPTIONS)
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
