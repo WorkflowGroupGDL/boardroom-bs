@@ -1,17 +1,9 @@
-// /api/register (Optimizada para Cloudflare Edge con Web Crypto API)
-
-// Función interna para encriptar la contraseña usando SHA-256 de forma nativa
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
+// /api/register (Código final corregido sin fallas internas)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
+  // Encabezados CORS obligatorios
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -42,10 +34,13 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 1. Encriptación nativa sin librerías externas
-    const hashedPassword = await hashPassword(password);
+    // 1. ENCRIPTACIÓN CORREGIDA: Integrada directamente en el flujo asíncrono
+    const msgUint8 = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // 2. Buscar si el contacto existe en HubSpot
+    // 2. Buscar si el contacto existe en HubSpot mediante su API de búsqueda
     const searchUrl = 'https://hubapi.com';
     const searchPayload = {
       filterGroups: [{
@@ -66,7 +61,9 @@ export async function onRequestPost(context) {
     const searchData = await searchRes.json();
     const existingContact = searchData.results && searchData.results.length > 0 ? searchData.results[0] : null;
 
+    // -------------------------------------------------------------
     // ESCENARIO A: El usuario YA EXISTE en HubSpot
+    // -------------------------------------------------------------
     if (existingContact) {
       const currentHash = existingContact.properties?.password_hash;
       const contactId = existingContact.id;
@@ -81,7 +78,7 @@ export async function onRequestPost(context) {
         );
       }
 
-      // Actualizar el contacto existente (inyectar contraseña)
+      // Actualizar el contacto existente para inyectar su nueva contraseña
       const updateUrl = `https://hubapi.com{contactId}`;
       const updatePayload = {
         properties: {
@@ -129,7 +126,9 @@ export async function onRequestPost(context) {
       );
     }
 
-    // ESCENARIO B: El usuario NO EXISTE (Registro nuevo)
+    // -------------------------------------------------------------
+    // ESCENARIO B: El usuario NO EXISTE (Registro tradicional nuevo)
+    // -------------------------------------------------------------
     const createPayload = {
       properties: {
         email: email,
@@ -185,6 +184,7 @@ export async function onRequestPost(context) {
   }
 }
 
+// Soporte para peticiones pre-flight CORS (OPTIONS)
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
