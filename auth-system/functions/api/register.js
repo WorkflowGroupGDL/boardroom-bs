@@ -1,4 +1,4 @@
-// /api/register (Versión optimizada contra bloqueos WAF de Tencent EdgeOne)
+// /api/register (Código final sin errores de asignación para Tencent EdgeOne)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -28,7 +28,7 @@ export async function onRequestPost(context) {
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
-        JSON.stringify({ success: false, message: 'Error interno: HUBSPOT_TOKEN no configurado en EdgeOne.' }),
+        JSON.stringify({ success: false, message: 'Error interno: HUBSPOT_TOKEN no configurado en la plataforma Edge.' }),
         { status: 500, headers: corsHeaders }
       );
     }
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
       'Accept': 'application/json'
     };
 
-    // 2. PASO DIRECTO: Intentar crear el contacto de forma limpia (Evita bloqueos de URL en EdgeOne)
+    // 2. Intentar crear el contacto directamente de forma limpia
     const createUrl = 'https://hubapi.com';
     const createPayload = {
       properties: {
@@ -69,22 +69,23 @@ export async function onRequestPost(context) {
     // ESCENARIO A: El usuario YA EXISTE en HubSpot (Código 409 Conflict)
     // -------------------------------------------------------------
     if (createRes.status === 409) {
-      // HubSpot en el error 409 nos devuelve de forma nativa el ID del contacto existente
-      // El formato del error de duplicados es: details: [ { message: 'Contact already exists. Existing ID: 12345' } ]
       let contactId = null;
       if (createData.message) {
         const match = createData.message.match(/Existing ID:\s*(\d+)/i);
-        if (match && match[1]) contactId = match[1];
+        // CORRECCIÓN AQUÍ: Tomar el grupo [1] capturado por la expresión regular
+        if (match && match[1]) {
+          contactId = match[1];
+        }
       }
 
       if (!contactId) {
         return new Response(
-          JSON.stringify({ success: false, message: 'El correo ya está registrado en la base de datos, pero no se pudo recuperar el identificador.' }),
+          JSON.stringify({ success: false, message: 'El correo ya está registrado, pero no se pudo extraer el identificador único.' }),
           { status: 409, headers: corsHeaders }
         );
       }
 
-      // Validar si la cuenta preexistente ya tiene una contraseña (Haciendo un GET corto al ID)
+      // Validar si la cuenta ya posee contraseña asignada (GET corto al ID)
       const verifyUrl = `https://hubapi.com/${contactId}?properties=password_hash`;
       const verifyRes = await fetch(verifyUrl, { method: 'GET', headers: hubspotHeaders });
       
@@ -98,7 +99,7 @@ export async function onRequestPost(context) {
         }
       }
 
-      // Si no tiene contraseña, procedemos a activarlo inyectando el Hash mediante PATCH
+      // Si no tiene contraseña, inyectar el Hash usando PATCH
       const updateUrl = `https://hubapi.com/${contactId}`;
       const updatePayload = {
         properties: {
@@ -117,7 +118,7 @@ export async function onRequestPost(context) {
 
       if (!updateRes.ok) {
         return new Response(
-          JSON.stringify({ success: false, message: 'Error al asignar las credenciales de acceso a tu cuenta existente.' }),
+          JSON.stringify({ success: false, message: 'Error al asignar tus claves de acceso a la cuenta preexistente.' }),
           { status: updateRes.status, headers: corsHeaders }
         );
       }
@@ -137,7 +138,7 @@ export async function onRequestPost(context) {
     // -------------------------------------------------------------
     if (!createRes.ok) {
       return new Response(
-        JSON.stringify({ success: false, message: 'HubSpot rechazó la solicitud de registro.', details: createData }),
+        JSON.stringify({ success: false, message: 'La base de datos rechazó la solicitud de registro.', details: createData }),
         { status: createRes.status, headers: corsHeaders }
       );
     }
