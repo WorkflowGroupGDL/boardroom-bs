@@ -1,4 +1,4 @@
-// /api/register (Diagnóstico absoluto de rechazos de HubSpot)
+// /api/register (Blindaje absoluto en la lectura del Body)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -11,15 +11,45 @@ export async function onRequestPost(context) {
   };
 
   try {
-    const body = await request.json();
-    const email = body.email ? body.email.trim() : '';
-    const firstname = body.firstname ? body.firstname.trim() : '';
-    const lastname = body.lastname ? body.lastname.trim() : '';
-    const password = body.password || '';
+    let email = '';
+    let firstname = '';
+    let lastname = '';
+    let password = '';
+
+    const contentType = request.headers.get('content-type') || '';
+
+    // 1. EXTRACTOR SEGURO: Detectar el tipo de datos que envía el frontend
+    if (contentType.includes('application/json')) {
+      try {
+        const body = await request.json();
+        email = body.email || '';
+        firstname = body.firstname || '';
+        lastname = body.lastname || '';
+        password = body.password || '';
+      } catch (e) {
+        return new Response(
+          JSON.stringify({ success: false, message: 'El JSON enviado por el frontend tiene errores de sintaxis.' }),
+          { status: 400, headers: corsHeaders }
+        );
+      }
+    } else {
+      // Si el formulario se envió de la forma tradicional del navegador
+      const formData = await request.formData();
+      email = formData.get('email') || '';
+      firstname = formData.get('firstname') || '';
+      lastname = formData.get('lastname') || '';
+      password = formData.get('password') || '';
+    }
+
+    // Limpieza de espacios
+    email = email.toString().trim();
+    firstname = firstname.toString().trim();
+    lastname = lastname.toString().trim();
+    password = password.toString();
 
     if (!email || !password) {
       return new Response(
-        JSON.stringify({ success: false, message: 'Correo y contraseña requeridos.' }),
+        JSON.stringify({ success: false, message: `Datos incompletos recibidos. Email: '${email}', Pass recibido: ${password ? 'SI' : 'NO'}` }),
         { status: 400, headers: corsHeaders }
       );
     }
@@ -27,18 +57,17 @@ export async function onRequestPost(context) {
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
-        JSON.stringify({ success: false, message: 'HUBSPOT_TOKEN no definido en variables de entorno.' }),
+        JSON.stringify({ success: false, message: 'Falta configurar HUBSPOT_TOKEN en el panel del servidor.' }),
         { status: 500, headers: corsHeaders }
       );
     }
 
-    // Hash nativo SHA-256
+    // 2. Encriptación nativa SHA-256
     const msgUint8 = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // CLAVE: Encabezados estrictos para evitar bloqueos de bots
     const hubspotHeaders = {
       'Authorization': `Bearer ${token.trim()}`,
       'Content-Type': 'application/json',
@@ -55,7 +84,7 @@ export async function onRequestPost(context) {
       }
     };
 
-    // Petición directa a HubSpot
+    // 3. Envío directo a HubSpot
     const createRes = await fetch('https://hubapi.com', {
       method: 'POST',
       headers: hubspotHeaders,
@@ -63,31 +92,26 @@ export async function onRequestPost(context) {
     });
 
     const createRawData = await createRes.text();
+    let createData = {};
+    if (createRes.headers.get('content-type')?.includes('application/json')) {
+      createData = JSON.parse(createRawData);
+    }
 
-    // SI HUBSPOT RESPONDE ERROR (Cualquiera diferente a 200/201)
     if (!createRes.ok) {
-      // Intentar ver si es un JSON de error de HubSpot o un HTML de bloqueo
-      let errorDetalle = createRawData;
-      if (createRes.headers.get('content-type')?.includes('application/json')) {
-        errorDetalle = JSON.parse(createRawData);
-      }
-
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: `HubSpot rechazó la creación del contacto. Código de estado del CRM: ${createRes.status}`,
-          diagnostico: errorDetalle
+        JSON.stringify({ 
+          success: false, 
+          message: `HubSpot rechazó la solicitud. Código: ${createRes.status}`, 
+          details: createData.message || createRawData.substring(0, 200) 
         }),
         { status: 400, headers: corsHeaders }
       );
     }
 
-    // Si llegó aquí, se guardó con éxito en el CRM
-    const createData = JSON.parse(createRawData);
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Usuario registrado con éxito en HubSpot.',
+        message: 'Usuario registrado exitosamente en el CRM.',
         contact: { id: createData.id, email }
       }),
       { status: 201, headers: corsHeaders }
@@ -95,7 +119,7 @@ export async function onRequestPost(context) {
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ success: false, message: `Falla crítica en Edge: ${error.message}` }),
+      JSON.stringify({ success: false, message: `Falla interna post-lectura: ${error.message}` }),
       { status: 500, headers: corsHeaders }
     );
   }

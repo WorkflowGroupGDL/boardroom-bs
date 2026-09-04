@@ -379,7 +379,12 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(datosFormulario)
+          body: JSON.stringify({
+            firstname: document.getElementById('inputNombre').value,
+            lastname: document.getElementById('inputApellido').value,
+            email: document.getElementById('inputEmail').value,
+            password: pass1
+          })
         });
 
         const resultado = await response.json();
