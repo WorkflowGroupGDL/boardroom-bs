@@ -79,7 +79,6 @@ export async function onRequestPost(context) {
         email: email,
         firstname: firstname,
         lastname: lastname,
-        userstatus: 'Activo',
         password_hash: hashedPassword
       }
     };
