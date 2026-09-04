@@ -1,4 +1,4 @@
-// /api/register (Código final optimizado para Cloudflare & HubSpot)
+// /api/register (Versión optimizada contra bloqueos WAF de Tencent EdgeOne)
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -28,7 +28,7 @@ export async function onRequestPost(context) {
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
-        JSON.stringify({ success: false, message: 'Error interno: El token de acceso a la base de datos no está configurado.' }),
+        JSON.stringify({ success: false, message: 'Error interno: HUBSPOT_TOKEN no configurado en EdgeOne.' }),
         { status: 500, headers: corsHeaders }
       );
     }
@@ -45,56 +45,61 @@ export async function onRequestPost(context) {
       'Accept': 'application/json'
     };
 
-    // 2. BUSCAR AL CONTACTO (Usando el endpoint GET ultra estable por propiedad de email)
-    const propertiesNeeded = ['password_hash', 'firstname', 'lastname', 'email', 'phone', 'jobtitle', 'company', 'program', 'userstatus'];
-    const propertiesQuery = propertiesNeeded.join(',');
-    
-    const searchUrl = `https://hubapi.com{encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
-    
-    const searchRes = await fetch(searchUrl, {
-      method: 'GET',
-      headers: hubspotHeaders
+    // 2. PASO DIRECTO: Intentar crear el contacto de forma limpia (Evita bloqueos de URL en EdgeOne)
+    const createUrl = 'https://hubapi.com';
+    const createPayload = {
+      properties: {
+        email: email,
+        firstname: firstname,
+        lastname: lastname,
+        userstatus: 'Activo',
+        password_hash: hashedPassword
+      }
+    };
+
+    const createRes = await fetch(createUrl, {
+      method: 'POST',
+      headers: hubspotHeaders,
+      body: JSON.stringify(createPayload)
     });
 
-    let existingContact = null;
-
-    // Si responde 200 significa que el usuario ya existe en HubSpot
-    if (searchRes.ok) {
-      existingContact = await searchRes.json();
-    } 
-    // Si da un error diferente a 404 (Contacto no encontrado), capturamos el fallo técnico
-    else if (searchRes.status !== 404) {
-      const errText = await searchRes.text();
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          message: `HubSpot denegó la consulta de validación (Código ${searchRes.status}).`, 
-          details: errText.substring(0, 300) 
-        }),
-        { status: 502, headers: corsHeaders }
-      );
-    }
+    const createData = await createRes.json();
 
     // -------------------------------------------------------------
-    // ESCENARIO A: El usuario YA EXISTE en HubSpot
+    // ESCENARIO A: El usuario YA EXISTE en HubSpot (Código 409 Conflict)
     // -------------------------------------------------------------
-    if (existingContact) {
-      const currentHash = existingContact.properties?.password_hash;
-      const contactId = existingContact.id;
+    if (createRes.status === 409) {
+      // HubSpot en el error 409 nos devuelve de forma nativa el ID del contacto existente
+      // El formato del error de duplicados es: details: [ { message: 'Contact already exists. Existing ID: 12345' } ]
+      let contactId = null;
+      if (createData.message) {
+        const match = createData.message.match(/Existing ID:\s*(\d+)/i);
+        if (match && match[1]) contactId = match[1];
+      }
 
-      // Caso A.1: El usuario ya tiene una contraseña asignada
-      if (currentHash) {
+      if (!contactId) {
         return new Response(
-          JSON.stringify({ 
-            success: false, 
-            message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' 
-          }),
+          JSON.stringify({ success: false, message: 'El correo ya está registrado en la base de datos, pero no se pudo recuperar el identificador.' }),
           { status: 409, headers: corsHeaders }
         );
       }
 
-      // Caso A.2: Existe pero no tiene contraseña (Lo actualizamos usando PATCH)
-      const updateUrl = `https://hubapi.com{contactId}`;
+      // Validar si la cuenta preexistente ya tiene una contraseña (Haciendo un GET corto al ID)
+      const verifyUrl = `https://hubapi.com/${contactId}?properties=password_hash`;
+      const verifyRes = await fetch(verifyUrl, { method: 'GET', headers: hubspotHeaders });
+      
+      if (verifyRes.ok) {
+        const verifyData = await verifyRes.json();
+        if (verifyData.properties?.password_hash) {
+          return new Response(
+            JSON.stringify({ success: false, message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' }),
+            { status: 409, headers: corsHeaders }
+          );
+        }
+      }
+
+      // Si no tiene contraseña, procedemos a activarlo inyectando el Hash mediante PATCH
+      const updateUrl = `https://hubapi.com/${contactId}`;
       const updatePayload = {
         properties: {
           firstname: firstname || undefined,
@@ -111,9 +116,8 @@ export async function onRequestPost(context) {
       });
 
       if (!updateRes.ok) {
-        const errData = await updateRes.text();
         return new Response(
-          JSON.stringify({ success: false, message: 'Error al inyectar las credenciales en tu cuenta existente.', details: errData.substring(0, 200) }),
+          JSON.stringify({ success: false, message: 'Error al asignar las credenciales de acceso a tu cuenta existente.' }),
           { status: updateRes.status, headers: corsHeaders }
         );
       }
@@ -122,50 +126,25 @@ export async function onRequestPost(context) {
         JSON.stringify({ 
           success: true, 
           message: 'Tu cuenta preexistente ha sido activada con éxito.',
-          contact: {
-            id: contactId,
-            firstname: existingContact.properties?.firstname || firstname,
-            lastname: existingContact.properties?.lastname || lastname,
-            email: existingContact.properties?.email || email,
-            phone: existingContact.properties?.phone || '',
-            jobtitle: existingContact.properties?.jobtitle || '',
-            company: existingContact.properties?.company || '',
-            program: existingContact.properties?.program || '',
-            userstatus: 'Activo'
-          }
+          contact: { id: contactId, firstname, lastname, email, userstatus: 'Activo' }
         }),
         { status: 200, headers: corsHeaders }
       );
     }
 
     // -------------------------------------------------------------
-    // ESCENARIO B: El usuario NO EXISTE (Registro nuevo desde cero)
+    // ESCENARIO B: Error General controlado de HubSpot
     // -------------------------------------------------------------
-    const createPayload = {
-      properties: {
-        email: email,
-        firstname: firstname,
-        lastname: lastname,
-        userstatus: 'Activo',
-        password_hash: hashedPassword
-      }
-    };
-
-    const createRes = await fetch('https://hubapi.com', {
-      method: 'POST',
-      headers: hubspotHeaders,
-      body: JSON.stringify(createPayload)
-    });
-
-    const createData = await createRes.json();
-
     if (!createRes.ok) {
       return new Response(
-        JSON.stringify({ success: false, message: 'HubSpot rechazó la creación del nuevo contacto.', details: createData }),
+        JSON.stringify({ success: false, message: 'HubSpot rechazó la solicitud de registro.', details: createData }),
         { status: createRes.status, headers: corsHeaders }
       );
     }
 
+    // -------------------------------------------------------------
+    // ESCENARIO C: Registro exitoso desde cero (Código 201 Created)
+    // -------------------------------------------------------------
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -175,10 +154,6 @@ export async function onRequestPost(context) {
           firstname: createData.properties?.firstname || '',
           lastname: createData.properties?.lastname || '',
           email: createData.properties?.email || email,
-          phone: '',
-          jobtitle: '',
-          company: '',
-          program: '',
           userstatus: 'Activo'
         }
       }),
@@ -187,7 +162,7 @@ export async function onRequestPost(context) {
 
   } catch (error) {
     return new Response(
-      JSON.stringify({ success: false, message: `Error crítico en el servidor backend: ${error.message}` }),
+      JSON.stringify({ success: false, message: `Error crítico en la infraestructura Edge: ${error.message}` }),
       { status: 500, headers: corsHeaders }
     );
   }
