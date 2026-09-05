@@ -168,35 +168,35 @@
               <form id="registroForm">
 
                 <!-- Campo Correo Electrónico -->
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-3 bg-light text-dark ps-3" id="inputEmail"
-                    placeholder="name@example.com" required>
-                  <label for="inputEmail">Correo Electrónico registrado</label>
+                <div class="mb-3">
+                  <label class="form-label text-dark fw-bold small">Correo Electrónico</label>
+                  <input type="email" class="form-control text-dark px-3" id="inputEmail"
+                    placeholder="ejemplo@boardroom.com" required style="border: 1px solid #ccc !important;">
                 </div>
 
                 <!-- Campo Contraseña -->
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-3 bg-light text-dark ps-3" id="inputPassword"
-                    placeholder="Contraseña" required minlength="6">
-                  <label for="inputPassword">Nueva Contraseña</label>
+                <div class="mb-3">
+                  <label class="form-label text-dark fw-bold small">Contraseña</label>
+                  <input type="password" class="form-control text-dark px-3" id="inputPassword"
+                    placeholder="Mínimo 6 caracteres" required minlength="6" style="border: 1px solid #ccc !important;">
                 </div>
 
                 <!-- Campo Confirmar Contraseña -->
-                <div class="form-floating mb-4">
-                  <input type="password" class="form-control rounded-3 bg-light text-dark ps-3" id="confirmPassword"
-                    placeholder="Confirmar Contraseña" required>
-                  <label for="confirmPassword">Confirmar Contraseña</label>
+                <div class="mb-4">
+                  <label class="form-label text-dark fw-bold small">Confirmar Contraseña</label>
+                  <input type="password" class="form-control text-dark px-3" id="confirmPassword"
+                    placeholder="Repite tu contraseña" required style="border: 1px solid #ccc !important;">
                   <!-- Contenedor dinámico de errores -->
-                  <div id="errorPassword" class="text-danger small mt-1" style="display: none; font-weight: 500;"></div>
+                  <div id="errorPassword" class="text-danger small mt-1" style="display: none; font-weight: bold;">
+                  </div>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit" id="btnSubmit">Activar Mi
-                  Cuenta</button>
+                <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit" id="btnSubmit">Activar
+                  Acceso</button>
 
                 <hr class="my-4">
-                <p class="text-center text-muted small">¿Ya la activaste? <a href="login.html"
-                    class="text-primary fw-bold">Inicia
-                    Sesión</a></p>
+                <p class="text-center text-muted small">¿Ya configuraste tu clave? <a href="login.html"
+                    class="text-primary fw-bold">Inicia Sesión aquí</a></p>
               </form>
               <!-- ESTE ELEMENTO DEBE EXISTIR CON EL ID "result" -->
               <div id="result"></div>
@@ -316,9 +316,81 @@
   <script src="assets/js/custom.js"></script>
 
   <!-- Lógica de Formulario e Interacción JS -->
-  <script src="get-email.js"></script>
+  <!-- <script src="get-email.js"></script> -->
   <!-- Asegúrate de colocar este script al final del archivo register.html, antes del cierre de </body> -->
+  <script>
+    // 1. Capturar el correo desde la URL si viene en formato Base64 (?u=...)
+    window.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userParam = urlParams.get('u');
 
+      if (userParam) {
+        const emailInput = document.getElementById('inputEmail');
+        try {
+          const decodedEmail = atob(userParam);
+          if (decodedEmail && decodedEmail.includes('@')) {
+            emailInput.value = decodedEmail;
+            emailInput.readOnly = true;
+            emailInput.style.backgroundColor = '#f0f2f5';
+          }
+        } catch (error) {
+          console.error('Error al decodificar parámetro:', error);
+        }
+      }
+    });
+
+    // 2. Procesar el envío asíncrono
+    document.getElementById('registroForm').addEventListener('submit', async function (event) {
+      event.preventDefault(); // Bloquea la recarga inmediata
+
+      const botonSubmit = document.getElementById('btnSubmit');
+      const emailValue = document.getElementById('inputEmail').value.trim();
+      const pass1 = document.getElementById('inputPassword').value;
+      const pass2 = document.getElementById('confirmPassword').value;
+      const errorContainer = document.getElementById('errorPassword');
+
+      errorContainer.style.display = 'none';
+      errorContainer.textContent = '';
+
+      // Validar contraseñas idénticas
+      if (pass1 !== pass2) {
+        errorContainer.textContent = 'Las contraseñas no coinciden.';
+        errorContainer.style.display = 'block';
+        return;
+      }
+
+      // Congelar botón
+      botonSubmit.disabled = true;
+      botonSubmit.textContent = 'Procesando...';
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailValue, password: pass1 })
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+          if (resultado.contact) {
+            localStorage.setItem('usuario_boardroom', JSON.stringify(resultado.contact));
+          }
+          alert('¡Activación exitosa! Tu contraseña ha sido configurada.');
+          window.location.href = 'dashboard.html';
+        } else {
+          alert(resultado.message);
+          botonSubmit.disabled = false;
+          botonSubmit.textContent = 'Activar Acceso';
+        }
+      } catch (error) {
+        console.error('Error en fetch:', error);
+        alert('Error de conexión con la infraestructura en la nube.');
+        botonSubmit.disabled = false;
+        botonSubmit.textContent = 'Activar Acceso';
+      }
+    });
+  </script>
 
 </body>
 
