@@ -1,9 +1,8 @@
-// app.js - Versión 100% Corregida y Funcional para producción
+// app.js (100% Blindado con Fetch nativo para HubSpot)
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const crypto = require('crypto'); // Usamos el módulo crypto nativo de Node.js para SHA-256
-const hubspot = require('@hubspot/api-client');
+const crypto = require('crypto');
 const cors = require('cors');
 
 const app = express();
@@ -14,23 +13,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
 app.enable('trust proxy');
 
-// INICIALIZACIÓN CRÍTICA: Instanciar correctamente el cliente oficial de HubSpot
+// Variables de entorno consolidadas
 const hubspotToken = process.env.HUBSPOT_ACCESS_TOKEN || process.env.HUBSPOT_TOKEN;
-const hubspotClient = hubspotToken ? new hubspot.Client({ accessToken: hubspotToken.trim() }) : null;
-
-if (!hubspotClient) {
-  console.warn("ADVERTENCIA: No se ha detectado un token de acceso válido para HubSpot en el archivo .env");
-}
 
 // Archivos Estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helper interno para generar Hash SHA-256 nativo compatible con tu Login
+// Helper para cifrado SHA-256 nativo compatible con tu Login
 function generateSHA256(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-// Endpoint de Registro (CORREGIDO Y OPTIMIZADO)
+// Endpoint de Registro Blindado contra caídas HTML
 app.post('/api/register', async (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
@@ -38,17 +32,23 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Correo y contraseña requeridos.' });
   }
 
-  if (!hubspotClient) {
-    return res.status(500).json({ success: false, message: 'El cliente de HubSpot no está configurado en el servidor.' });
+  if (!hubspotToken) {
+    return res.status(500).json({ success: false, message: 'Falta configurar las credenciales de HubSpot en el archivo .env.' });
   }
 
   try {
-    // 1. Generar Hash SHA-256 nativo compatible
     const hashedPassword = generateSHA256(password);
+    const hubspotHeaders = {
+      'Authorization': `Bearer ${hubspotToken.trim()}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
 
-    // 2. Intentar crear el contacto directamente en HubSpot
-    try {
-      await hubspotClient.crm.contacts.basicApi.create({
+    // 1. INTENTAR CREAR EL CONTACTO DIRECTAMENTE (Flujo optimizado para velocidad)
+    const createRes = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
+      method: 'POST',
+      headers: hubspotHeaders,
+      body: JSON.stringify({
         properties: {
           email: email.trim(),
           firstname: firstname || '',
@@ -56,59 +56,77 @@ app.post('/api/register', async (req, res) => {
           password_hash: hashedPassword,
           userstatus: 'Activo'
         }
-      });
+      })
+    });
+
+    // 2. CONTROL DE DUPLICADOS (Código 409 Conflict)
+    if (createRes.status === 409) {
+      // El usuario ya existe. Hacemos un GET limpio usando el correo directo en la URL
+      const propertiesQuery = 'password_hash,firstname,lastname';
+      const getUrl = `https://api.hubapi.com/${encodeURIComponent(email.trim())}?idProperty=email&properties=${propertiesQuery}`;
       
-      return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente en el CRM.' });
+      const getRes = await fetch(getUrl, { method: 'GET', headers: hubspotHeaders });
 
-    } catch (createError) {
-      // 3. MANEJO DE DUPLICADOS (Código de error 409 native en HubSpot API Client)
-      if (createError.statusCode === 409 || (createError.message && createError.message.includes('409'))) {
-        
-        // El usuario ya existe en HubSpot. Extraemos su ID desde el mensaje de error o buscamos por email
-        // Para agilizar y asegurar el flujo, buscamos el ID del contacto existente mediante su email
-        const searchResponse = await hubspotClient.crm.contacts.basicApi.getById(email.trim(), ['password_hash'], [], [], false, 'email');
-        
-        if (searchResponse && searchResponse.id) {
-          // Si ya tiene contraseña asignada, denegamos la duplicidad
-          if (searchResponse.properties?.password_hash) {
-            return res.status(409).json({ success: false, message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' });
-          }
+      if (getRes.ok) {
+        const contactData = await getRes.json();
 
-          // Si existe en el CRM pero no tiene contraseña, le inyectamos la nueva usando UPDATE (PATCH)
-          await hubspotClient.crm.contacts.basicApi.update(searchResponse.id, {
+        // Si el usuario ya cuenta con una contraseña guardada en el CRM
+        if (contactData.properties?.password_hash) {
+          return res.status(409).json({ 
+            success: false, 
+            message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' 
+          });
+        }
+
+        // Si existe pero no tiene contraseña, inyectamos la contraseña usando PATCH directo al ID numérico
+        const updateRes = await fetch(`https://api.hubapi.com/crm/v3/objects/contacts/${contactData.id}`, {
+          method: 'PATCH',
+          headers: hubspotHeaders,
+          body: JSON.stringify({
             properties: {
               firstname: firstname || undefined,
               lastname: lastname || undefined,
               password_hash: hashedPassword,
               userstatus: 'Activo'
             }
-          });
+          })
+        });
 
+        if (updateRes.ok) {
           return res.status(200).json({ success: true, message: 'Tu cuenta preexistente ha sido activada con éxito.' });
         }
       }
-      
-      // Si fue otro tipo de error al crear, lanzamos la excepción
-      throw createError;
     }
 
+    // 3. Control de errores generales controlados de HubSpot
+    if (!createRes.ok) {
+      const errData = await createRes.json().catch(() => ({ message: 'Error de formato en HubSpot' }));
+      return res.status(400).json({ 
+        success: false, 
+        message: 'HubSpot rechazó la inserción del contacto.', 
+        details: errData.message 
+      });
+    }
+
+    return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente.' });
+
   } catch (error) {
-    console.error('Error en /api/register:', error?.body || error.message);
+    console.error('Error crítico en backend /api/register:', error.message);
     return res.status(500).json({ 
       success: false, 
-      message: 'Error al procesar el registro en el CRM.',
-      details: error?.body?.message || error.message 
+      message: 'Falla crítica interna al procesar el registro.',
+      error: error.message 
     });
   }
 });
 
-// Endpoint de Actualización de Perfil en HubSpot (Se mantiene intacto tu flujo original)
+// Endpoint de Actualización de Perfil (Manteniendo tu estructura)
 app.put('/api/profile/update/:contactId', async (req, res) => {
   const { contactId } = req.params;
   const { firstname, lastname, phone, jobtitle, company } = req.body;
 
   if (!contactId) {
-    return res.status(400).json({ success: false, error: 'Se requiere el ID del contacto de HubSpot.' });
+    return res.status(400).json({ success: false, error: 'Se requiere el ID del contacto.' });
   }
 
   const propertiesToUpdate = {};
@@ -118,19 +136,18 @@ app.put('/api/profile/update/:contactId', async (req, res) => {
   if (jobtitle !== undefined) propertiesToUpdate.jobtitle = jobtitle;
   if (company !== undefined) propertiesToUpdate.company = company;
 
-  if (Object.keys(propertiesToUpdate).length === 0) {
-    return res.status(400).json({ success: false, error: 'Debes proporcionar al menos un campo para actualizar.' });
-  }
-
-  if (!hubspotClient) {
-    return res.status(500).json({ success: false, error: 'El cliente de HubSpot no está configurado.' });
-  }
-
   try {
-    const apiResponse = await hubspotClient.crm.contacts.basicApi.update(
-      contactId,
-      { properties: propertiesToUpdate }
-    );
+    const response = await fetch(`https://api.hubapi.com/crm/v3/objects/contacts/${contactId}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${hubspotToken.trim()}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ properties: propertiesToUpdate })
+    });
+
+    if (!response.ok) throw new Error('Error al actualizar en CRM');
+    const apiResponse = await response.json();
 
     return res.status(200).json({
       success: true,
@@ -138,30 +155,19 @@ app.put('/api/profile/update/:contactId', async (req, res) => {
       contact: apiResponse,
     });
   } catch (error) {
-    console.error('Error al actualizar perfil:', error?.body || error.message);
-    return res.status(500).json({ success: false, error: 'Error al actualizar en el CRM.' });
+    return res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Endpoint de Consulta de Perfil
 app.get('/api/profile', (req, res) => {
-  return res.json({ success: true, message: 'Endpoint de perfil activo.' });
+  return res.json({ success: true, message: 'Endpoint activo.' });
 });
 
-// Fallback de Express para Frontend (Asegurar orden abajo)
+// Fallback de archivos estáticos
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const startServer = () => {
-  const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor activo en el puerto ${PORT}`);
-  });
-};
-
-if (require.main === module) {
-  startServer();
-}
-
-module.exports = app;
+app.listen(Number(process.env.PORT) || 3000, '0.0.0.0', () => {
+  console.log(`Servidor corriendo.`);
+});

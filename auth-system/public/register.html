@@ -124,34 +124,6 @@
 
   <!-- Lógica de Frontend -->
   <script>
-    // 1. COMPARACIÓN EN TIEMPO REAL (AL MOMENTO ESCRITO)
-    function validarContraseñasAlMomento() {
-      const pass1 = document.getElementById('inputPassword').value;
-      const pass2 = document.getElementById('confirmPassword').value;
-      const errorContainer = document.getElementById('errorPassword');
-      const botonSubmit = document.getElementById('btnSubmit');
-
-      if (!pass2) {
-        errorContainer.style.display = 'none';
-        return;
-      }
-
-      errorContainer.style.display = 'block';
-
-      if (pass1 === pass2) {
-        // Coinciden perfectamente
-        errorContainer.textContent = '✓ Las contraseñas coinciden.';
-        errorContainer.className = 'text-success small mt-1';
-        botonSubmit.disabled = false; // Desbloquea el botón
-      } else {
-        // No coinciden
-        errorContainer.textContent = '✗ Las contraseñas no coinciden.';
-        errorContainer.className = 'text-danger small mt-1';
-        botonSubmit.disabled = true; // Bloquea el botón para evitar envíos erróneos
-      }
-    }
-
-    // 2. ENVÍO ASÍNCRONO CLÁSICO POR RUTA RELATIVA
     document.getElementById('registroForm').addEventListener('submit', async function (event) {
       event.preventDefault();
 
@@ -175,24 +147,34 @@
           body: JSON.stringify(datos)
         });
 
+        // VALIDACIÓN DEFENSIVA: Evita crashes asíncronos si el servidor responde HTML por error
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          const textoErrorRaw = await response.text();
+          console.error('Respuesta no-JSON del servidor:', textoErrorRaw);
+          alert('El servidor en la nube no devolvió una respuesta válida. Revisa los logs de Nginx.');
+          botonSubmit.disabled = false;
+          botonSubmit.textContent = textoOriginal;
+          return; // Frena el flujo de forma segura
+        }
+
         const resultado = await response.json();
 
         if (resultado.success) {
           alert('¡Registro exitoso! Bienvenido a Boardroom.');
           window.location.href = 'dashboard.html';
         } else {
-          alert('Error: ' + resultado.message);
+          alert('Error en el registro: ' + resultado.message);
           botonSubmit.disabled = false;
           botonSubmit.textContent = textoOriginal;
         }
       } catch (error) {
-        console.error('Error en fetch:', error);
-        alert('Error de conexión con el servidor en la nube.');
+        console.error('Error en la llamada de red:', error);
+        alert('Error crítico de comunicación con el servidor de Tencent.');
         botonSubmit.disabled = false;
         botonSubmit.textContent = textoOriginal;
       }
-    });
-  </script>
+    });  </script>
 </body>
 
 </html>
