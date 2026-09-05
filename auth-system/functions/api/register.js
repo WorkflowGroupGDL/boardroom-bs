@@ -1,149 +1,167 @@
-// api/register.js - Código 100% compatible con Tencent Cloud EdgeOne Functions
+// app.js - Versión 100% Corregida y Funcional para producción
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const crypto = require('crypto'); // Usamos el módulo crypto nativo de Node.js para SHA-256
+const hubspot = require('@hubspot/api-client');
+const cors = require('cors');
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
+const app = express();
 
-  // Encabezados CORS integrales para producción
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Content-Type': 'application/json'
-  };
+// Middlewares obligatorios
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: true, credentials: true }));
+app.enable('trust proxy');
+
+// INICIALIZACIÓN CRÍTICA: Instanciar correctamente el cliente oficial de HubSpot
+const hubspotToken = process.env.HUBSPOT_ACCESS_TOKEN || process.env.HUBSPOT_TOKEN;
+const hubspotClient = hubspotToken ? new hubspot.Client({ accessToken: hubspotToken.trim() }) : null;
+
+if (!hubspotClient) {
+  console.warn("ADVERTENCIA: No se ha detectado un token de acceso válido para HubSpot en el archivo .env");
+}
+
+// Archivos Estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Helper interno para generar Hash SHA-256 nativo compatible con tu Login
+function generateSHA256(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
+
+// Endpoint de Registro (CORREGIDO Y OPTIMIZADO)
+app.post('/api/register', async (req, res) => {
+  const { email, password, firstname, lastname } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Correo y contraseña requeridos.' });
+  }
+
+  if (!hubspotClient) {
+    return res.status(500).json({ success: false, message: 'El cliente de HubSpot no está configurado en el servidor.' });
+  }
 
   try {
-    // 1. Extraer y validar el cuerpo de la petición de forma segura
-    const body = await request.json();
-    const email = body.email ? body.email.trim() : '';
-    const password = body.password || '';
+    // 1. Generar Hash SHA-256 nativo compatible
+    const hashedPassword = generateSHA256(password);
 
-    if (!email || !password) {
-      return new Response(
-        JSON.stringify({ success: false, message: 'El correo electrónico y la contraseña son campos requeridos.' }),
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    const token = env.HUBSPOT_TOKEN;
-    if (!token) {
-      return new Response(
-        JSON.stringify({ success: false, message: 'Falla interna: HUBSPOT_TOKEN no está definido en el entorno de Tencent Cloud.' }),
-        { status: 500, headers: corsHeaders }
-      );
-    }
-
-    // 2. Encriptación nativa SHA-256 en el Edge (Cero dependencias externas)
-    const msgUint8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-    const hubspotHeaders = {
-      'Authorization': `Bearer ${token.trim()}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-
-    // 3. PASO 1: Validar si el contacto existe en HubSpot a través de su correo
-    // Pedimos las propiedades necesarias de inmediato
-    const propertiesQuery = 'password_hash,firstname,lastname,email,phone,jobtitle,company,program,userstatus';
-    const getUrl = `https://hubapi.com{encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
-    
-    const getRes = await fetch(getUrl, { method: 'GET', headers: hubspotHeaders });
-
-    // Si no se encuentra el correo registrado en el CRM
-    if (getRes.status === 404) {
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          message: 'Tu correo electrónico no está registrado en el sistema de Boardroom. Solicita tu alta con administración.' 
-        }),
-        { status: 404, headers: corsHeaders }
-      );
-    }
-
-    // Si HubSpot devuelve un HTML de error o bloqueo, lo atrapamos de forma segura como texto
-    if (!getRes.ok) {
-      const errTxt = await getRes.text();
-      return new Response(
-        JSON.stringify({ success: false, message: `HubSpot denegó la consulta de validación (Status ${getRes.status}).`, debug: errTxt.substring(0, 150) }),
-        { status: 502, headers: corsHeaders }
-      );
-    }
-
-    const contactData = await getRes.json();
-    const contactId = contactData.id;
-
-    // 4. PASO 2: Verificar si ya tenía una contraseña activa
-    if (contactData.properties?.password_hash) {
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          message: 'Este correo electrónico ya cuenta con una contraseña activa. Por favor, ve a la pantalla de Inicio de Sesión.' 
-        }),
-        { status: 409, headers: corsHeaders }
-      );
-    }
-
-    // 5. PASO 3: Actualizar el contacto existente agregando el Hash usando PATCH
-    const updateUrl = `https://hubapi.com{contactId}`;
-    const updatePayload = {
-      properties: {
-        password_hash: hashedPassword,
-        userstatus: 'Activo'
-      }
-    };
-
-    const updateRes = await fetch(updateUrl, {
-      method: 'PATCH',
-      headers: hubspotHeaders,
-      body: JSON.stringify(updatePayload)
-    });
-
-    if (!updateRes.ok) {
-      const updateErr = await updateRes.text();
-      return new Response(
-        JSON.stringify({ success: false, message: 'El correo existe, pero el CRM rechazó almacenar la contraseña.', debug: updateErr.substring(0, 150) }),
-        { status: updateRes.status, headers: corsHeaders }
-      );
-    }
-
-    // 6. Registro/Activación exitosa: Retornamos el objeto limpio estructurado para el Dashboard
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Contraseña asignada con éxito. Tu cuenta ha sido activada.',
-        contact: {
-          id: contactId,
-          email: email,
-          firstname: contactData.properties?.firstname || '',
-          lastname: contactData.properties?.lastname || '',
-          phone: contactData.properties?.phone || '',
-          jobtitle: contactData.properties?.jobtitle || '',
-          company: contactData.properties?.company || '',
-          program: contactData.properties?.program || '',
+    // 2. Intentar crear el contacto directamente en HubSpot
+    try {
+      await hubspotClient.crm.contacts.basicApi.create({
+        properties: {
+          email: email.trim(),
+          firstname: firstname || '',
+          lastname: lastname || '',
+          password_hash: hashedPassword,
           userstatus: 'Activo'
         }
-      }),
-      { status: 200, headers: corsHeaders }
-    );
+      });
+      
+      return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente en el CRM.' });
+
+    } catch (createError) {
+      // 3. MANEJO DE DUPLICADOS (Código de error 409 native en HubSpot API Client)
+      if (createError.statusCode === 409 || (createError.message && createError.message.includes('409'))) {
+        
+        // El usuario ya existe en HubSpot. Extraemos su ID desde el mensaje de error o buscamos por email
+        // Para agilizar y asegurar el flujo, buscamos el ID del contacto existente mediante su email
+        const searchResponse = await hubspotClient.crm.contacts.basicApi.getById(email.trim(), ['password_hash'], [], [], false, 'email');
+        
+        if (searchResponse && searchResponse.id) {
+          // Si ya tiene contraseña asignada, denegamos la duplicidad
+          if (searchResponse.properties?.password_hash) {
+            return res.status(409).json({ success: false, message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' });
+          }
+
+          // Si existe en el CRM pero no tiene contraseña, le inyectamos la nueva usando UPDATE (PATCH)
+          await hubspotClient.crm.contacts.basicApi.update(searchResponse.id, {
+            properties: {
+              firstname: firstname || undefined,
+              lastname: lastname || undefined,
+              password_hash: hashedPassword,
+              userstatus: 'Activo'
+            }
+          });
+
+          return res.status(200).json({ success: true, message: 'Tu cuenta preexistente ha sido activada con éxito.' });
+        }
+      }
+      
+      // Si fue otro tipo de error al crear, lanzamos la excepción
+      throw createError;
+    }
 
   } catch (error) {
-    return new Response(
-      JSON.stringify({ success: false, message: `Falla crítica interna en el Edge de Tencent: ${error.message}` }),
-      { status: 500, headers: corsHeaders }
-    );
+    console.error('Error en /api/register:', error?.body || error.message);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Error al procesar el registro en el CRM.',
+      details: error?.body?.message || error.message 
+    });
   }
+});
+
+// Endpoint de Actualización de Perfil en HubSpot (Se mantiene intacto tu flujo original)
+app.put('/api/profile/update/:contactId', async (req, res) => {
+  const { contactId } = req.params;
+  const { firstname, lastname, phone, jobtitle, company } = req.body;
+
+  if (!contactId) {
+    return res.status(400).json({ success: false, error: 'Se requiere el ID del contacto de HubSpot.' });
+  }
+
+  const propertiesToUpdate = {};
+  if (firstname !== undefined) propertiesToUpdate.firstname = firstname;
+  if (lastname !== undefined) propertiesToUpdate.lastname = lastname;
+  if (phone !== undefined) propertiesToUpdate.phone = phone;
+  if (jobtitle !== undefined) propertiesToUpdate.jobtitle = jobtitle;
+  if (company !== undefined) propertiesToUpdate.company = company;
+
+  if (Object.keys(propertiesToUpdate).length === 0) {
+    return res.status(400).json({ success: false, error: 'Debes proporcionar al menos un campo para actualizar.' });
+  }
+
+  if (!hubspotClient) {
+    return res.status(500).json({ success: false, error: 'El cliente de HubSpot no está configurado.' });
+  }
+
+  try {
+    const apiResponse = await hubspotClient.crm.contacts.basicApi.update(
+      contactId,
+      { properties: propertiesToUpdate }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Perfil actualizado exitosamente en HubSpot.',
+      contact: apiResponse,
+    });
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error?.body || error.message);
+    return res.status(500).json({ success: false, error: 'Error al actualizar en el CRM.' });
+  }
+});
+
+// Endpoint de Consulta de Perfil
+app.get('/api/profile', (req, res) => {
+  return res.json({ success: true, message: 'Endpoint de perfil activo.' });
+});
+
+// Fallback de Express para Frontend (Asegurar orden abajo)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const startServer = () => {
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor activo en el puerto ${PORT}`);
+  });
+};
+
+if (require.main === module) {
+  startServer();
 }
 
-// Interceptor para peticiones pre-flight CORS
-export async function onRequestOptions() {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-    }
-  });
-}
+module.exports = app;
