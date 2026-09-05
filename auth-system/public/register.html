@@ -4,17 +4,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Boardroom Business School - Registro</title>
+  <title>Boardroom Business School | Registro</title>
 
-  <!-- CSS Core -->
-  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Bootstrap e Iconos -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="assets/css/templatemo-edu-meeting.css">
   <link rel="stylesheet" href="assets/css/material-kit.min.css" id="pagestyle" />
-  <link rel="stylesheet" type="text/css" href="https://googleapis.com" />
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" />
 </head>
 
-<body>
+<body class="bg-light">
   <div id="top"></div>
 
   <!-- Header Area -->
@@ -36,7 +37,6 @@
     </div>
   </header>
 
-  <!-- Banner Superior -->
   <section class="user-page header-text">
     <div class="container">
       <div class="row">
@@ -52,18 +52,7 @@
     <div class="container bg-white rounded-top-4 pt-5 pb-5">
       <div class="row justify-content-center">
 
-        <!-- Texto Lateral -->
-        <div class="col-md-5 card text-center text-dark p-4 border-0 shadow-sm mb-4" id="txtlogin">
-          <h3 class="text-center fw-bold h4 mb-3">Transforma tu visión directiva con Boardroom</h3>
-          <p class="mb-3 text-muted small">Al crear tu cuenta te integras a una plataforma diseñada para ejecutivos,
-            consultores y líderes de alto nivel.</p>
-          <ul class="text-start ps-3 small text-secondary">
-            <li class="mb-2">Formación ejecutiva de alto impacto enfocada en resultados reales de negocio.</li>
-            <li class="mb-2">Conexión directa con una red selecta de tomadores de decisión.</li>
-          </ul>
-        </div>
-
-        <!-- Tarjeta del Formulario -->
+        <!-- Formulario -->
         <div class="col-md-6 d-flex justify-content-center align-items-center">
           <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-5"
             style="width: 100%; max-width: 420px; background-color: #ffffff;">
@@ -71,18 +60,16 @@
               <h2 class="fw-bold text-dark h4 mb-2">Registro</h2>
             </div>
 
-            <!-- Formulario de Entrada -->
             <form id="registroForm">
-
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Nombre</label>
-                <input type="text" class="form-control text-dark px-3" id="inputNombre" placeholder="Tu nombre" required
+                <input type="text" class="form-control text-dark px-3" id="inputNombre" placeholder="Nombre" required
                   style="border: 1px solid #ccc !important;">
               </div>
 
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Apellido</label>
-                <input type="text" class="form-control text-dark px-3" id="inputApellido" placeholder="Tu apellido"
+                <input type="text" class="form-control text-dark px-3" id="inputApellido" placeholder="Apellido"
                   required style="border: 1px solid #ccc !important;">
               </div>
 
@@ -100,21 +87,16 @@
 
               <div class="mb-4">
                 <label class="form-label text-dark fw-bold small">Confirmar Contraseña</label>
-                <!-- CLAVE: El evento oninput ejecuta la comparación al instante mientras se escribe -->
+                <!-- CORREGIDO: Llamada a la función checkPasswords sin caracteres especiales -->
                 <input type="password" class="form-control text-dark px-3" id="confirmPassword"
                   placeholder="Repite tu contraseña" required style="border: 1px solid #ccc !important;"
-                  oninput="validarContraseñasAlMomento()">
+                  oninput="checkPasswords()">
                 <div id="errorPassword" class="small mt-1" style="display: none; font-weight: bold;"></div>
               </div>
 
               <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit" id="btnSubmit">Activar
                 Acceso</button>
-
-              <hr class="my-4">
-              <p class="text-center text-muted small">¿Ya configuraste tu clave? <a href="login.html"
-                  class="text-primary fw-bold">Inicia Sesión aquí</a></p>
             </form>
-
           </div>
         </div>
 
@@ -122,8 +104,34 @@
     </div>
   </section>
 
-  <!-- Lógica de Frontend -->
+  <!-- Lógica de control -->
   <script>
+    // 1. COMPARACIÓN EN TIEMPO REAL CORREGIDA (Sin caracteres especiales)
+    function checkPasswords() {
+      const pass1 = document.getElementById('inputPassword').value;
+      const pass2 = document.getElementById('confirmPassword').value;
+      const errorContainer = document.getElementById('errorPassword');
+      const botonSubmit = document.getElementById('btnSubmit');
+
+      if (!pass2) {
+        errorContainer.style.display = 'none';
+        return;
+      }
+
+      errorContainer.style.display = 'block';
+
+      if (pass1 === pass2) {
+        errorContainer.textContent = '✓ Las contraseñas coinciden.';
+        errorContainer.className = 'text-success small mt-1';
+        botonSubmit.disabled = false;
+      } else {
+        errorContainer.textContent = '✗ Las contraseñas no coinciden.';
+        errorContainer.className = 'text-danger small mt-1';
+        botonSubmit.disabled = true;
+      }
+    }
+
+    // 2. ENVÍO DEL FETCH
     document.getElementById('registroForm').addEventListener('submit', async function (event) {
       event.preventDefault();
 
@@ -131,7 +139,7 @@
       const textoOriginal = botonSubmit.textContent;
 
       botonSubmit.disabled = true;
-      botonSubmit.textContent = 'Procesando registro...';
+      botonSubmit.textContent = 'Procesando...';
 
       const datos = {
         firstname: document.getElementById('inputNombre').value.trim(),
@@ -147,15 +155,14 @@
           body: JSON.stringify(datos)
         });
 
-        // VALIDACIÓN DEFENSIVA: Evita crashes asíncronos si el servidor responde HTML por error
         const contentType = response.headers.get('content-type') || '';
         if (!contentType.includes('application/json')) {
           const textoErrorRaw = await response.text();
-          console.error('Respuesta no-JSON del servidor:', textoErrorRaw);
-          alert('El servidor en la nube no devolvió una respuesta válida. Revisa los logs de Nginx.');
+          console.error('Respuesta HTML recibida:', textoErrorRaw);
+          alert('Error: El servidor web está mal configurado y devolvió una página HTML en lugar de procesar los datos. Revisa el orden de tus rutas en app.js.');
           botonSubmit.disabled = false;
           botonSubmit.textContent = textoOriginal;
-          return; // Frena el flujo de forma segura
+          return;
         }
 
         const resultado = await response.json();
@@ -164,17 +171,18 @@
           alert('¡Registro exitoso! Bienvenido a Boardroom.');
           window.location.href = 'dashboard.html';
         } else {
-          alert('Error en el registro: ' + resultado.message);
+          alert('Error: ' + resultado.message);
           botonSubmit.disabled = false;
           botonSubmit.textContent = textoOriginal;
         }
       } catch (error) {
-        console.error('Error en la llamada de red:', error);
-        alert('Error crítico de comunicación con el servidor de Tencent.');
+        console.error('Error en fetch:', error);
+        alert('Error de conexión con el servidor.');
         botonSubmit.disabled = false;
         botonSubmit.textContent = textoOriginal;
       }
-    });  </script>
+    });
+  </script>
 </body>
 
 </html>
