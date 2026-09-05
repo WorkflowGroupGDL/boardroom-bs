@@ -1,4 +1,4 @@
-require('dotenv').config();
+required('dotenv').config();
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
