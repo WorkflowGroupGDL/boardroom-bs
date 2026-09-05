@@ -6,9 +6,7 @@ const cors = require('cors');
 
 const app = express();
 
-// ==========================================
 // 1. PRIMERA CAPA: MIDDLEWARES CENTRALES
-// ==========================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
@@ -16,21 +14,19 @@ app.enable('trust proxy');
 
 const hubspotToken = process.env.HUBSPOT_ACCESS_TOKEN || process.env.HUBSPOT_TOKEN;
 
-if (!hubspotToken) {
-  console.error("ERROR CRÍTICO: No se detectó la variable HUBSPOT_TOKEN ni HUBSPOT_ACCESS_TOKEN en el archivo .env");
-}
-
 function generateSHA256(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-// ==========================================
-// 2. SEGUNDA CAPA: ENDPOINTS DE LA API (MÁXIMA PRIORIDAD)
-// ==========================================
+// =================================================================
+// 2. SEGUNDA CAPA: EL LOGIN (Colócalo aquí, justo arriba del registro)
+// =================================================================
+// DEJA AQUÍ TU CÓDIGO DE LOGIN INTACTO (No lo toques, ya que funciona perfectamente)
 
-// Tu endpoint de login existente se queda aquí arriba intacto y sin tocar.
 
-// Endpoint de Registro / Activación de cuentas (URLs CORREGIDAS)
+// =================================================================
+// 3. TERCERA CAPA: EL NUEVO ENDPOINT DE REGISTRO BLINDADO
+// =================================================================
 app.post('/api/register', async (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
@@ -39,7 +35,7 @@ app.post('/api/register', async (req, res) => {
   }
 
   if (!hubspotToken) {
-    return res.status(500).json({ success: false, message: 'Error interno: Base de datos CRM no vinculada en el servidor.' });
+    return res.status(500).json({ success: false, message: 'Error interno: Token de HubSpot no configurado.' });
   }
 
   try {
@@ -50,7 +46,7 @@ app.post('/api/register', async (req, res) => {
       'Accept': 'application/json'
     };
 
-    // CORRECCIÓN: URL de API v3 Oficial de HubSpot
+    // 1. Intentar crear el contacto directamente en HubSpot (URL CORREGIDA)
     const createRes = await fetch('https://hubapi.com', {
       method: 'POST',
       headers: hubspotHeaders,
@@ -65,8 +61,8 @@ app.post('/api/register', async (req, res) => {
       })
     });
 
+    // 2. Manejo de duplicados (Código 409 Conflict)
     if (createRes.status === 409) {
-      // CORRECCIÓN: URL alternativa de consulta por Email para el control de duplicados
       const propertiesQuery = 'password_hash,firstname,lastname';
       const getUrl = `https://hubapi.com/${encodeURIComponent(email.trim())}?idProperty=email&properties=${propertiesQuery}`;
       
@@ -78,11 +74,11 @@ app.post('/api/register', async (req, res) => {
         if (contactData.properties?.password_hash) {
           return res.status(409).json({ 
             success: false, 
-            message: 'Este correo electrónico ya cuenta con una cuenta activa en el portal. Intenta iniciar sesión.' 
+            message: 'Este correo electrónico ya cuenta con una cuenta activa. Por favor, inicia sesión.' 
           });
         }
 
-        // CORRECCIÓN: URL de actualización PATCH por ID único de contacto
+        // Si existe en el CRM pero no tiene contraseña, la inyectamos usando PATCH
         const updateRes = await fetch(`https://hubapi.com/${contactData.id}`, {
           method: 'PATCH',
           headers: hubspotHeaders,
@@ -103,49 +99,34 @@ app.post('/api/register', async (req, res) => {
     }
 
     if (!createRes.ok) {
-      const errData = await createRes.json().catch(() => ({ message: 'Error de parseo en la respuesta del CRM.' }));
-      return res.status(400).json({ 
-        success: false, 
-        message: 'HubSpot rechazó la inserción del contacto.', 
-        details: errData.message 
-      });
+      const errData = await createRes.json().catch(() => ({ message: 'Error de parseo en HubSpot.' }));
+      return res.status(400).json({ success: false, message: 'HubSpot rechazó la inserción.', details: errData.message });
     }
 
     return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente.' });
 
   } catch (error) {
     console.error('Error crítico en endpoint /api/register:', error.message);
-    return res.status(500).json({ success: false, message: 'Falla crítica interna en el servidor de Boardroom.' });
+    return res.status(500).json({ success: false, message: 'Falla crítica interna en el servidor.' });
   }
 });
 
-// El resto de tu archivo (profile/update, app.use static, app.get '*') se queda igual...
-app.put('/api/profile/update/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const { firstname, lastname, phone, jobtitle, company } = req.body;
-  try {
-    const response = await fetch(`https://hubapi.com/${contactId}`, {
-      method: 'PATCH',
-      headers: { 'Authorization': `Bearer ${hubspotToken.trim()}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ properties: { firstname, lastname, phone, jobtitle, company } })
-    });
-    const apiResponse = await response.json();
-    return res.status(200).json({ success: true, message: 'Perfil actualizado.', contact: apiResponse });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
-});
 
-app.get('/api/profile', (req, res) => {
-  return res.json({ success: true, message: 'Microservicio de autenticación activo.' });
-});
-
+// =================================================================
+// 4. CUARTA CAPA: ARCHIVOS ESTÁTICOS (DEBE IR ABAJO DE LA API)
+// =================================================================
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// =================================================================
+// 5. QUINTA CAPA: COMODÍN FALLBACK (ESTRICTAMENTE AL FINAL DE TODO)
+// =================================================================
+// Esto asegura que Express solo responda HTML si la ruta no coincide con el login o el registro
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Levantar el servidor
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor activo en el puerto: ${PORT}`);
