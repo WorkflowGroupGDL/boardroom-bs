@@ -316,59 +316,9 @@
   <script src="assets/js/custom.js"></script>
 
   <!-- Lógica de Formulario e Interacción JS -->
-  <!-- <script src="app.js"></script> -->
+  <script src="get-email.js"></script>
   <!-- Asegúrate de colocar este script al final del archivo register.html, antes del cierre de </body> -->
 
-  <script>
-      < script >
-      document.getElementById('registroForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Detiene la recarga estándar de la página
-        const botonSubmit = document.getElementById('btnSubmit');
-        const emailValue = document.getElementById('inputEmail').value.trim();
-        const pass1 = document.getElementById('inputPassword').value;
-        const pass2 = document.getElementById('confirmPassword').value;
-        const errorContainer = document.getElementById('errorPassword');// Resetear estados visuales
-        errorContainer.style.display = 'none'; errorContainer.textContent = '';
-        // 1. Validar que las contraseñas coincidan
-        if (pass1 !== pass2) {
-          errorContainer.textContent = 'Las contraseñas no coinciden. Por favor verifica.';
-          errorContainer.style.display = 'block'; return;
-        }
-        // 2. Control de carga visual del botón submit
-        const textoOriginal = botonSubmit.textContent;
-        botonSubmit.disabled = true;
-        botonSubmit.textContent = 'Guardando contraseña...'; try {
-          // 3. Envío de datos por RUTA RELATIVA directa a Tencent EdgeOne
-          const response = await fetch('/api/register', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: emailValue, password: pass1 })
-          });
-          const resultado = await response.json();
-          // 4. Procesar respuesta de éxito o error devuelta por el Backend
-          if (resultado.success) {
-            // Loguear de forma automática al usuario guardando su perfil en el navegador
-            if (resultado.contact) {
-              localStorage.setItem('usuario_boardroom',
-                JSON.stringify(resultado.contact));
-            }
-            alert('¡Cuenta activada con éxito! Bienvenido al portal directivo.');
-            window.location.href = 'dashboard.html';
-            // Transferencia automática
-          }
-          else {
-            alert(resultado.message);
-            if (resultado.debug) { console.error('Debug del servidor:', resultado.debug); }
-            botonSubmit.disabled = false; botonSubmit.textContent = textoOriginal;
-          }
-        }
-        catch (error) {
-          console.error('Error de red en el fetch relativo:', error);
-          alert('No se pudo establecer contacto con la función de Tencent Cloud.');
-          botonSubmit.disabled = false; botonSubmit.textContent = textoOriginal;
-        }
-      });
-
-  </script>
 
 </body>
 
