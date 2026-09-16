@@ -1,93 +1,97 @@
-import express from 'express';
-import cors from 'cors';
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const hubspot = require('@hubspot/api-client');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
-app.use(cors());
+// Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Endpoint de login
-app.post('/api/login', async (req, res) => {
+// Inicializar HubSpot
+const hubspotClient = new hubspot.Client({ accessToken: process.env.HUBSPOT_ACCESS_TOKEN });
+
+// --- RUTA: REGISTRO DE USUARIOS ---
+app.post('/api/register', async (req, res) => {
+  const { email, password, firstname, lastname } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Email y contraseña requeridos.' });
+  }
+
   try {
-    const { email } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'El correo es requerido.' });
-    }
+    const properties = {
+      email: email,
+      firstname: firstname || '',
+      lastname: lastname || '',
+      password_hash: hashedPassword 
+    };
 
-    const token = process.env.HUBSPOT_TOKEN;
-
-    if (!token) {
-      console.error('ERROR: HUBSPOT_TOKEN no está definido en process.env');
-      return res.status(500).json({ success: false, message: 'Configuración del servidor incompleta (Token no configurado).' });
-    }
-
-    // Consulta a la API de HubSpot
-    const response = await fetch(`https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const propertiesNeeded = [
-  'firstname',
-  'lastname',
-  'email',
-  'phone',
-  'jobtitle',
-  'company',
-  'program',
-  'userstatus',
-  'token',
-      'matricula_escolar'
-    ];
+    const apiResponse = await hubspotClient.crm.contacts.basicApi.create({ properties });
     
-    const propertiesQuery = propertiesNeeded.join(',');
-    const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
+    return res.status(201).json({ success: true, message: 'Usuario registrado con éxito.', id: apiResponse.id });
+  } catch (error) {
+    console.error('Error en registro:', error.body || error);
+    return res.status(400).json({ success: false, message: 'El correo ya existe o faltan configurar propiedades en HubSpot.' });
+  }
+});
 
-    const data = await response.json();
+// --- RUTA: INICIO DE SESIÓN ---
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        success: false,
-        message: 'Contacto no encontrado en HubSpot.',
-        details: data
-      });
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Email y contraseña requeridos.' });
+  }
+
+  try {
+    const searchRequest = {
+      filterGroups: [{
+        filters: [{ propertyName: 'email', operator: 'EQ', value: email }]
+      }],
+      properties: ['email', 'password_hash', 'firstname'],
+      limit: 1
+    };
+
+    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch(searchRequest);
+
+    if (searchResponse.results.length === 0) {
+      return res.status(401).json({ success: false, message: 'Credenciales incorrectas.' });
+    }
+
+    const contact = searchResponse.results[0];
+    const savedPasswordHash = contact.properties.password_hash;
+
+    if (!savedPasswordHash) {
+      return res.status(401).json({ success: false, message: 'El usuario no tiene una contraseña registrada.' });
+    }
+
+    const match = await bcrypt.compare(password, savedPasswordHash);
+
+    if (!match) {
+      return res.status(401).json({ success: false, message: 'Credenciales incorrectas.' });
     }
 
     return res.status(200).json({
       success: true,
-      contact: {
-        id: data.id,
-        firstname: data.properties?.firstname || '',
-        lastname: data.properties?.lastname || '',
-        email: data.properties?.email || email,
-        phone: data.properties?.phone || '',
-        jobtitle: data.properties?.jobtitle || '',
-        company: data.properties?.company || '',
-        program: data.properties?.program || '',
-        userstatus: data.properties?.userstatus || '',
-        token: data.properties?.token || '',
-        matricula_escolar: data.properties?.matricula_escolar || ''
-      }
+      message: `¡Bienvenido, ${contact.properties.firstname || 'Usuario'}!`,
+      user: { id: contact.id, email: contact.properties.email }
     });
 
   } catch (error) {
-    console.error('Error en /api/login:', error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error('Error en login:', error.body || error);
+    return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
   }
 });
 
-// EXPORTAR APP PARA VERCEL (OBLIGATORIO)
+// Redirección por defecto al frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-// Solo escuchar puerto si se ejecuta localmente (npm start)
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Servidor local corriendo en http://localhost:${PORT}`);
-  });
-}
-export default app;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor activo en puerto ${PORT}`));

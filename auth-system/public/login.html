@@ -240,6 +240,28 @@
           </div>
         </div>
 
+        <!-- NUEVO FORMULARIO -->
+        <div class="container">
+          <div class="card">
+            <h2>Registro</h2>
+            <form id="registerForm">
+              <input type="text" id="regFormName" placeholder="Nombre" required>
+              <input type="email" id="regFormEmail" placeholder="Correo Electrónico" required>
+              <input type="password" id="regFormPassword" placeholder="Contraseña" required>
+              <button type="submit">Crear Cuenta</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Iniciar Sesión</h2>
+            <form id="loginForm">
+              <input type="email" id="loginFormEmail" placeholder="Correo Electrónico" required>
+              <input type="password" id="loginFormPassword" placeholder="Contraseña" required>
+              <button type="submit">Ingresar</button>
+            </form>
+          </div>
+        </div>
+
         <a target="_self" href="#top" class="btn btn-primary btn-lg rounded-circle" id="btn-back-to-top"
           title="Volver arriba">↑</a>
         <br><br>
@@ -342,8 +364,39 @@
   <script src="assets/js/custom.js"></script>
 
   <!-- Lógica de Formulario e Interacción JS -->
-  <script src="app.js"></script>
+  <!-- <script src="app.js"></script> -->
+  <script>
+    // Lógica de Registro
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const firstname = document.getElementById('regFormName').value;
+      const email = document.getElementById('regFormEmail').value;
+      const password = document.getElementById('regFormPassword').value;
 
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstname, email, password })
+      });
+      const data = await res.json();
+      alert(data.message);
+    });
+
+    // Lógica de Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginFormEmail').value;
+      const password = document.getElementById('loginFormPassword').value;
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      alert(data.message);
+    });
+  </script>
 </body>
 
 </html>
