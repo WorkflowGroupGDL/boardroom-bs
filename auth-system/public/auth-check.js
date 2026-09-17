@@ -84,3 +84,8 @@ window.removeToken = removeToken;
 window.checkAuth = checkAuth;
 window.requireAuth = requireAuth;
 window.logout = logout;
+
+// EJECUCIÓN AUTOMÁTICA AL CARGAR CUALQUIER PÁGINA
+document.addEventListener('DOMContentLoaded', () => {
+  renderAuthNavigation();
+});
