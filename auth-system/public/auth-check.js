@@ -1,17 +1,14 @@
-const API_BASE_URL = window.location.origin;
+// Cambia esto a la URL pública de tu Render Web Service cuando esté desplegado:
+// Ej: 'https://boardroom-api.onrender.com'
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:3000' 
+  : 'https://boardroom-bs-api.onrender.com';
 
 function getToken() { return localStorage.getItem('jwt_token'); }
 function setToken(token) { localStorage.setItem('jwt_token', token); }
 function removeToken() {
   localStorage.removeItem('jwt_token');
   localStorage.removeItem('user');
-}
-
-function getStoredUser() {
-  try {
-    const userData = localStorage.getItem('user');
-    return userData ? JSON.parse(userData) : null;
-  } catch (e) { return null; }
 }
 
 async function checkAuth() {
@@ -24,7 +21,7 @@ async function checkAuth() {
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    if (!res.ok) throw new Error('Token expirado');
+    if (!res.ok) throw new Error('Sesión no válida');
     const data = await res.json();
     return data.user;
   } catch (error) {
@@ -36,7 +33,7 @@ async function checkAuth() {
 async function requireAuth() {
   const user = await checkAuth();
   if (!user) {
-    window.location.href = '/login.html';
+    window.location.href = 'login.html';
     return null;
   }
   return user;
@@ -44,9 +41,10 @@ async function requireAuth() {
 
 function logout() {
   removeToken();
-  window.location.href = '/login.html';
+  window.location.href = 'login.html';
 }
 
+window.API_BASE_URL = API_BASE_URL;
 window.getToken = getToken;
 window.setToken = setToken;
 window.removeToken = removeToken;

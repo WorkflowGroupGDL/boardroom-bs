@@ -318,7 +318,7 @@
 
       const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
 
-      document.getElementById('user-info').innerText = `Sesión activa como: ${fullName}`;
+      document.getElementById('user-info').innerText = `Sesión activa: ${fullName}`;
       document.getElementById('user-name').innerText = fullName;
       document.getElementById('user-email').innerText = user.email || 'N/A';
       document.getElementById('user-phone').innerText = user.phone || 'No registrado';

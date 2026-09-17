@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = pass.value;
 
     try {
-      const res = await fetch('/api/register', {
+      const res = await fetch(`${API_BASE_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firstname, lastname, email, password })
@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data.success) {
         alert(data.message);
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
       } else {
         errorDiv.style.display = 'block';
         errorDiv.innerText = data.message;
       }
     } catch (err) {
       errorDiv.style.display = 'block';
-      errorDiv.innerText = 'Error al registrar usuario en el servidor.';
+      errorDiv.innerText = 'Error al comunicar con la API de registro.';
     }
   });
 });

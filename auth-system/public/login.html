@@ -330,7 +330,7 @@
       errorMsg.innerText = '';
 
       try {
-        const res = await fetch('/api/login', {
+        const res = await fetch(`${API_BASE_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -340,12 +340,12 @@
         if (data.success) {
           setToken(data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
-          window.location.href = '/dashboard.html';
+          window.location.href = 'dashboard.html';
         } else {
           errorMsg.innerText = data.message;
         }
       } catch (err) {
-        errorMsg.innerText = 'Error de conexión con el servidor.';
+        errorMsg.innerText = 'Error al conectar con el servicio de autenticación.';
       }
     });
   </script>
