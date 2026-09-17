@@ -190,40 +190,18 @@
 
               <!-- Formulario Único para Auth -->
               <form id="loginForm">
-
-                <!-- Campo Nombre (Oculto en Login) -->
-                <div class="form-floating mb-3 d-none" id="container-firstname">
-                  <input type="text" class="form-control rounded-3 bg-light" id="firstname" placeholder="Nombre">
-                  <label for="firstname">Nombre</label>
-                </div>
-
-                <!-- Campo Apellido (Oculto en Login) -->
-                <div class="form-floating mb-3 d-none" id="container-lastname">
-                  <input type="text" class="form-control rounded-3 bg-light" id="lastname" placeholder="Apellido">
-                  <label for="lastname">Apellido</label>
-                </div>
-
-                <!-- Campo Email -->
                 <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-3 bg-light" id="email"
-                    placeholder="Correo electrónico" required>
-                  <label for="email">Correo electrónico</label>
+                  <input type="email" class="form-control rounded-3" id="loginEmail" placeholder="Correo" required>
+                  <label for="loginEmail">Correo electrónico</label>
                 </div>
-
-                <!-- Campo Password -->
                 <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-3 bg-light" id="password" placeholder="Contraseña"
+                  <input type="password" class="form-control rounded-3" id="loginPassword" placeholder="Contraseña"
                     required>
-                  <label for="password">Contraseña</label>
+                  <label for="loginPassword">Contraseña</label>
                 </div>
-
-                <!-- Botón Submit -->
-                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-semibold shadow-sm mb-3"
-                  id="submitBtn">
-                  Entrar
-                </button>
-
+                <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold py-2 mb-3">Entrar</button>
               </form>
+              <div id="error-msg" class="text-center small fw-bold text-danger"></div>
               <!-- ESTE ELEMENTO DEBE EXISTIR CON EL ID "result" -->
               <div id="result"></div>
 
@@ -237,28 +215,6 @@
               </div>
 
             </div>
-          </div>
-        </div>
-
-        <!-- NUEVO FORMULARIO -->
-        <div class="container">
-          <div class="card">
-            <h2>Registro</h2>
-            <form id="registerForm">
-              <input type="text" id="regFormName" placeholder="Nombre" required>
-              <input type="email" id="regFormEmail" placeholder="Correo Electrónico" required>
-              <input type="password" id="regFormPassword" placeholder="Contraseña" required>
-              <button type="submit">Crear Cuenta</button>
-            </form>
-          </div>
-
-          <div class="card">
-            <h2>Iniciar Sesión</h2>
-            <form id="loginForm">
-              <input type="email" id="loginFormEmail" placeholder="Correo Electrónico" required>
-              <input type="password" id="loginFormPassword" placeholder="Contraseña" required>
-              <button type="submit">Ingresar</button>
-            </form>
           </div>
         </div>
 
@@ -364,37 +320,33 @@
   <script src="assets/js/custom.js"></script>
 
   <!-- Lógica de Formulario e Interacción JS -->
-  <!-- <script src="app.js"></script> -->
+  <script src="auth-check.js"></script>
   <script>
-    // Lógica de Registro
-    document.getElementById('registerForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const firstname = document.getElementById('regFormName').value;
-      const email = document.getElementById('regFormEmail').value;
-      const password = document.getElementById('regFormPassword').value;
-
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstname, email, password })
-      });
-      const data = await res.json();
-      alert(data.message);
-    });
-
-    // Lógica de Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginFormEmail').value;
-      const password = document.getElementById('loginFormPassword').value;
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const errorMsg = document.getElementById('error-msg');
+      errorMsg.innerText = '';
 
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      alert(data.message);
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setToken(data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = '/dashboard.html';
+        } else {
+          errorMsg.innerText = data.message;
+        }
+      } catch (err) {
+        errorMsg.innerText = 'Error de conexión con el servidor.';
+      }
     });
   </script>
 </body>

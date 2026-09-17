@@ -88,40 +88,30 @@
             <form id="registroForm">
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Nombre</label>
-                <input type="text" class="form-control text-dark px-3" id="inputNombre" placeholder="Nombre" required
-                  style="border: 1px solid #ccc !important;">
+                <input type="text" class="form-control" id="inputNombre" required>
               </div>
-
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Apellido</label>
-                <input type="text" class="form-control text-dark px-3" id="inputApellido" placeholder="Apellido"
-                  required style="border: 1px solid #ccc !important;">
+                <input type="text" class="form-control" id="inputApellido" required>
               </div>
-
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Correo electrónico</label>
-                <input type="email" class="form-control text-dark px-3" id="inputEmail"
-                  placeholder="ejemplo@boardroom.com" required style="border: 1px solid #ccc !important;">
+                <input type="email" class="form-control" id="inputEmail" required>
               </div>
-
               <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Contraseña</label>
-                <input type="password" class="form-control text-dark px-3" id="inputPassword"
-                  placeholder="Mínimo 6 caracteres" required minlength="6" style="border: 1px solid #ccc !important;">
+                <input type="password" class="form-control" id="inputPassword" minlength="6" required>
               </div>
-
-              <div class="mb-4">
+              <div class="mb-3">
                 <label class="form-label text-dark fw-bold small">Confirmar Contraseña</label>
-                <!-- CORREGIDO: Llamada a la función checkPasswords sin caracteres especiales -->
-                <input type="password" class="form-control text-dark px-3" id="confirmPassword"
-                  placeholder="Repite tu contraseña" required style="border: 1px solid #ccc !important;"
-                  oninput="checkPasswords()">
-                <div id="errorPassword" class="small mt-1" style="display: none; font-weight: bold;"></div>
+                <input type="password" class="form-control" id="confirmPassword" required>
               </div>
-
-              <button class="w-100 btn btn-lg btn-primary rounded-3 fw-bold" type="submit" id="btnSubmit">Activar
-                Acceso</button>
+              <div id="errorPassword" class="small mb-3 text-danger fw-bold"></div>
+              <button class="w-100 btn btn-primary rounded-3 fw-bold" type="submit">Activar Acceso</button>
             </form>
+            <div class="text-center mt-3">
+              <a href="login.html">¿Ya tienes cuenta? Inicia sesión</a>
+            </div>
           </div>
         </div>
 

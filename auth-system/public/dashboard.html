@@ -170,65 +170,47 @@
           </div>
 
           <!-- Panel Derecho: Módulos de Información -->
-          <div class="col-md-8 text-dark">
+          <div class="col-md-6 text-dark">
             <div class="container pb-5">
               <div class="row g-4">
 
                 <!-- Card 1: Perfil Personal -->
                 <div class="col-md-6">
-                  <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h5 class="fw-bold text-color-blue mb-3"><i class="fa fa-user me-2"></i>Información Personal</h5>
-                    <p class="mb-2"><strong>Nombre:</strong> <span id="user-name">Cargando...</span></p>
-                    <p class="mb-2"><strong>Correo:</strong> <span id="user-email">-</span></p>
-                    <p class="mb-0"><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
-                    <p class="mb-0"><strong>Matrícula:</strong> <span id="user-matricula">-</span></p>
+                  <div class="card p-3 border-0 shadow-sm">
+                    <h5>Información Personal</h5>
+                    <p><strong>Nombre:</strong> <span id="user-name">-</span></p>
+                    <p><strong>Correo:</strong> <span id="user-email">-</span></p>
+                    <p><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
+                    <p><strong>Matrícula:</strong> <span id="user-matricula">-</span></p>
                   </div>
                 </div>
-
-                <!-- Card 2: Perfil Profesional -->
                 <div class="col-md-6">
-                  <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h5 class="fw-bold text-color-red mb-3"><i class="fa fa-briefcase me-2"></i>Información Profesional
-                    </h5>
-                    <p class="mb-2"><strong>Cargo:</strong> <span id="user-job">Cargando...</span></p>
-                    <p class="mb-2"><strong>Empresa:</strong> <span id="user-company">-</span></p>
-                    <p class="mb-0"><strong>Ubicación:</strong> <span id="user-location">-</span></p>
+                  <div class="card p-3 border-0 shadow-sm">
+                    <h5>Información Profesional</h5>
+                    <p><strong>Cargo:</strong> <span id="user-job">-</span></p>
+                    <p><strong>Empresa:</strong> <span id="user-company">-</span></p>
                   </div>
                 </div>
-
-                <!-- Card 3: Estado y Programa -->
                 <div class="col-md-12">
-                  <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h5 class="fw-bold text-color-yellow mb-3"><i class="fa fa-graduation-cap me-2"></i>Estado de Cuenta
-                      y
-                      Programa</h5>
-                    <div class="row">
-                      <div class="col-md-4 mb-2 mb-md-0">
-                        <p class="mb-0"><strong>Etapa directiva:</strong> <br><span id="user-stage"
-                            class="badge bg-light text-dark mt-1">-</span></p>
-                      </div>
-                      <div class="col-md-4 mb-2 mb-md-0">
-                        <p class="mb-0"><strong>Estatus:</strong> <br><span id="user-status"
-                            class="badge bg-success mt-1">Activo</span></p>
-                      </div>
-                      <div class="col-md-4">
-                        <p class="mb-0"><strong>Programa Actual:</strong> <br><span id="user-program"
-                            class="fw-semibold text-primary mt-1">-</span></p>
-                      </div>
-                    </div>
+                  <div class="card p-3 border-0 shadow-sm">
+                    <h5>Programa y Estado</h5>
+                    <p><strong>Programa Actual:</strong> <span id="user-program">-</span></p>
+                    <p><strong>Estatus:</strong> <span id="user-status" class="badge bg-success">Activo</span></p>
                   </div>
                 </div>
-
               </div>
             </div>
-          </div>
 
-          <!-- Botón Scroll to Top -->
-          <a target="_self" href="#top" class="btn btn-primary btn-lg rounded-circle" id="btn-back-to-top"
-            title="Volver arriba">↑</a>
-          <br><br>
+          </div>
         </div>
       </div>
+
+      <!-- Botón Scroll to Top -->
+      <a target="_self" href="#top" class="btn btn-primary btn-lg rounded-circle" id="btn-back-to-top"
+        title="Volver arriba">↑</a>
+      <br><br>
+    </div>
+    </div>
     </div>
   </section>
 
@@ -330,31 +312,21 @@
   <!-- Lógica Única de Carga del Perfil y Logout -->
   <script src="auth-check.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      // Una sola verificación de sesión centralizada
+    document.addEventListener('DOMContentLoaded', async () => {
       const user = await requireAuth();
-      if (!user) return; // Si auth-check.js maneja la redirección, detiene la ejecución aquí
+      if (!user) return;
 
-      console.log('Sesión activa para:', user);
-
-      // Llenado de información del perfil en la interfaz
       const fullName = `${user.firstname || ''} ${user.lastname || ''}`.trim() || user.email;
 
-      const setElementText = (id, text) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = text;
-      };
-
-      setElementText('user-info', `Sesión activa como ${fullName}`);
-      setElementText('user-name', fullName);
-      setElementText('user-email', user.email || 'N/A');
-      setElementText('user-phone', user.phone || 'No registrado');
-      setElementText('user-job', user.jobtitle || 'Puesto no registrado');
-      setElementText('user-company', user.company || 'Empresa no registrada');
-      setElementText('user-program', user.programa_inscrito || 'Sin programa asignado');
-      setElementText('user-status', user.hs_lead_status || 'Activo');
-      setElementText('user-token', user.token || 'Activo');
-      setElementText('user-matricula', user.matricula_escolar || 'Sin Matrícula');
+      document.getElementById('user-info').innerText = `Sesión activa como: ${fullName}`;
+      document.getElementById('user-name').innerText = fullName;
+      document.getElementById('user-email').innerText = user.email || 'N/A';
+      document.getElementById('user-phone').innerText = user.phone || 'No registrado';
+      document.getElementById('user-matricula').innerText = user.matricula_escolar || 'Sin Matrícula';
+      document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
+      document.getElementById('user-company').innerText = user.company || 'Empresa no registrada';
+      document.getElementById('user-program').innerText = user.program || 'Sin programa asignado';
+      document.getElementById('user-status').innerText = user.userstatus || 'Activo';
     });
   </script>
 

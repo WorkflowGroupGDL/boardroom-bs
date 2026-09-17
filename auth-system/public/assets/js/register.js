@@ -1,86 +1,50 @@
-// public/assets/js/register.js
 document.addEventListener('DOMContentLoaded', () => {
-  const registroForm = document.getElementById('registroForm');
-  if (!registroForm) return;
+  const form = document.getElementById('registroForm');
+  const pass = document.getElementById('inputPassword');
+  const confirmPass = document.getElementById('confirmPassword');
+  const errorDiv = document.getElementById('errorPassword');
 
-  const passInput = document.getElementById('inputPassword');
-  const confirmInput = document.getElementById('confirmPassword');
-  const submitBtn = document.getElementById('btnSubmit') || registroForm.querySelector('button[type="submit"]');
-
-  // Contenedor dinámico de alertas visuales para contraseñas
-  const errorDiv = document.createElement('div');
-  errorDiv.style.fontWeight = 'bold';
-  errorDiv.style.fontSize = '13px';
-  errorDiv.style.marginTop = '5px';
-  if (confirmInput && confirmInput.parentNode) {
-    confirmInput.parentNode.appendChild(errorDiv);
+  function checkPasswords() {
+    if (confirmPass.value && pass.value !== confirmPass.value) {
+      errorDiv.style.display = 'block';
+      errorDiv.innerText = 'Las contraseñas no coinciden.';
+      return false;
+    }
+    errorDiv.style.display = 'none';
+    errorDiv.innerText = '';
+    return true;
   }
 
-  // Comparación al instante (Mapeado en tiempo real)
-  const verificarContrasenas = () => {
-    const p1 = passInput.value;
-    const p2 = confirmInput.value;
+  confirmPass.addEventListener('input', checkPasswords);
 
-    if (!p2) {
-      errorDiv.style.display = 'none';
-      if (submitBtn) submitBtn.disabled = false;
-      return;
-    }
-
-    errorDiv.style.display = 'block';
-
-    if (p1 === p2) {
-      errorDiv.innerText = '✓ Las contraseñas coinciden.';
-      errorDiv.style.color = '#107c41';
-      if (submitBtn) submitBtn.disabled = false; // Desbloquea
-    } else {
-      errorDiv.innerText = '✗ Las contraseñas no coinciden.';
-      errorDiv.style.color = '#e81123';
-      if (submitBtn) submitBtn.disabled = true; // Bloquea envío erróneo
-    }
-  };
-
-  if (passInput) passInput.addEventListener('input', verificarContrasenas);
-  if (confirmInput) confirmInput.addEventListener('input', verificarContrasenas);
-
-  // Envío del Formulario
-  registroForm.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!checkPasswords()) return;
 
-    const nombre = document.getElementById('inputNombre')?.value.trim() || '';
-    const apellido = document.getElementById('inputApellido')?.value.trim() || '';
-    const email = document.getElementById('inputEmail')?.value.trim() || '';
-    const password = passInput ? passInput.value : '';
-
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'Procesando...';
-    }
+    const firstname = document.getElementById('inputNombre').value;
+    const lastname = document.getElementById('inputApellido').value;
+    const email = document.getElementById('inputEmail').value;
+    const password = pass.value;
 
     try {
-      const response = await fetch('/api/register', {
+      const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, firstname: nombre, lastname: apellido })
+        body: JSON.stringify({ firstname, lastname, email, password })
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok && data.success) {
-        alert('¡Registro y activación exitosa! Procede a iniciar sesión.');
+      if (data.success) {
+        alert(data.message);
         window.location.href = '/login.html';
       } else {
-        alert(data.message || 'Error al procesar el registro.');
+        errorDiv.style.display = 'block';
+        errorDiv.innerText = data.message;
       }
-
-    } catch (error) {
-      console.error('Error en registro:', error);
-      alert('Error de comunicación con la infraestructura del servidor.');
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Activar Acceso';
-      }
+    } catch (err) {
+      errorDiv.style.display = 'block';
+      errorDiv.innerText = 'Error al registrar usuario en el servidor.';
     }
   });
 });
