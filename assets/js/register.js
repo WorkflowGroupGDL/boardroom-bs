@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const pass = document.getElementById('inputPassword');
   const confirmPass = document.getElementById('confirmPassword');
   const errorDiv = document.getElementById('errorPassword');
+  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:3000' 
+  : 'https://boardroom-bs-api.onrender.com';
 
   function checkPasswords() {
     if (confirmPass.value && pass.value !== confirmPass.value) {
