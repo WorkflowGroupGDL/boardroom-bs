@@ -70,7 +70,10 @@ async function renderAuthNavigation(userData = null) {
   } else {
     navContainer.innerHTML = `
       <a href="login.html" target="_self" class="text-white text-decoration-none">
-        <i class="fa fa-user"></i> Iniciar Sesión
+        <i class="fa fa-lock"></i> Iniciar Sesión | 
+      </a>
+      <a href="register.html" target="_self" class="text-white text-decoration-none">
+        <i class="fa fa-key"></i> Registro
       </a>
     `;
     navContainer.style.display = 'inline-block';
