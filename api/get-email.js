@@ -100,7 +100,7 @@ export async function onRequestPost(context) {
           firstname: data.properties?.firstname || '',
           lastname: data.properties?.lastname || '',
           email: data.properties?.email || email,
-          phone: data.properties?.phone || '',
+          mobilephone: data.properties?.mobilephone || '',
           jobtitle: data.properties?.jobtitle || '',
           company: data.properties?.company || '',
           program: data.properties?.program || '',

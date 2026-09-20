@@ -28,12 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastname = document.getElementById('inputApellido').value;
     const email = document.getElementById('inputEmail').value;
     const password = pass.value;
+    const phone = document.getElementById('inputTelefono').value;
+    const city = document.getElementById('inputCity').value;
+    const state = document.getElementById('inputState').value;
+    const country = document.getElementById('inputCountry').value;
+    const jobtitle = document.getElementById('inputJobTitle').value;  
+    const company = document.getElementById('inputCompany').value;
+    const field_of_study = document.getElementById('inputFieldOfStudy').value;
+    const hs_linkedin_url = document.getElementById('inputLinkedIn').value;
+    const asunto = document.getElementById('inputAsunto').value;
+    const mensaje = document.getElementById('inputMensaje').value;
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstname, lastname, email, password })
+        body: JSON.stringify({ firstname, lastname, email, password, phone, city, state, country, jobtitle, company, field_of_study, hs_linkedin_url, asunto, mensaje })
       });
 
       const data = await res.json();

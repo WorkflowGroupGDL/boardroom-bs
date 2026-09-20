@@ -43,8 +43,8 @@ export async function onRequestPost(context) {
       'phone',
       'jobtitle',
       'company',
-      'program',
-      'userstatus',
+      'field_of_study',
+      'military_status',
       'token',
       'matricula_escolar'
     ];
@@ -87,8 +87,8 @@ export async function onRequestPost(context) {
           phone: data.properties?.phone || '',
           jobtitle: data.properties?.jobtitle || '',
           company: data.properties?.company || '',
-          program: data.properties?.program || '',
-          userstatus: data.properties?.userstatus || '',
+          field_of_study: data.properties?.field_of_study || '',
+          military_status: data.properties?.military_status || '',
           token: data.properties?.token || '',
           matricula_escolar: data.properties?.matricula_escolar || ''
         }
