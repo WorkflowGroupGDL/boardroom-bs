@@ -1,0 +1,5 @@
+Ahora, cuando quieras ejecutarlo, solo presionas:
+ Ctrl + Shift + P,
+  seleccionas Tasks: 
+  Run Task
+   y eliges Generar URLs Canónicas.

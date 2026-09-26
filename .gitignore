@@ -1,6 +1,7 @@
 # Archivos de variables de entorno y credenciales
 .env
 .env.*
+.txt
 
 # Dependencias de Node
 node_modules/
