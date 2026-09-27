@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "sitemap": "^9.0.1",
+    "sitemap-generator-cli": "^6.2.6"
+  }
+}

@@ -1,11 +1,19 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Generar URLs Canónicas",
-      "type": "shell",
-      "command": "node generar-canonical.js",
-      "problemMatcher": []
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generar Sitemap Universal",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "${workspaceFolder}/generar-sitemap.js"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
 }
