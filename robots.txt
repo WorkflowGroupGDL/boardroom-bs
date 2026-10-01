@@ -1,2 +1,2 @@
 User-agent: * 
-Sitemap: https://vivehoy.com.mx/sitemap.xml
+Sitemap: https://boardroom-business.school/sitemap.xml
