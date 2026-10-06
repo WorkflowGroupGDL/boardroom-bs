@@ -77,7 +77,7 @@ hr {
 // Typography
 //
 // 1. Remove top margins from headings
-//    By default, `<h1>`-`<h6>` all receive top and bottom margins. We nuke the top
+//    By default, `<h1 class="text-white">`-`<h6>` all receive top and bottom margins. We nuke the top
 //    margin for easier control within type scales as it avoids margin collapsing.
 
 %heading {
