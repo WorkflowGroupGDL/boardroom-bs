@@ -26,7 +26,7 @@
 		"ghcr.io/itsalljustdata/devcontainers-custom-features/python-virtualenv:1": {
 			"includeSetupTools": true
 		},
-		"ghcr.io/devcontainer-config/features/dot-config:4": {},
+		"ghcr.io/devcontainer-config/features/dot-config:5": {},
 		"ghcr.io/esimkowitz/devcontainer-features/direnv:1": {
 			"version": "latest"
 		}
