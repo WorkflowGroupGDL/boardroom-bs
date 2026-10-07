@@ -349,9 +349,8 @@
                   <div class="mb-md-5">
                     <h3>Contactanos</h3>
                     <p>
-                      Para más preguntas, incluidas oportunidades de colaboración, envíe un correo electrónico a <a
-                        href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                        data-cfemail="cca4a9a0a0a38cafbea9adb8a5baa9e1b8a5a1e2afa3a1">[email&#160;protected]</a>
+                      Para más preguntas, incluidas oportunidades de colaboración, envíe un correo electrónico a: <span
+                        id="email-container"></span>
                       o
                       comuníquese mediante nuestro formulario de contacto.
                     </p>
@@ -778,6 +777,25 @@
       $(window).scroll(function () {
         checkSection();
       });
+    </script>
+    <script>
+      // JavaScript function to create email link dynamically
+      function generateEmailLink() {
+        // Define email components to obfuscate the address
+        const user = "contacto";
+        const domain = "boardroom-business.school";
+        const linkText = "Contacto Directivo | Boardroom Business School";
+        // Combine components to form the email address
+        const email = user + "@" + domain;
+        // Create an anchor element and set attributes
+        const anchor = document.createElement("a");
+        anchor.href = "mailto:" + email;
+        anchor.textContent = linkText;
+        // Append the link to the desired container
+        document.getElementById("email-container").appendChild(anchor);
+      }
+      // Call the function on page load
+      document.addEventListener("DOMContentLoaded", generateEmailLink);
     </script>
     <script src="auth-check.js"></script>
 

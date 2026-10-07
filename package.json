@@ -2,5 +2,8 @@
   "devDependencies": {
     "sitemap": "^9.0.1",
     "sitemap-generator-cli": "^6.2.6"
+  },
+  "dependencies": {
+    "@botbye/client": "^2.1.1"
   }
 }
