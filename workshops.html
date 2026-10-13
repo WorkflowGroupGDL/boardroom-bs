@@ -20,6 +20,10 @@
         </script>
         <!-- End Google Tag Manager -->
 
+        <!-- RECAPTCHA v3 -->
+        <script src="https://www.google.com/recaptcha/api.js?render=6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA"></script>
+        <!-- RECAPTCHA v3 -->
+
         <meta charset="utf-8">
         <link rel="canonical" href="https://boardroom-business.school/workshops.html">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -455,7 +459,8 @@
                                 3].</p>
 
                             <form id="workshops-form" role="form">
-                                <input type="hidden" name="subject" id="subject" value="Pre-registro Workshops">
+                                <input type="hidden" name="subject" id="subject"
+                                    value="Workshop 24 de noviembre 2026 - 7:00 PM">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -506,13 +511,29 @@
                                         </div>
                                     </div>
                                     <div class="col-12 text-center mt-4">
-                                        <button type="submit"
+                                        <!-- Campo oculto para enviar el token -->
+                                        <input type="hidden" id="recaptchaToken" name="recaptchaToken">
+                                        <button type="submit" onclick="ejecutarRecaptcha()"
                                             class="btn btn-danger btn-lg px-5 text-uppercase fw-bold">Registrarme al
                                             Workshop</button>
                                     </div>
                                     <div id="thankyou" class="text-center mt-3"></div>
                                 </div>
                             </form>
+                            <script>
+                                function ejecutarRecaptcha() {
+                                    grecaptcha.ready(function () {
+                                        // Ejecutar reCAPTCHA para la acción 'formulario_contacto'
+                                        grecaptcha.execute('6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA', { action: 'workshops-form' }).then(function (token) {
+                                            // Asignar el token generado al campo oculto
+                                            document.getElementById('recaptchaToken').value = token;
+
+                                            // Enviar el formulario
+                                            document.getElementById('workshops-form').submit();
+                                        });
+                                    });
+                                }
+                            </script>
                             <script>
                                 // 1. Esperamos a que todo el HTML esté cargado en el navegador
                                 document.addEventListener('DOMContentLoaded', function () {
