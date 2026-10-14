@@ -572,21 +572,14 @@
                                             const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
 
                                             const formData = new FormData(this);
-
-                                            // Se excluyen explícitamente campos que no pertenecen a HubSpot como math-answer y cf-turnstile-response
-                                            const data = [];
-                                            formData.forEach((value, key) => {
-                                                if (value && key !== 'math-answer' && key !== 'cf-turnstile-response') {
-                                                    data.push({ name: key, value: value });
-                                                }
-                                            });
+                                            const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
 
                                             const jsonPayload = {
                                                 fields: data,
                                                 context: {
                                                     pageUri: window.location.href,
                                                     pageName: document.title,
-                                                    hutk: getCookie('hubspotutk')
+                                                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
                                                 }
                                             };
 
