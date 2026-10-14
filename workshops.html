@@ -521,18 +521,17 @@
                                 </div>
                             </form>
                             <script>
-                                function ejecutarRecaptcha() {
-                                    grecaptcha.ready(function () {
-                                        // Ejecutar reCAPTCHA para la acción 'formulario_contacto'
-                                        grecaptcha.execute('6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA', { action: 'workshops-form' }).then(function (token) {
-                                            // Asignar el token generado al campo oculto
-                                            document.getElementById('recaptchaToken').value = token;
+                                document.getElementById('workshops-form').addEventListener('submit', function (event) {
+                                    event.preventDefault();
 
-                                            // Enviar el formulario
+                                    grecaptcha.ready(function () {
+                                        // La acción solo debe contener letras minúsculas y guiones bajos
+                                        grecaptcha.execute('6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA', { action: 'workshops-form' }).then(function (token) {
+                                            document.getElementById('recaptchaToken').value = token;
                                             document.getElementById('workshops-form').submit();
                                         });
                                     });
-                                }
+                                });
                             </script>
                             <script>
                                 // 1. Esperamos a que todo el HTML esté cargado en el navegador
