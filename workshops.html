@@ -507,7 +507,7 @@
                                     </div>
 
                                     <!-- VERIFICACIÓN MATEMÁTICA ANTI-BOT -->
-                                    <div class="col-md-12">
+                                    <!-- <div class="col-md-12">
                                         <div class="p-3 border rounded bg-light">
                                             <label class="form-label text-dark fw-bold small"
                                                 id="math-question">Cargando verificación...</label>
@@ -516,7 +516,7 @@
                                             <div id="math-error" class="text-danger small mt-1" style="display: none;">
                                                 Respuesta incorrecta. Inténtalo de nuevo.</div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-12 text-center mt-4">
                                         <button type="submit" id="form-submit"
@@ -529,62 +529,12 @@
                                 </div>
                             </form>
                             <script>
-                                // Variables globales para la validación matemática
-                                let expectedMathAnswer = 0;
-
-                                // Generar operación matemática al cargar la página
-                                function generateMathChallenge() {
-                                    const num1 = Math.floor(Math.random() * 10) + 1;
-                                    const num2 = Math.floor(Math.random() * 10) + 1;
-                                    const operators = ['+', '-', '*'];
-                                    const operator = operators[Math.floor(Math.random() * operators.length)];
-
-                                    let questionText = '';
-
-                                    if (operator === '+') {
-                                        expectedMathAnswer = num1 + num2;
-                                        questionText = `¿Cuánto es ${num1} + ${num2}?`;
-                                    } else if (operator === '-') {
-                                        // Asegurar que no dé negativo para facilitar al usuario
-                                        const max = Math.max(num1, num2);
-                                        const min = Math.min(num1, num2);
-                                        expectedMathAnswer = max - min;
-                                        questionText = `¿Cuánto es ${max} - ${min}?`;
-                                    } else {
-                                        // Multiplicaciones sencillas (números del 1 al 5)
-                                        const n1 = Math.floor(Math.random() * 5) + 1;
-                                        const n2 = Math.floor(Math.random() * 5) + 1;
-                                        expectedMathAnswer = n1 * n2;
-                                        questionText = `¿Cuánto es ${n1} × ${n2}?`;
-                                    }
-
-                                    document.getElementById('math-question').innerText = questionText;
-                                    document.getElementById('math-answer').value = '';
-                                }
-
-                                // Ejecutar al cargar
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    generateMathChallenge();
-                                });
-
                                 document.getElementById('workshops-form').addEventListener('submit', function (event) {
                                     event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
 
-                                    const userAnswer = parseInt(document.getElementById('math-answer').value, 10);
-                                    const mathErrorDiv = document.getElementById('math-error');
-
-                                    // Validar la respuesta matemática
-                                    if (userAnswer !== expectedMathAnswer) {
-                                        mathErrorDiv.style.display = 'block';
-                                        generateMathChallenge(); // Generar nueva pregunta si falla
-                                        return;
-                                    } else {
-                                        mathErrorDiv.style.display = 'none';
-                                    }
-
                                     const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-                                    const portalId = '44884955'; // Tu ID de portal HubSpot
-                                    const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6'; // Tu GUID de HubSpot
+                                    const portalId = '44884955'; // Reemplaza con tu ID de portal
+                                    const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6'; // Reemplaza con el GUID de tu formulario
                                     const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
 
                                     const formData = new FormData(this);
@@ -599,10 +549,6 @@
                                         }
                                     };
 
-                                    const submitButton = document.getElementById('form-submit');
-                                    submitButton.disabled = true;
-                                    submitButton.innerText = 'Enviando...';
-
                                     fetch(submitURL, {
                                         method: 'POST',
                                         headers: {
@@ -612,24 +558,11 @@
                                     })
                                         .then(response => response.json())
                                         .then(data => {
-                                            submitButton.disabled = false;
-                                            submitButton.innerText = 'Registrarme al Workshop';
                                             if (data.inlineMessage) {
                                                 document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
-                                                document.getElementById('workshops-form').reset();
-                                                generateMathChallenge();
-                                            } else {
-                                                document.getElementById('thankyou').innerHTML = '<span class="text-success">¡Registro enviado con éxito! Gracias por inscribirte.</span>';
-                                                document.getElementById('workshops-form').reset();
-                                                generateMathChallenge();
                                             }
                                         })
-                                        .catch(error => {
-                                            console.error('Error:', error);
-                                            submitButton.disabled = false;
-                                            submitButton.innerText = 'Registrarme al Workshop';
-                                            document.getElementById('thankyou').innerHTML = '<span class="text-danger">Hubo un error al enviar el registro. Inténtalo de nuevo.</span>';
-                                        });
+                                        .catch(error => console.error('Error:', error));
                                 });
 
                                 // Función para obtener cookies
