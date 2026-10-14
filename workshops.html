@@ -529,86 +529,120 @@
                                 </div>
                             </form>
                             <script>
-                                let num1, num2, expectedAnswer;
+                                // Variables globales para la validación matemática
+                                let expectedMathAnswer = 0;
 
-                                function generarPreguntaMatematica() {
-                                    num1 = Math.floor(Math.random() * 10) + 1;
-                                    num2 = Math.floor(Math.random() * 10) + 1;
-                                    expectedAnswer = num1 + num2;
+                                // Generar operación matemática al cargar la página
+                                function generateMathChallenge() {
+                                    const num1 = Math.floor(Math.random() * 10) + 1;
+                                    const num2 = Math.floor(Math.random() * 10) + 1;
+                                    const operators = ['+', '-', '*'];
+                                    const operator = operators[Math.floor(Math.random() * operators.length)];
 
-                                    const questionElement = document.getElementById('math-question');
-                                    if (questionElement) {
-                                        questionElement.innerText = `Verificación de seguridad: ¿Cuánto es ${num1} + ${num2}? *`;
+                                    let questionText = '';
+
+                                    if (operator === '+') {
+                                        expectedMathAnswer = num1 + num2;
+                                        questionText = `¿Cuánto es ${num1} + ${num2}?`;
+                                    } else if (operator === '-') {
+                                        // Asegurar que no dé negativo para facilitar al usuario
+                                        const max = Math.max(num1, num2);
+                                        const min = Math.min(num1, num2);
+                                        expectedMathAnswer = max - min;
+                                        questionText = `¿Cuánto es ${max} - ${min}?`;
+                                    } else {
+                                        // Multiplicaciones sencillas (números del 1 al 5)
+                                        const n1 = Math.floor(Math.random() * 5) + 1;
+                                        const n2 = Math.floor(Math.random() * 5) + 1;
+                                        expectedMathAnswer = n1 * n2;
+                                        questionText = `¿Cuánto es ${n1} × ${n2}?`;
                                     }
-                                    const answerElement = document.getElementById('math-answer');
-                                    if (answerElement) {
-                                        answerElement.value = '';
-                                    }
+
+                                    document.getElementById('math-question').innerText = questionText;
+                                    document.getElementById('math-answer').value = '';
                                 }
 
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    generarPreguntaMatematica();
+                                // Ejecutar al cargar
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    generateMathChallenge();
+                                });
 
-                                    const formElement = document.getElementById('workshops-form');
+                                document.getElementById('workshops-form').addEventListener('submit', function (event) {
+                                    event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+                                    const userAnswer = parseInt(document.getElementById('math-answer').value, 10);
                                     const mathErrorDiv = document.getElementById('math-error');
 
-                                    if (formElement) {
-                                        formElement.addEventListener('submit', function (event) {
-                                            event.preventDefault();
+                                    // Validar la respuesta matemática
+                                    if (userAnswer !== expectedMathAnswer) {
+                                        mathErrorDiv.style.display = 'block';
+                                        generateMathChallenge(); // Generar nueva pregunta si falla
+                                        return;
+                                    } else {
+                                        mathErrorDiv.style.display = 'none';
+                                    }
 
-                                            // Validar respuesta matemática
-                                            const userAnswer = parseInt(document.getElementById('math-answer').value, 10);
-                                            if (userAnswer !== expectedAnswer) {
-                                                if (mathErrorDiv) mathErrorDiv.style.display = 'block';
-                                                generarPreguntaMatematica();
-                                                return;
-                                            } else {
-                                                if (mathErrorDiv) mathErrorDiv.style.display = 'none';
-                                            }
+                                    const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                                    const portalId = '44884955'; // Tu ID de portal HubSpot
+                                    const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6'; // Tu GUID de HubSpot
+                                    const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
 
-                                            const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-                                            const portalId = '44884955';
-                                            const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6';
-                                            const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+                                    const formData = new FormData(this);
+                                    const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
 
-                                            const formData = new FormData(this);
-                                            const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
-
-                                            const jsonPayload = {
-                                                fields: data,
-                                                context: {
-                                                    pageUri: window.location.href,
-                                                    pageName: document.title,
-                                                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
-                                                }
-                                            };
-
-                                            fetch(submitURL, {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify(jsonPayload)
-                                            })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    if (data.inlineMessage) {
-                                                        document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
-                                                    }
-                                                })
-                                                .catch(error => console.error('Error:', error));
-                                        });
-
-                                        function getCookie(name) {
-                                            let cookieArr = document.cookie.split(";");
-                                            for (let i = 0; i < cookieArr.length; i++) {
-                                                let cookiePair = cookieArr[i].split("=");
-                                                if (name === cookiePair[0].trim()) {
-                                                    return decodeURIComponent(cookiePair[1]);
-                                                }
-                                            }
-                                            return null;
+                                    const jsonPayload = {
+                                        fields: data,
+                                        context: {
+                                            pageUri: window.location.href,
+                                            pageName: document.title,
+                                            hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
                                         }
+                                    };
+
+                                    const submitButton = document.getElementById('form-submit');
+                                    submitButton.disabled = true;
+                                    submitButton.innerText = 'Enviando...';
+
+                                    fetch(submitURL, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(jsonPayload)
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            submitButton.disabled = false;
+                                            submitButton.innerText = 'Registrarme al Workshop';
+                                            if (data.inlineMessage) {
+                                                document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                                                document.getElementById('workshops-form').reset();
+                                                generateMathChallenge();
+                                            } else {
+                                                document.getElementById('thankyou').innerHTML = '<span class="text-success">¡Registro enviado con éxito! Gracias por inscribirte.</span>';
+                                                document.getElementById('workshops-form').reset();
+                                                generateMathChallenge();
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            submitButton.disabled = false;
+                                            submitButton.innerText = 'Registrarme al Workshop';
+                                            document.getElementById('thankyou').innerHTML = '<span class="text-danger">Hubo un error al enviar el registro. Inténtalo de nuevo.</span>';
+                                        });
+                                });
+
+                                // Función para obtener cookies
+                                function getCookie(name) {
+                                    let cookieArr = document.cookie.split(";");
+                                    for (let i = 0; i < cookieArr.length; i++) {
+                                        let cookiePair = cookieArr[i].split("=");
+                                        if (name === cookiePair[0].trim()) {
+                                            return decodeURIComponent(cookiePair[1]);
+                                        }
+                                    }
+                                    return null;
+                                }
                             </script>
                         </div>
                     </div>
@@ -690,51 +724,51 @@
         <script src="assets/js/slick-slider.js"></script>
         <script src="assets/js/custom.js"></script>
         <script>
-                                        //according to loftblog tut
-                                        $('.nav li:first').addClass('active');
+            //according to loftblog tut
+            $('.nav li:first').addClass('active');
 
-                                        var showSection = function showSection(section, isAnimate) {
-                                            var
-                                                direction = section.replace(/#/, ''),
-                                                reqSection = $('.section').filter('[data-section="' + direction + '"]'),
-                                                reqSectionPos = reqSection.offset().top - 0;
+            var showSection = function showSection(section, isAnimate) {
+                var
+                    direction = section.replace(/#/, ''),
+                    reqSection = $('.section').filter('[data-section="' + direction + '"]'),
+                    reqSectionPos = reqSection.offset().top - 0;
 
-                                            if (isAnimate) {
-                                                $('body, html').animate({
-                                                    scrollTop: reqSectionPos
-                                                },
-                                                    800);
-                                            } else {
-                                                $('body, html').scrollTop(reqSectionPos);
-                                            }
+                if (isAnimate) {
+                    $('body, html').animate({
+                        scrollTop: reqSectionPos
+                    },
+                        800);
+                } else {
+                    $('body, html').scrollTop(reqSectionPos);
+                }
 
-                                        };
+            };
 
-                                        var checkSection = function checkSection() {
-                                            $('.section').each(function () {
-                                                var
-                                                    $this = $(this),
-                                                    topEdge = $this.offset().top - 80,
-                                                    bottomEdge = topEdge + $this.height(),
-                                                    wScroll = $(window).scrollTop();
-                                                if (topEdge < wScroll && bottomEdge > wScroll) {
-                                                    var
-                                                        currentId = $this.data('section'),
-                                                        reqLink = $('a').filter('[href*=\\#' + currentId + ']');
-                                                    reqLink.closest('li').addClass('active').
-                                                        siblings().removeClass('active');
-                                                }
-                                            });
-                                        };
+            var checkSection = function checkSection() {
+                $('.section').each(function () {
+                    var
+                        $this = $(this),
+                        topEdge = $this.offset().top - 80,
+                        bottomEdge = topEdge + $this.height(),
+                        wScroll = $(window).scrollTop();
+                    if (topEdge < wScroll && bottomEdge > wScroll) {
+                        var
+                            currentId = $this.data('section'),
+                            reqLink = $('a').filter('[href*=\\#' + currentId + ']');
+                        reqLink.closest('li').addClass('active').
+                            siblings().removeClass('active');
+                    }
+                });
+            };
 
-                                        $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
-                                            e.preventDefault();
-                                            showSection($(this).attr('href'), true);
-                                        });
+            $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
+                e.preventDefault();
+                showSection($(this).attr('href'), true);
+            });
 
-                                        $(window).scroll(function () {
-                                            checkSection();
-                                        });
+            $(window).scroll(function () {
+                checkSection();
+            });
         </script>
         <script src="auth-check.js"></script>
 
