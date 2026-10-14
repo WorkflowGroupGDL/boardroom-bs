@@ -540,7 +540,7 @@
                                                 thankYouElement.innerText = 'Procesando registro...';
                                             }
 
-                                            // Ejecutar reCAPTCHA v3 con una acción limpia y sin espacios
+                                            // Ejecutar reCAPTCHA v3
                                             grecaptcha.ready(function () {
                                                 grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'workshops_form' })
                                                     .then(function (token) {
@@ -575,24 +575,29 @@
                                                     })
                                                     .then(response => response.json())
                                                     .then(data => {
-                                                        if (data.inlineMessage) {
+                                                        // HubSpot devuelve un objeto con inlineMessage o un mensaje de éxito
+                                                        if (data && (data.inlineMessage || data.status === 'success')) {
                                                             if (thankYouElement) {
                                                                 thankYouElement.style.color = 'green';
-                                                                thankYouElement.innerHTML = data.inlineMessage;
+                                                                thankYouElement.innerHTML = data.inlineMessage || '¡Registro completado con éxito!';
                                                             }
                                                             formElement.reset();
                                                         } else {
-                                                            throw new Error('Respuesta inesperada del servidor.');
+                                                            if (thankYouElement) {
+                                                                thankYouElement.style.color = 'red';
+                                                                thankYouElement.innerText = 'Ocurrió un error al procesar el registro en el servidor.';
+                                                            }
                                                         }
                                                     })
                                                     .catch(error => {
                                                         console.error('Error:', error);
                                                         if (thankYouElement) {
                                                             thankYouElement.style.color = 'red';
-                                                            thankYouElement.innerText = 'Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo.';
+                                                            thankYouElement.innerText = 'Ocurrió un error de conexión. Por favor, inténtalo de nuevo.';
                                                         }
                                                     })
-                                                    .finally(() => {
+                                                    .then(function () {
+                                                        // Reemplazo compatible para .finally()
                                                         if (btnSubmit) btnSubmit.disabled = false;
                                                     });
                                             });
