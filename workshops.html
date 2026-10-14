@@ -21,7 +21,7 @@
         <!-- End Google Tag Manager -->
 
         <!-- RECAPTCHA v3 -->
-        <script src="https://www.google.com/recaptcha/api.js?render=6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA"></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <!-- RECAPTCHA v3 -->
 
         <meta charset="utf-8">
@@ -511,103 +511,68 @@
                                     </div>
                                     <div class="col-12 text-center mt-4">
                                         <!-- Campo oculto para enviar el token -->
-                                        <input type="hidden" id="recaptchaToken" name="recaptchaToken">
-                                        <button type="submit" id="btnSubmit"
+                                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFWExkDzgS2KJft-"></div>
+                                        <button type="submit"
                                             class="btn btn-danger btn-lg px-5 text-uppercase fw-bold">Registrarme al
                                             Workshop</button>
                                     </div>
                                     <div id="thankyou" class="text-center mt-3 fw-bold"></div>
                                 </div>
                             </form>
-
                             <script>
-                                const RECAPTCHA_SITE_KEY = '6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA';
-                                const portalId = '44884955';
-                                const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6';
-
+                                // 1. Esperamos a que todo el HTML esté cargado en el navegador
                                 document.addEventListener('DOMContentLoaded', function () {
-                                    const formElement = document.getElementById('workshops-form');
-                                    const btnSubmit = document.getElementById('btnSubmit');
-                                    const thankYouElement = document.getElementById('thankyou');
 
+                                    // 2. Ahora sí podemos buscar el formulario de HubSpot de forma segura
+                                    const formElement = document.getElementById('custom-form');
+
+                                    // Verificación de seguridad por si acaso el ID cambia en el futuro
                                     if (formElement) {
                                         formElement.addEventListener('submit', function (event) {
-                                            event.preventDefault(); // Evita el envío tradicional
+                                            event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
 
-                                            if (btnSubmit) btnSubmit.disabled = true;
-                                            if (thankYouElement) {
-                                                thankYouElement.style.color = '#333';
-                                                thankYouElement.innerText = 'Procesando registro...';
-                                            }
+                                            const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+                                            const portalId = '44884955'; // Reemplaza con tu ID de portal
+                                            const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6'; // Reemplaza con el GUID de tu formulario
+                                            const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
 
-                                            // Ejecutar reCAPTCHA v3
-                                            grecaptcha.ready(function () {
-                                                grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'workshops_form' })
-                                                    .then(function (token) {
-                                                        // Asignar el token generado al campo oculto
-                                                        document.getElementById('recaptchaToken').value = token;
+                                            const formData = new FormData(this);
+                                            const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
 
-                                                        const submitURL = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`;
+                                            const jsonPayload = {
+                                                fields: data,
+                                                context: {
+                                                    pageUri: window.location.href,
+                                                    pageName: document.title,
+                                                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
+                                                }
+                                            };
 
-                                                        // Recopilar todos los campos del formulario
-                                                        const formData = new FormData(formElement);
-                                                        const data = Array.from(formData)
-                                                            .map(([key, value]) => ({ name: key, value }))
-                                                            .filter(field => field.value);
-
-                                                        const jsonPayload = {
-                                                            fields: data,
-                                                            context: {
-                                                                pageUri: window.location.href,
-                                                                pageName: document.title,
-                                                                hutk: getCookie('hubspotutk')
-                                                            }
-                                                        };
-
-                                                        // Enviar a la API de HubSpot vía Fetch (AJAX)
-                                                        return fetch(submitURL, {
-                                                            method: 'POST',
-                                                            headers: {
-                                                                'Content-Type': 'application/json'
-                                                            },
-                                                            body: JSON.stringify(jsonPayload)
-                                                        });
-                                                    })
-                                                    .then(response => response.json())
-                                                    .then(data => {
-                                                        // HubSpot devuelve un objeto con inlineMessage o un mensaje de éxito
-                                                        if (data && (data.inlineMessage || data.status === 'success')) {
-                                                            if (thankYouElement) {
-                                                                thankYouElement.style.color = 'green';
-                                                                thankYouElement.innerHTML = data.inlineMessage || '¡Registro completado con éxito!';
-                                                            }
-                                                            formElement.reset();
-                                                        } else {
-                                                            if (thankYouElement) {
-                                                                thankYouElement.style.color = 'red';
-                                                                thankYouElement.innerText = 'Ocurrió un error al procesar el registro en el servidor.';
-                                                            }
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error:', error);
+                                            fetch(submitURL, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify(jsonPayload)
+                                            })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.inlineMessage) {
+                                                        const thankYouElement = document.getElementById('thankyou');
                                                         if (thankYouElement) {
-                                                            thankYouElement.style.color = 'red';
-                                                            thankYouElement.innerText = 'Ocurrió un error de conexión. Por favor, inténtalo de nuevo.';
+                                                            thankYouElement.innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
                                                         }
-                                                    })
-                                                    .then(function () {
-                                                        // Reemplazo compatible para .finally()
-                                                        if (btnSubmit) btnSubmit.disabled = false;
-                                                    });
-                                            });
+                                                    }
+                                                })
+                                                .catch(error => console.error('Error:', error));
                                         });
                                     } else {
-                                        console.warn("No se encontró ningún elemento con el ID 'workshops-form' en esta página.");
+                                        console.warn("No se encontró ningún elemento con el ID 'custom-form' en esta página.");
                                     }
+
                                 });
 
-                                // Función para obtener cookies de HubSpot
+                                // Función para obtener cookies (puede quedar afuera del DOMContentLoaded)
                                 function getCookie(name) {
                                     let cookieArr = document.cookie.split(";");
                                     for (let i = 0; i < cookieArr.length; i++) {
