@@ -583,9 +583,6 @@
                                                 }
                                             };
 
-                                            const submitBtn = document.getElementById('form-submit');
-                                            if (submitBtn) submitBtn.disabled = true;
-
                                             fetch(submitURL, {
                                                 method: 'POST',
                                                 headers: {
@@ -595,51 +592,23 @@
                                             })
                                                 .then(response => response.json())
                                                 .then(data => {
-                                                    const thankYouElement = document.getElementById('thankyou');
                                                     if (data.inlineMessage) {
-                                                        if (thankYouElement) {
-                                                            thankYouElement.style.color = 'green';
-                                                            thankYouElement.innerHTML = data.inlineMessage;
-                                                        }
-                                                        formElement.reset();
-                                                        generarPreguntaMatematica();
-                                                    } else {
-                                                        if (thankYouElement) {
-                                                            thankYouElement.style.color = 'green';
-                                                            thankYouElement.innerText = '¡Registro completado con éxito!';
-                                                        }
-                                                        formElement.reset();
-                                                        generarPreguntaMatematica();
+                                                        document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
                                                     }
                                                 })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                    const thankYouElement = document.getElementById('thankyou');
-                                                    if (thankYouElement) {
-                                                        thankYouElement.style.color = 'red';
-                                                        thankYouElement.innerText = 'Ocurrió un error al enviar el formulario.';
-                                                    }
-                                                })
-                                                .finally(() => {
-                                                    if (submitBtn) submitBtn.disabled = false;
-                                                });
+                                                .catch(error => console.error('Error:', error));
                                         });
-                                    } else {
-                                        console.warn("No se encontró ningún elemento con el ID 'workshops-form' en esta página.");
-                                    }
 
-                                });
-
-                                function getCookie(name) {
-                                    let cookieArr = document.cookie.split(";");
-                                    for (let i = 0; i < cookieArr.length; i++) {
-                                        let cookiePair = cookieArr[i].split("=");
-                                        if (name === cookiePair[0].trim()) {
-                                            return decodeURIComponent(cookiePair[1]);
+                                        function getCookie(name) {
+                                            let cookieArr = document.cookie.split(";");
+                                            for (let i = 0; i < cookieArr.length; i++) {
+                                                let cookiePair = cookieArr[i].split("=");
+                                                if (name === cookiePair[0].trim()) {
+                                                    return decodeURIComponent(cookiePair[1]);
+                                                }
+                                            }
+                                            return null;
                                         }
-                                    }
-                                    return null;
-                                }
                             </script>
                         </div>
                     </div>
@@ -709,9 +678,66 @@
         </section>
 
         <!-- Scripts -->
+        <!-- Bootstrap core JavaScript -->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <script src="assets/js/isotope.min.js"></script>
+        <script src="assets/js/owl-carousel.js"></script>
+        <script src="assets/js/lightbox.js"></script>
+        <script src="assets/js/tabs.js"></script>
+        <script src="assets/js/video.js"></script>
+        <script src="assets/js/slick-slider.js"></script>
         <script src="assets/js/custom.js"></script>
+        <script>
+                                        //according to loftblog tut
+                                        $('.nav li:first').addClass('active');
+
+                                        var showSection = function showSection(section, isAnimate) {
+                                            var
+                                                direction = section.replace(/#/, ''),
+                                                reqSection = $('.section').filter('[data-section="' + direction + '"]'),
+                                                reqSectionPos = reqSection.offset().top - 0;
+
+                                            if (isAnimate) {
+                                                $('body, html').animate({
+                                                    scrollTop: reqSectionPos
+                                                },
+                                                    800);
+                                            } else {
+                                                $('body, html').scrollTop(reqSectionPos);
+                                            }
+
+                                        };
+
+                                        var checkSection = function checkSection() {
+                                            $('.section').each(function () {
+                                                var
+                                                    $this = $(this),
+                                                    topEdge = $this.offset().top - 80,
+                                                    bottomEdge = topEdge + $this.height(),
+                                                    wScroll = $(window).scrollTop();
+                                                if (topEdge < wScroll && bottomEdge > wScroll) {
+                                                    var
+                                                        currentId = $this.data('section'),
+                                                        reqLink = $('a').filter('[href*=\\#' + currentId + ']');
+                                                    reqLink.closest('li').addClass('active').
+                                                        siblings().removeClass('active');
+                                                }
+                                            });
+                                        };
+
+                                        $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
+                                            e.preventDefault();
+                                            showSection($(this).attr('href'), true);
+                                        });
+
+                                        $(window).scroll(function () {
+                                            checkSection();
+                                        });
+        </script>
+        <script src="auth-check.js"></script>
+
     </body>
 
 </html>
