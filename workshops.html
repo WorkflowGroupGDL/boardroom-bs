@@ -455,8 +455,7 @@
                         <div class="bg-white p-4 p-md-5 rounded-3 shadow-sm border">
                             <h3 class="text-dark fw-bold mb-2 text-center">Pre-registro e Información de Workshops</h3>
                             <p class="text-center text-muted mb-4">Inscríbete en la lista de espera para recibir primero
-                                el catálogo de talleres, fechas confirmadas y tarifas preferenciales de preventa[cite:
-                                3].</p>
+                                el catálogo de talleres, fechas confirmadas y tarifas preferenciales de preventa.</p>
 
                             <form id="workshops-form" role="form">
                                 <input type="hidden" name="subject" id="subject"
@@ -513,80 +512,97 @@
                                     <div class="col-12 text-center mt-4">
                                         <!-- Campo oculto para enviar el token -->
                                         <input type="hidden" id="recaptchaToken" name="recaptchaToken">
-                                        <button type="submit" onclick="ejecutarRecaptcha()"
+                                        <button type="submit" id="btnSubmit"
                                             class="btn btn-danger btn-lg px-5 text-uppercase fw-bold">Registrarme al
                                             Workshop</button>
                                     </div>
-                                    <div id="thankyou" class="text-center mt-3"></div>
+                                    <div id="thankyou" class="text-center mt-3 fw-bold"></div>
                                 </div>
                             </form>
-                            <script>
-                                document.getElementById('workshops-form').addEventListener('submit', function (event) {
-                                    event.preventDefault();
 
-                                    grecaptcha.ready(function () {
-                                        // La acción solo debe contener letras minúsculas y guiones bajos
-                                        grecaptcha.execute('6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA', { action: 'workshops-form' }).then(function (token) {
-                                            document.getElementById('recaptchaToken').value = token;
-                                            document.getElementById('workshops-form').submit();
-                                        });
-                                    });
-                                });
-                            </script>
                             <script>
-                                // 1. Esperamos a que todo el HTML esté cargado en el navegador
+                                const RECAPTCHA_SITE_KEY = '6LfbGe4tAAAAACznOTI-ycMAfHdpoRDw_C30pmjA';
+                                const portalId = '44884955';
+                                const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6';
+
                                 document.addEventListener('DOMContentLoaded', function () {
-
-                                    // 2. Ahora sí podemos buscar el formulario de HubSpot de forma segura
                                     const formElement = document.getElementById('workshops-form');
+                                    const btnSubmit = document.getElementById('btnSubmit');
+                                    const thankYouElement = document.getElementById('thankyou');
 
-                                    // Verificación de seguridad por si acaso el ID cambia en el futuro
                                     if (formElement) {
                                         formElement.addEventListener('submit', function (event) {
-                                            event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+                                            event.preventDefault(); // Evita el envío tradicional
 
-                                            const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-                                            const portalId = '44884955'; // Reemplaza con tu ID de portal
-                                            const formGuid = '5cd2583a-2538-4e35-b41d-c79b17db58f6'; // Reemplaza con el GUID de tu formulario
-                                            const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
+                                            if (btnSubmit) btnSubmit.disabled = true;
+                                            if (thankYouElement) {
+                                                thankYouElement.style.color = '#333';
+                                                thankYouElement.innerText = 'Procesando registro...';
+                                            }
 
-                                            const formData = new FormData(this);
-                                            const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
+                                            // Ejecutar reCAPTCHA v3 con una acción limpia y sin espacios
+                                            grecaptcha.ready(function () {
+                                                grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'workshops_form' })
+                                                    .then(function (token) {
+                                                        // Asignar el token generado al campo oculto
+                                                        document.getElementById('recaptchaToken').value = token;
 
-                                            const jsonPayload = {
-                                                fields: data,
-                                                context: {
-                                                    pageUri: window.location.href,
-                                                    pageName: document.title,
-                                                    hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
-                                                }
-                                            };
+                                                        const submitURL = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`;
 
-                                            fetch(submitURL, {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify(jsonPayload)
-                                            })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    if (data.inlineMessage) {
-                                                        const thankYouElement = document.getElementById('thankyou');
-                                                        if (thankYouElement) {
-                                                            thankYouElement.innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
+                                                        // Recopilar todos los campos del formulario
+                                                        const formData = new FormData(formElement);
+                                                        const data = Array.from(formData)
+                                                            .map(([key, value]) => ({ name: key, value }))
+                                                            .filter(field => field.value);
+
+                                                        const jsonPayload = {
+                                                            fields: data,
+                                                            context: {
+                                                                pageUri: window.location.href,
+                                                                pageName: document.title,
+                                                                hutk: getCookie('hubspotutk')
+                                                            }
+                                                        };
+
+                                                        // Enviar a la API de HubSpot vía Fetch (AJAX)
+                                                        return fetch(submitURL, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify(jsonPayload)
+                                                        });
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (data.inlineMessage) {
+                                                            if (thankYouElement) {
+                                                                thankYouElement.style.color = 'green';
+                                                                thankYouElement.innerHTML = data.inlineMessage;
+                                                            }
+                                                            formElement.reset();
+                                                        } else {
+                                                            throw new Error('Respuesta inesperada del servidor.');
                                                         }
-                                                    }
-                                                })
-                                                .catch(error => console.error('Error:', error));
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error:', error);
+                                                        if (thankYouElement) {
+                                                            thankYouElement.style.color = 'red';
+                                                            thankYouElement.innerText = 'Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo.';
+                                                        }
+                                                    })
+                                                    .finally(() => {
+                                                        if (btnSubmit) btnSubmit.disabled = false;
+                                                    });
+                                            });
                                         });
                                     } else {
                                         console.warn("No se encontró ningún elemento con el ID 'workshops-form' en esta página.");
                                     }
-
                                 });
 
-                                // Función para obtener cookies (puede quedar afuera del DOMContentLoaded)
+                                // Función para obtener cookies de HubSpot
                                 function getCookie(name) {
                                     let cookieArr = document.cookie.split(";");
                                     for (let i = 0; i < cookieArr.length; i++) {
