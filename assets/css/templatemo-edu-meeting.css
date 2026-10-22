@@ -2114,6 +2114,35 @@ section.conferencias-page h2 {
   letter-spacing: 1px;
 }
 
+section.perfiles-page {
+  background-image: url(../images/perfiles.webp);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 230px;
+  padding-bottom: 110px;
+  text-align: center;
+}
+
+section.perfiles-page h6 {
+  margin-top: 0px;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+section.perfiles-page h2 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
 /*
 ---------------------------------------------
 heading page
@@ -2683,4 +2712,12 @@ html {
 
 .text-red {
   color: #8A2525;
+}
+
+.text-azul {
+  color: #0A1631;
+}
+
+.tet-yellow {
+  color: #f5a425;
 }
