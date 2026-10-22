@@ -1,64 +1,61 @@
 const fs = require('fs');
 const path = require('path');
-const { SitemapStream, streamToPromise } = require('sitemap');
-const { Readable } = require('stream');
 
-// CONFIGURACIÓN DE TU DOMINIO REAL
-const BASE_URL = 'https://boardroom-business.school';
+// Lista de tus páginas HTML del sitio web de Boardroom Business School
+const paginas = [
+    'index',
+    'nosotros',
+    'por-que-boardroom',
+    'historia',
+    'equipo',
+    'claustro',
+    'cohorte-cero',
+    'programas',
+    'diplomados',
+    'programas-in-house',
+    'admisiones',
+    'networking',
+    'congresos',
+    'workshops',
+    'case-competitions',
+    'ferias-de-empleo',
+    'conferencias-y-catedras',
+    'becas',
+    'incubadora',
+    'contacto',
+    'james-lass',
+    'leticia-maldonado',
+    'ricardo-bustamante',
+    'diego-donadei',
+    'isabel-zapata',
+    'consulting',
+    'cookies',
+    'politica',
+    'terminos',
+    'bolsa-de-trabajo'
+];
 
-// Función para buscar todos los archivos .html recursivamente en tu proyecto
-function buscarArchivosHtml(dir, listaArchivos = []) {
-  const archivos = fs.readdirSync(dir);
+const dominioBase = 'https://boardroom-business.school';
 
-  archivos.forEach(archivo => {
-    const rutaCompleta = path.join(dir, archivo);
-    const stat = fs.statSync(rutaCompleta);
+// Construcción del contenido del sitemap con saltos de página y extensión .html en <loc>
+let sitemapXML = '<?xml version="1.0" encoding="UTF-8"?>\n';
+sitemapXML += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-    // Ignorar carpetas del sistema, dependencias y la carpeta .vscode
-    if (stat.isDirectory()) {
-      if (archivo !== 'node_modules' && archivo !== '.git' && archivo !== '.vscode') {
-        buscarArchivosHtml(rutaCompleta, listaArchivos);
-      }
-    } else if (archivo.endsWith('.html')) {
-      // Obtener la ruta relativa desde la raíz del proyecto
-      let rutaRelativa = path.relative(__dirname, rutaCompleta).replace(/\\/g, '/');
-      
-      // Formatear la URL para el sitemap
-      if (rutaRelativa === 'index.html') {
-        rutaRelativa = ''; // Raíz
-      } else {
-        rutaRelativa = rutaRelativa.replace('.html', ''); // URLs limpias sin .html
-      }
-      
-      listaArchivos.push({ url: `/${rutaRelativa}`, changefreq: 'weekly', priority: rutaRelativa === '' ? 1.0 : 0.8 });
-    }
-  });
-
-  return listaArchivos;
-}
-
-(async () => {
-  try {
-    console.log('🔍 Escaneando archivos HTML locales...');
-    const enlaces = buscarArchivosHtml(__dirname);
-
-    if (enlaces.length === 0) {
-      console.log('❌ No se encontraron archivos HTML en la raíz del proyecto.');
-      return;
-    }
-
-    console.log(`✨ Se encontraron ${enlaces.length} páginas locales. Generando sitemap...`);
-
-    const stream = new SitemapStream({ hostname: BASE_URL });
-    const xmlBuffer = await streamToPromise(Readable.from(enlaces).pipe(stream));
+paginas.forEach(pagina => {
+    // Si la página es 'index', se puede dejar como la raíz o index.html según prefieras. Aquí se maneja limpia o con .html
+    const rutaLoc = pagina === 'index' ? `${dominioBase}/` : `${dominioBase}/${pagina}.html`;
     
-    // Guardar el sitemap.xml en la raíz
-    fs.writeFileSync(path.join(__dirname, 'sitemap.xml'), xmlBuffer.toString());
-    
-    console.log('🎉 ¡Sitemap generado con ÉXITO de forma local para todas tus páginas!');
-    enlaces.forEach(e => console.log(`   👉 ${BASE_URL}${e.url}`));
+    sitemapXML += '  <url>\n';
+    sitemapXML += `    <loc>${rutaLoc}</loc>\n`;
+    sitemapXML += `    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n`;
+    sitemapXML += '    <changefreq>weekly</changefreq>\n';
+    sitemapXML += '    <priority>0.8</priority>\n';
+    sitemapXML += '  </url>\n\n'; // Salto de línea adicional para separar cada nodo URL
+});
 
-  } catch (error) {
-    console.error('❌ Error generando el sitemap:', error);
-  }
-})();
+sitemapXML += '</urlset>';
+
+// Guardar el archivo sitemap.xml en la raíz del workspace
+fs.writeFileSync(path.join(__dirname, 'sitemap.xml'), sitemapXML, 'utf8');
+
+console.log('¡Sitemap generado exitosamente con extensión .html y saltos de línea por nodo!');

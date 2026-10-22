@@ -1,145 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://boardroom-business.school/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
-       <loc>https://boardroom-business.school/</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>1.0000</priority>
+    <loc>https://boardroom-business.school/nosotros.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/nosotros.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/por-que-boardroom.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/por-que-boardroom.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/historia.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/historia.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/equipo.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/equipo.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/claustro.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/claustro.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/cohorte-cero.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/cohorte-cero.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/programas.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/programas.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/diplomados.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/diplomados.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/programas-in-house.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/programas-in-house.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/admisiones.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/admisiones.html</loc>
-       <lastmod>2026-09-29T20:01:19+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/networking.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/networking.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/congresos.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/congresos.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/workshops.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/workshops.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/case-competitions.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/case-competitions.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/ferias-de-empleo.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/ferias-de-empleo.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/conferencias-y-catedras.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/conferencias-y-catedras.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/becas.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/becas.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/incubadora.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/contacto.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/contacto.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/strategic-leadership-program.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/james-lass.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/strategic-execution-people-leadership.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/leticia-maldonado.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/frontline-leadership-excellence.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/ricardo-bustamante.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/bolsa-de-trabajo.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/diego-donadei.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/consulting.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/isabel-zapata.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/cookies.html</loc>
-       <lastmod>2026-09-29T20:01:20+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/consulting.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/politica.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/cookies.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-       <loc>https://boardroom-business.school/terminos.html</loc>
-       <lastmod>2026-09-29T20:01:30+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://boardroom-business.school/politica.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+
   <url>
-     <loc>https://boardroom-business.school/incubadora.html</loc>
-     <lastmod>2026-10-12T18:58:30+00:00</lastmod>
-     <priority>0.8000</priority>
-</url>
+    <loc>https://boardroom-business.school/terminos.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://boardroom-business.school/bolsa-de-trabajo.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
