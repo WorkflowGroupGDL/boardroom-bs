@@ -1195,91 +1195,13 @@
           </div>
           <div class="row">
             <div class="col-lg-12 d-flex justify-content-center flex-column ms-auto">
-              <form role="form" id="custom-form">
-                <div class="row">
-                  <div class="col-sm-2">
-                    <div class="input-group input-group-outline mb-4">
-                      <label class="form-label text-light">Nombres...</label>
-                      <input class="form-control" type="text" id="firstname" name="firstname">
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="input-group input-group-outline mb-4">
-                      <label class="form-label text-light">Apellidos...</label>
-                      <input class="form-control" type="text" id="lastname" name="lastname">
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="input-group input-group-outline mb-4">
-                      <label class="form-label text-light">Teléfono...</label>
-                      <input class="form-control" type="text" id="mobilephone" name="mobilephone">
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="input-group input-group-outline mb-4">
-                      <label class="form-label text-light">Tu Email...</label>
-                      <input class="form-control" type="email" id="email" name="email">
-                    </div>
-                  </div>
-                  <div class="col-sm-3 ps-0">
-                    <button type="submit" class="btn bg-light w-100" value="Enviar">Inscribir</button>
-                  </div>
-                  <div id="thankyou"></div>
-                </div>
-              </form>
+              <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
               <script>
-                document.getElementById('custom-form').addEventListener('submit', function (event) {
-                  event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
-
-
-                  const baseSubmitURL = 'https://api.hsforms.com/submissions/v3/integration/submit';
-                  const portalId = '44884955'; // Reemplaza con tu ID de portal
-                  const formGuid = 'e0cb0ee0-8837-48f6-9ef9-efdff4202720'; // Reemplaza con el GUID de tu formulario
-                  const submitURL = `${baseSubmitURL}/${portalId}/${formGuid}`;
-
-
-                  const formData = new FormData(this);
-                  const data = Array.from(formData).map(([key, value]) => ({ name: key, value })).filter(field => field.value);
-
-
-                  const jsonPayload = {
-                    fields: data,
-                    context: {
-                      pageUri: window.location.href,
-                      pageName: document.title,
-                      hutk: getCookie('hubspotutk') // Obtiene el valor del cookie hubspotutk
-                    }
-                  };
-
-
-                  fetch(submitURL, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(jsonPayload)
-                  })
-                    .then(response => response.json())
-                    .then(data => {
-                      if (data.inlineMessage) {
-                        document.getElementById('thankyou').innerHTML = data.inlineMessage; // Muestra un mensaje de agradecimiento
-                      }
-                    })
-                    .catch(error => console.error('Error:', error));
+                hbspt.forms.create({
+                  portalId: "44884955",
+                  formId: "26de8f79-266b-47b7-8710-5010c62d6ae6",
+                  region: "na1"
                 });
-
-
-                // Función para obtener cookies
-                function getCookie(name) {
-                  let cookieArr = document.cookie.split(";");
-                  for (let i = 0; i < cookieArr.length; i++) {
-                    let cookiePair = cookieArr[i].split("=");
-                    if (name === cookiePair[0].trim()) {
-                      return decodeURIComponent(cookiePair[1]);
-                    }
-                  }
-                  return null;
-                }
               </script>
             </div>
           </div>
