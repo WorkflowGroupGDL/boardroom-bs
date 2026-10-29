@@ -35,7 +35,8 @@
 		"vscode": {
 			"extensions": [
 				"hoffs.dotnet-secret-explorer",
-				"sharad28.secrets-manager"
+				"sharad28.secrets-manager",
+				"xc-012.sitemap-generate"
 			]
 		}
 	}

@@ -2721,3 +2721,38 @@ html {
 .tet-yellow {
   color: #f5a425;
 }
+
+/* --- Estilos para despliegue automático por Hover en Menús Anidados --- */
+@media (min-width: 992px) {
+
+  /* Mostrar el primer submenú al pasar el cursor sobre el elemento padre */
+  .main-nav .nav li.has-sub:hover>ul.sub-menu {
+    visibility: visible;
+    opacity: 1;
+    margin-top: 0;
+    display: block;
+  }
+
+  /* Posicionar y desplegar el submenú anidado (Cohorte Cero) hacia un lado al pasar el cursor */
+  .main-nav .nav ul.sub-menu li.has-sub {
+    position: relative;
+  }
+
+  .main-nav .nav ul.sub-menu li.has-sub:hover>ul.sub-menu {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    position: absolute;
+    left: 70%;
+    top: 0;
+    margin-top: 0;
+  }
+
+  /* Ocultar por defecto los submenús anidados */
+  .main-nav .nav ul.sub-menu ul.sub-menu {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+    transition: all 0.3s ease;
+  }
+}

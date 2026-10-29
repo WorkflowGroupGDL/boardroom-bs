@@ -32,7 +32,10 @@ const paginas = [
     'cookies',
     'politica',
     'terminos',
-    'bolsa-de-trabajo'
+    'bolsa-de-trabajo',
+    'cohorte-cero-directores',
+    'cohorte-cero-mandos-medios',
+    'cohorte-cero-supervisores'
 ];
 
 const dominioBase = 'https://boardroom-business.school';
