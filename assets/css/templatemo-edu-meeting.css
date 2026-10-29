@@ -2756,3 +2756,49 @@ html {
     transition: all 0.3s ease;
   }
 }
+
+.btn-red {
+  color: #8A2525;
+}
+
+.custom-dropdown-btn {
+  background-color: #8A2525;
+  /* Color corporativo */
+  border-color: #8A2525;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  height: 45px;
+  border-radius: 15px;
+  /* Transición suave de CSS3 */
+}
+
+.custom-dropdown-btn:hover,
+.custom-dropdown-btn:focus {
+  background-color: #8A2525;
+  border-color: #8A2525;
+  color: #ffffff;
+}
+
+/* 2. Personalizar el Menú Desplegable (Caja) */
+.custom-dropdown-menu {
+  background-color: #8A2525;
+  border: 1px solid #8A2525;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  /* Sombra avanzada con CSS3 */
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+/* 3. Personalizar los Enlaces del Menú */
+.custom-dropdown-item {
+  color: #8A2525;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* 4. Efecto Hover / Focus en los Enlaces */
+.custom-dropdown-item:hover,
+.custom-dropdown-item:focus {
+  background-color: #8A2525;
+  color: #ffffff;
+}
