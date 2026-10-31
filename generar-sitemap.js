@@ -35,7 +35,15 @@ const paginas = [
     'bolsa-de-trabajo',
     'cohorte-cero-directores',
     'cohorte-cero-mandos-medios',
-    'cohorte-cero-supervisores'
+    'cohorte-cero-supervisores',
+    'alianzas',
+    'frontline-leadership-excellence',
+    'incubadora',
+    'login',
+    'register',
+    'strategic-execution-people-leadership',
+    'strategic-leadership-program',
+    'terminos'
 ];
 
 const dominioBase = 'https://boardroom-business.school';
