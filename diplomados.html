@@ -329,85 +329,167 @@
               <div class="col-lg-12">
                 <div class="meeting-single-item">
                   <div class="down-content">
-                    <!-- START Project section w/ 3 tilt cards -->
-                    <div class="container">
-                      <div class="row mb-5">
-                        <div class="col-lg-8 text-center mx-auto">
-                          <p class="mb-1 text-gradient text-primary font-weight-bold text-uppercase">Diplomado</p>
-                          <h3>Para mujeres y personas interesadas en potenciar su liderazgo.</h3>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-4 col-md-6">
-                          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-                            <img src="assets/images/programas/mujer-dorada-ejecutiva.webp" class="card-img-top"
-                              alt="Computer Science Students" style="object-fit: cover;">
-                            <div class="card-body p-4 d-flex flex-column h-100">
-                              <div class="mb-2">
-                                <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1 rounded-pill">
-                                  DIPLOMADO</span>
-                              </div>
-                              <h3 class="card-title h5 fw-bold text-dark mb-2">Mujer Dorada Ejecutiva
-                              </h3>
-                              <p class="card-text text-muted small mb-4 text-justify">El Diplomado es un
-                                programa exclusivo de formación y liderazgo diseñado para potenciar el
-                                talento, la visión estratégica y la marca personal de las mujeres en la alta dirección,
-                                integrando herramientas de
-                                inteligencia emocional, negociación de alto nivel y empoderamiento empresarial.</p>
-                              <div class="row g-2 border-top border-bottom py-3 mb-4 text-secondary small">
-                                <div class="col-6">
-                                  <i class="bi bi-clock me-1"></i> 9 semanas - 18 horas
-                                </div>
-                                <div class="col-6 text-end">
-                                  <i class="bi bi-laptop me-1"></i> Online
-                                </div>
-                              </div>
-                              <div class="main-button-blue text-center">
-                                <a target="_self" href="#" class="btn mt-auto rounded-pill py-2 fw-semibold">Ver
-                                  detalles del
-                                  programa</a>
-                              </div>
-
-                            </div>
+                    <!-- Harvard Online Style Hero Section -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <div>
+                            <span
+                              class="badge bg-dark-blue text-white px-3 py-2 rounded-pill fw-bold text-uppercase mb-3"
+                              style="letter-spacing: 1px;">Educación Ejecutiva Superior</span>
+                            <h1 class="display-4 fw-bold mb-3">Aprende de los Mejores Líderes de la
+                              Industria</h1>
+                            <p class="lead opacity-9 mb-4">
+                              Desarrolla visión estratégica, liderazgo de alto rendimiento y
+                              pensamiento directivo
+                              transformacional con la metodología de casos aplicados de Boardroom
+                              Business School.
+                            </p>
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-                            <img src="assets/images/programas/liderazgo-ejecutivo.webp" class="card-img-top"
-                              alt="Computer Science Students" style="object-fit: cover;">
-                            <div class="card-body p-4 d-flex flex-column h-100">
-                              <div class="mb-2">
-                                <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1 rounded-pill">
-                                  DIPLOMADO</span>
-                              </div>
-                              <h3 class="card-title h5 fw-bold text-dark mb-2">Liderazgo Ejecutivo
-                              </h3>
-                              <p class="card-text text-muted small mb-4 text-justify">El Diplomado Liderazgo Ejecutivo
-                                es
-                                un programa
-                                de alto rendimiento diseñado para directores y gerentes que buscan
-                                transformar su capacidad de gestión, optimizar la toma de decisiones estratégicas e
-                                inspirar a sus equipos hacia el
-                                logro de resultados excepcionales en entornos dinámicos.</p>
-                              <div class="row g-2 border-top border-bottom py-3 mb-4 text-secondary small">
-                                <div class="col-6">
-                                  <i class="bi bi-clock me-1"></i> 16 semanas - 32 horas
-                                </div>
-                                <div class="col-6 text-end">
-                                  <i class="bi bi-laptop me-1"></i> Online
+                      </div>
+                    </section>
+
+                    <!-- Course Search & Filter Bar (Harvard Online Style) -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container filter-container">
+                        <div class="filter-card">
+                          <form id="filter-form" onsubmit="return false;">
+                            <div class="row g-3 align-items-center">
+                              <div class="col-lg-4 col-md-12">
+                                <div class="input-group">
+                                  <span class="input-group-text bg-white border-end-0"><i
+                                      class="fas fa-search text-muted"></i></span>
+                                  <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
+                                    placeholder="Buscar por tema o programa...">
                                 </div>
                               </div>
-                              <div class="main-button-blue text-center">
-                                <a target="_self" href="#" class="btn mt-auto rounded-pill py-2 fw-semibold">Ver
-                                  detalles del
-                                  programa</a>
+                              <div class="col-lg-3 col-md-4">
+                                <select class="form-select" id="topicSelect">
+                                  <option value="all">Todos los Temas</option>
+                                  <option value="liderazgo">Liderazgo & Estrategia</option>
+                                  <option value="finanzas">Finanzas Corporativas</option>
+                                  <option value="tecnologia">Transformación Digital</option>
+                                  <option value="operaciones">Gestión Operativa</option>
+                                </select>
+                              </div>
+                              <div class="col-lg-3 col-md-4">
+                                <select class="form-select" id="levelSelect">
+                                  <option value="all">Todos los Niveles</option>
+                                  <option value="Directivos">Directivos & Fundadores</option>
+                                  <option value="Mandos Medios">Mandos Medios & Gerentes</option>
+                                  <option value="Supervisores">Supervisores & Mandos Operativos
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="col-lg-2 col-md-4">
+                                <button type="button" id="resetFilters"
+                                  class="btn btn-outline-secondary w-100 rounded-pill">
+                                  <i class="fas fa-undo me-1"></i> Limpiar
+                                </button>
                               </div>
                             </div>
+                          </form>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Academic Catalog Grid Section -->
+                    <section class="py-5 text-center text-lg-start bg-white" id="programas">
+                      <div class="container">
+
+                        <div class="text-center mb-5">
+                          <p class="text-uppercase text-primary fw-bold mb-1" style="letter-spacing: 1.5px;">
+                            OFERTA ACADÉMICA
+                            DESTACADA</p>
+                          <h2 class="fw-bold text-dark">Cursos Diseñados para tu Nivel Ejecutivo</h2>
+                        </div>
+
+                        <!-- SECCION DE EVENTOS -->
+                        <section class="upcoming-meetings" id="programas">
+                          <div class="container bg-white">
+                            <div class="row">
+                              <div id="lista-eventos" class="grid-eventos"></div>
+
+                              <div id="lista-eventos" class="grid-eventos">Final de eventos...</div>
+
+                              <script>
+                                const contenedor = document.getElementById('lista-eventos');
+
+                                // URL del Web Service en Render
+                                const URL_WEB_SERVICE = 'https://boardroom-bs-api.onrender.com/api/cursos';
+
+                                const hoy = new Date();
+                                const año = hoy.getFullYear();
+                                const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                                const dia = String(hoy.getDate()).padStart(2, '0');
+                                const fechaHoyFormateada = `${año}-${mes}-${dia}`;
+
+                                // Función para recortar el texto a 300 caracteres máximo
+                                function recortarTexto(texto, limite = 300) {
+                                  if (!texto) return '';
+                                  return texto.length > limite ? texto.slice(0, limite) + '...' : texto;
+                                }
+
+                                fetch(URL_WEB_SERVICE)
+                                  .then(response => response.json())
+                                  .then(cursos => {
+                                    contenedor.innerHTML = '';
+
+                                    // Filtrado por fechas futuras o actuales
+                                    const cursosFiltrados = cursos.filter(curso => curso.fecha >= fechaHoyFormateada);
+
+                                    if (cursosFiltrados.length === 0) {
+                                      contenedor.innerHTML = `<p>No hay eventos próximos programados.</p>`;
+                                      return;
+                                    }
+
+                                    cursosFiltrados.forEach(curso => {
+                                      // Se aplica el recorte a la descripción del curso
+                                      const descripcionCorta = recortarTexto(curso.descripcion, 300);
+
+                                      const card = document.createElement('div');
+                                      card.className = 'card-evento';
+                                      card.innerHTML = `
+                                                                      <img src="${curso.imagen}" alt="${curso.titulo}" style="width:100%; height:150px; object-fit:cover; border-radius: 4px;">
+                                                                      <h2>${curso.titulo}</h2>
+                                                                      <p><strong>Fecha:</strong> ${curso.fecha}</p>
+                                                                      <p><strong>Instructor:</strong> ${curso.docente}</p>
+                                                                      <p><img src="assets/images/claustro/${curso.foto_docente}" alt="${curso.docente}" class="img-fluid rounded-circle" style="width: 50px; height: 50px; object-fit: cover;"></p>
+                                                                      <p><strong>Precio:</strong> ${curso.precio}</p>
+                                                                      <p><strong>Descripción:</strong> ${descripcionCorta}</p>
+                                                                      <p class="main-button-red pt-5 text-center text-white"><a target="_self" href="${curso.url}">más información</a></p>
+                                                                      <div class="row border-top border-bottom py-2 my-3 text-secondary small text-center g-0">
+                                                                        <div class="col-4 border-end"><i class="far fa-clock me-1"></i> ${curso.meses}</div>
+                                                                        <div class="col-4 border-end"><i class="fas fa-book-open me-1"></i> ${curso.horas}</div>
+                                                                        <div class="col-4"><i class="fas fa-globe me-1"></i> ${curso.modalidad}</div>
+                                                                      </div>
+                                                                    `;
+                                      contenedor.appendChild(card);
+                                    });
+
+                                    // Guardamos la respuesta del Web Service para la pantalla de detalle
+                                    localStorage.setItem('cursos_ws_cache', JSON.stringify(cursosFiltrados));
+                                  })
+                                  .catch(error => {
+                                    contenedor.innerHTML = `<p>Error de comunicación con el Web Service de Render.</p>`;
+                                    console.error(error);
+                                  });
+                              </script>
+                            </div>
                           </div>
+                        </section>
+
+                        <!-- No Results Alert -->
+                        <div id="no-results" class="alert alert-info text-center mt-4 d-none">
+                          No se encontraron programas que coincidan con los criterios de búsqueda
+                          seleccionados.
                         </div>
 
                       </div>
-                    </div>
+                    </section>
+
+
                     <div class="row bg-white">
                       <!-- GRUPO 6 Conoce todos nuestros programas -->
                       <section class="bg-white pt-5">
@@ -462,6 +544,7 @@
                   </div>
                   <!-- END Project section w/ 3 images & quote & text -->
                 </div>
+
               </div>
             </div>
           </div>
