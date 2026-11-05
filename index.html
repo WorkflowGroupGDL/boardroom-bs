@@ -572,49 +572,51 @@
             <script>
               const contenedor = document.getElementById('lista-eventos');
 
-              // 1. Obtener la fecha de hoy en formato YYYY-MM-DD (hora local)
+              // !!! REEMPLAZA ESTA DIRECCIÓN POR LA URL QUE TE DIO RENDER !!!
+              const URL_WEB_SERVICE = 'https://boardroom-bs-api.onrender.com';
+
               const hoy = new Date();
               const año = hoy.getFullYear();
-              const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+              const mes = String(hoy.getMonth() + 1).padStart(2, '0');
               const dia = String(hoy.getDate()).padStart(2, '0');
               const fechaHoyFormateada = `${año}-${mes}-${dia}`;
 
-              // 2. Leer el archivo JSON
-              fetch('eventos.json')
+              fetch(URL_WEB_SERVICE)
                 .then(response => response.json())
                 .then(eventos => {
-                  contenedor.innerHTML = ''; // Limpiar el mensaje de "Cargando"
+                  contenedor.innerHTML = '';
 
-                  // 3. Filtrar: mantener solo eventos mayores o iguales a la fecha de hoy
+                  // Mismo filtrado por fechas futuras o actuales
                   const eventosFiltrados = eventos.filter(evento => evento.fecha >= fechaHoyFormateada);
 
-                  // 4. Validar si quedaron eventos vigentes
                   if (eventosFiltrados.length === 0) {
-                    contenedor.innerHTML = `<p>No hay eventos programados a partir de hoy.</p>`;
+                    contenedor.innerHTML = `<p>No hay eventos próximos programados.</p>`;
                     return;
                   }
 
-                  // 5. Renderizar las tarjetas filtradas
                   eventosFiltrados.forEach(evento => {
                     const card = document.createElement('div');
                     card.className = 'card-evento';
                     card.innerHTML = `
-                        <img src="${evento.imagen}" alt="${evento.titulo}" style="width:100%; height:150px; object-fit:cover; border-radius: 4px;">
-                          <h2>${evento.titulo}</h2>
-                          <p><strong>Fecha:</strong> ${evento.fecha}</p>
-                          <p><strong>Lugar:</strong> ${evento.lugar}</p>
-                          <p><strong>Precio:</strong> ${evento.precio}</p>
-                          <p><strong>Descripcion:</strong> ${evento.descripcion_larga}</p>
-                          <p class="main-button-red pt-5 text-center text-white"><a target="_self"
-                          href="${evento.url}">más
-                          información</a></p>
-                                        `;
+                    <img src="${evento.imagen}" alt="${evento.titulo}" style="width:100%; height:150px; object-fit:cover; border-radius: 4px;">
+                    <h2>${evento.titulo}</h2>
+                    <p><strong>Fecha:</strong> ${evento.fecha}</p>
+                    <p><strong>Lugar:</strong> ${evento.lugar}</p>
+                    <p><strong>Precio:</strong> ${evento.precio}</p>
+                    <p><strong>Descripcion:</strong> ${evento.descripcion_larga}</p>
+                    <p class="main-button-red pt-5 text-center text-white"><a target="_self"
+                    href="${evento.url}">más
+                    información</a></p>
+                                `;
                     contenedor.appendChild(card);
                   });
+
+                  // Guardamos la respuesta del Web Service para la pantalla de detalle
+                  localStorage.setItem('eventos_ws_cache', JSON.stringify(eventos));
                 })
                 .catch(error => {
-                  contenedor.innerHTML = `<p>Error al cargar los eventos.</p>`;
-                  console.error('Error:', error);
+                  contenedor.innerHTML = `<p>Error de comunicación con el Web Service de Render.</p>`;
+                  console.error(error);
                 });
             </script>
           </div>
