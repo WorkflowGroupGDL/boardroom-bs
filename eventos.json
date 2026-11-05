@@ -1,0 +1,44 @@
+[
+    {
+      "id": 1,
+      "titulo": "¿Tu PYME está lista para los cambios contables y financieros de 2027?",
+      "fecha": "2026-11-24",
+      "lugar": "Online",
+      "precio": "Gratis",
+      "descripcion": "​​Adoptar la NIIF para PYMES (3.ª Edición) y alinearte con las NIF Mexicanas no es solo un tema contable, es una decisión estratégica que impacta tus impuestos (LISR/CFF) y la valoración de tu empresa.",
+      "imagen": "assets/images/flyer/workshop1.webp",
+      "url": "workshops.html"
+    },
+    {
+      "id": 2,
+      "titulo": "Networking 1.0 - Supervisores",
+      "fecha": "2027-01-19",
+      "lugar": "Av. de la Paz 2055, Col Americana, Lafayette, 44140 Guadalajara, Jal.",
+      "precio": "300 MXN",
+      "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+      "imagen": "assets/images/networking.webp",
+      "url": "networking.html"
+    },
+    {
+      "id": 3,
+      "titulo": "Networking 1.1 - Mandos Medios",
+      "fecha": "2027-01-20",
+      "lugar": "Av. de la Paz 2055, Col Americana, Lafayette, 44140 Guadalajara, Jal.",
+      "precio": "300 MXN",
+      "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+      "imagen": "assets/images/meeting-01.jpg",
+      "url": "networking.html"
+    }
+    ,
+    {
+      "id": 4,
+      "titulo": "Networking 1.2 - Directivos & C-Level",
+      "fecha": "2027-01-21",
+      "lugar": "Av. de la Paz 2055, Col Americana, Lafayette, 44140 Guadalajara, Jal.",
+      "precio": "300 MXN",
+      "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+      "imagen": "assets/images/meeting-02.jpg",
+      "url": "networking.html"
+    }
+  ]
+  
