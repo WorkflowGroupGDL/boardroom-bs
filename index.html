@@ -413,7 +413,13 @@
                   <li class="pt-3"><a target="_self" href="#" class="text-dark">Coaching Ontológico Ejecutivo</a></li>
                   <li class="pt-3"><a target="_self" href="programas-in-house.html" class="text-dark">Programas
                       In-House</a></li><br>
-                  <li class="pt-3"><a target="_self" href="consulting.html" class="text-dark">Consultoria</a></li>
+                  <li class="pt-3"><a target="_self" href="consulting.html" class="text-dark">Consultoria</a></li><br>
+                  <li class="pt-3"><a target="_self" href="incubadora.html" class="text-dark">Incubadora</a></li><br>
+                  <li class="pt-3"><a target="_self" href="congresos.html" class="text-dark">Congresos</a></li><br>
+                  <li class="pt-3"><a target="_self" href="#" class="text-dark">MBA's</a></li><br>
+                  <li class="pt-3"><a target="_self" href="competencias.html" class="text-dark">Competencias</a></li>
+                  <br>
+                  <li class="pt-3"><a target="_self" href="workshops.html" class="text-dark">Workshops</a></li>
                 </ul>
                 <div class="main-button-red pt-5">
                   <a target="_self" href="programas.html">Consultar Todos los Programas</a>
@@ -424,39 +430,6 @@
                     el
                     Folleto</a>
                 </div>
-              </div>
-              <br>
-              <div class="categories">
-                <h4 class="text-dark fw-bold mb-3 border-bottom pb-2">PRIMER NETWORKING GDL</h4>
-                <ul class="list-unstyled text-dark">
-                  <li>
-                    <strong><i class="fas fa-calendar-alt text-red me-2"></i>Fecha:</strong>
-                    <span class="fs-5 fw-bold text-red d-block">19, 20 y 21 de enero, 2027,
-                      6PM</span>
-                  </li>
-                  <li class="mb-1">
-                    <strong><i class="fas fa-tag text-red me-2"></i>Inversi&oacute;n:</strong>
-                    <span class="fs-5 fw-bold text-red d-block">$300 MXN (Por Evento)</span>
-                  </li>
-                  <li class="mb-2">
-                    <strong><i class="fas fa-map-marker-alt text-red me-2"></i>Sede:</strong>
-                    <span>Instalaciones de Hotel Lafayette / Av. de la Paz 2055, Col Americana,
-                      Lafayette, 44140 Guadalajara, Jal.
-                    </span>
-                  </li>
-                  <li class="mb-2">
-                    <strong><i class="fas fa-clock text-red me-2"></i>Formato:</strong>
-                    <span>Presencial - Cupos Limitados (Máximo 50 personas Emprendedores, Empresarios,
-                      Directivos o Gerenciales de todos los giros.)</span>
-                  </li>
-                  <li class="mb-3">
-                    <strong><i class="fas fa-utensils text-red me-2"></i>Servicios:</strong>
-                    <span>Cena + Coffee Break + Demo Clase con metodo de Caso estilo Harvard +
-                      Networking</span>
-                  </li>
-                </ul>
-                <p class="main-button-red text-center"><a target="_self" href="networking.html">más
-                    información</a></p>
               </div>
             </div>
             <div class="col-lg-8">
@@ -580,90 +553,70 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <h2>Próximos Workshops / Cursos / Programas</h2>
-                <div id="lista-eventos" class="grid-eventos"></div>
 
-                <style>
-                  .grid-eventos {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                    gap: 20px;
-                    margin-top: 20px;
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SECCION DE EVENTOS -->
+      <section class="upcoming-meetings" id="programas">
+        <div class="container bg-light">
+          <div class="row">
+            <h2>Próximos Workshops / Cursos / Programas</h2>
+            <div id="lista-eventos" class="grid-eventos"></div>
+
+            <div id="lista-eventos" class="grid-eventos">Final de eventos...</div>
+
+            <script>
+              const contenedor = document.getElementById('lista-eventos');
+
+              // 1. Obtener la fecha de hoy en formato YYYY-MM-DD (hora local)
+              const hoy = new Date();
+              const año = hoy.getFullYear();
+              const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+              const dia = String(hoy.getDate()).padStart(2, '0');
+              const fechaHoyFormateada = `${año}-${mes}-${dia}`;
+
+              // 2. Leer el archivo JSON
+              fetch('eventos.json')
+                .then(response => response.json())
+                .then(eventos => {
+                  contenedor.innerHTML = ''; // Limpiar el mensaje de "Cargando"
+
+                  // 3. Filtrar: mantener solo eventos mayores o iguales a la fecha de hoy
+                  const eventosFiltrados = eventos.filter(evento => evento.fecha >= fechaHoyFormateada);
+
+                  // 4. Validar si quedaron eventos vigentes
+                  if (eventosFiltrados.length === 0) {
+                    contenedor.innerHTML = `<p>No hay eventos programados a partir de hoy.</p>`;
+                    return;
                   }
 
-                  .card-evento {
-                    border: 1px solid #ddd;
-                    padding: 15px;
-                    border-radius: 8px;
-                    background: #fff;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-                  }
-
-                  .card-evento h2 {
-                    margin: 10px 0;
-                    font-size: 1.4em;
-                  }
-
-                  .card-evento a {
-                    display: inline-block;
-                    margin-top: 10px;
-                    color: #ffffff;
-                    text-decoration: none;
-                    font-weight: bold;
-                  }
-                </style>
-                <div id="lista-eventos" class="grid-eventos">Final de eventos...</div>
-
-                <script>
-                  const contenedor = document.getElementById('lista-eventos');
-
-                  // 1. Obtener la fecha de hoy en formato YYYY-MM-DD (hora local)
-                  const hoy = new Date();
-                  const año = hoy.getFullYear();
-                  const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
-                  const dia = String(hoy.getDate()).padStart(2, '0');
-                  const fechaHoyFormateada = `${año}-${mes}-${dia}`;
-
-                  // 2. Leer el archivo JSON
-                  fetch('eventos.json')
-                    .then(response => response.json())
-                    .then(eventos => {
-                      contenedor.innerHTML = ''; // Limpiar el mensaje de "Cargando"
-
-                      // 3. Filtrar: mantener solo eventos mayores o iguales a la fecha de hoy
-                      const eventosFiltrados = eventos.filter(evento => evento.fecha >= fechaHoyFormateada);
-
-                      // 4. Validar si quedaron eventos vigentes
-                      if (eventosFiltrados.length === 0) {
-                        contenedor.innerHTML = `<p>No hay eventos programados a partir de hoy.</p>`;
-                        return;
-                      }
-
-                      // 5. Renderizar las tarjetas filtradas
-                      eventosFiltrados.forEach(evento => {
-                        const card = document.createElement('div');
-                        card.className = 'card-evento';
-                        card.innerHTML = `
+                  // 5. Renderizar las tarjetas filtradas
+                  eventosFiltrados.forEach(evento => {
+                    const card = document.createElement('div');
+                    card.className = 'card-evento';
+                    card.innerHTML = `
                         <img src="${evento.imagen}" alt="${evento.titulo}" style="width:100%; height:150px; object-fit:cover; border-radius: 4px;">
                           <h2>${evento.titulo}</h2>
                           <p><strong>Fecha:</strong> ${evento.fecha}</p>
                           <p><strong>Lugar:</strong> ${evento.lugar}</p>
                           <p><strong>Precio:</strong> ${evento.precio}</p>
+                          <p><strong>Descripcion:</strong> ${evento.descripcion_larga}</p>
                           <p class="main-button-red pt-5 text-center text-white"><a target="_self"
                           href="${evento.url}">más
                           información</a></p>
                                         `;
-                        contenedor.appendChild(card);
-                      });
-                    })
-                    .catch(error => {
-                      contenedor.innerHTML = `<p>Error al cargar los eventos.</p>`;
-                      console.error('Error:', error);
-                    });
-                </script>
-              </div>
-            </div>
+                    contenedor.appendChild(card);
+                  });
+                })
+                .catch(error => {
+                  contenedor.innerHTML = `<p>Error al cargar los eventos.</p>`;
+                  console.error('Error:', error);
+                });
+            </script>
           </div>
         </div>
       </section>
