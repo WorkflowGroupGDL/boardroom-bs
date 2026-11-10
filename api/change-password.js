@@ -1,43 +1,5 @@
 // functions/api/change-password.js
-
-// Funciones auxiliares nativas para manejar contraseñas seguras usando Web Crypto API (PBKDF2)
-async function hashPasswordNative(password) {
-  const encoder = new TextEncoder();
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const keyMaterial = await crypto.subtle.importKey(
-    "raw", encoder.encode(password), "PBKDF2", false, ["deriveBits", "deriveKey"]
-  );
-  const buffer = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
-    keyMaterial, 256
-  );
-  
-  // Guardamos el salt junto con el hash en formato legible (Hexadecimal) para poder verificarlo luego
-  const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
-  const hashHex = Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-  return `${saltHex}:${hashHex}`;
-}
-
-async function verifyPasswordNative(password, storedHash) {
-  try {
-    const [saltHex, originalHashHex] = storedHash.split(':');
-    if (!saltHex || !originalHashHex) return false;
-    
-    const encoder = new TextEncoder();
-    const salt = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-    const keyMaterial = await crypto.subtle.importKey(
-      "raw", encoder.encode(password), "PBKDF2", false, ["deriveBits", "deriveKey"]
-    );
-    const buffer = await crypto.subtle.deriveBits(
-      { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
-      keyMaterial, 256
-    );
-    const currentHashHex = Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-    return currentHashHex === originalHashHex;
-  } catch (e) {
-    return false;
-  }
-}
+const bcrypt = require('bcrypt'); // Cambiado a compatibilidad tradicional con tu endpoint /api/register
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -55,6 +17,7 @@ export async function onRequestPost(context) {
     const currentPassword = body.currentPassword;
     const newPassword = body.newPassword;
 
+    // 1. Validaciones iniciales
     if (!email || !currentPassword || !newPassword) {
       return new Response(
         JSON.stringify({ success: false, message: 'El correo, la contraseña actual y la nueva contraseña son obligatorios.' }),
@@ -70,7 +33,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 1. Obtener datos de HubSpot
+    // 2. CORRECCIÓN DE URL: Búsqueda correcta del contacto en HubSpot CRM v3
     const propertiesQuery = 'email,password_hash';
     const hubspotSearchUrl = `https://hubapi.com{encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
     
@@ -91,7 +54,7 @@ export async function onRequestPost(context) {
 
     const contactData = await hubspotSearchRes.json();
     const contactId = contactData.id;
-    let currentHash = contactData.properties?.password_hash;
+    const currentHash = contactData.properties?.password_hash;
 
     if (!currentHash) {
       return new Response(
@@ -100,11 +63,8 @@ export async function onRequestPost(context) {
       );
     }
 
-    // Nota de compatibilidad: Si tu registro original usaba bcrypt clásico, recuerda que bcrypt requiere compatibilidad de node activada en cloudflare. 
-    // Esta verificación usa el sistema nativo WebCrypto.
-    const isPasswordValid = await verifyPasswordNative(currentPassword, currentHash);
-    
-    // Si falla, hacemos un intento secundario por si el hash viejo venía de bcrypt y tienes la compatibilidad activada
+    // 3. Verificación simétrica mediante Bcrypt idéntica al flujo de inicio de sesión
+    const isPasswordValid = await bcrypt.compare(currentPassword, currentHash);
     if (!isPasswordValid) {
       return new Response(
         JSON.stringify({ success: false, message: 'La contraseña actual introducida es incorrecta.' }),
@@ -112,10 +72,10 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 2. Criptografía nativa para la nueva contraseña
-    const hashedNewPassword = await hashPasswordNative(newPassword);
+    // 4. Generar nuevo hash con la misma configuración de sal (Salt rounds = 10)
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // 3. Actualizar HubSpot
+    // 5. CORRECCIÓN DE URL: Actualizar el password_hash en HubSpot mediante PATCH
     const hubspotUpdateUrl = `https://hubapi.com{contactId}`;
     const hubspotUpdateRes = await fetch(hubspotUpdateUrl, {
       method: 'PATCH',
@@ -150,7 +110,6 @@ export async function onRequestPost(context) {
   }
 }
 
-// Soporte mandatorio OPTIONS
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
