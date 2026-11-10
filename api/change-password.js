@@ -1,5 +1,5 @@
 // functions/api/change-password.js
-const bcrypt = require('bcrypt'); // Cambiado a compatibilidad tradicional con tu endpoint /api/register
+import bcrypt from 'bcryptjs'; // Cambiado a importación nativa compatible con Cloudflare Pages
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -28,12 +28,12 @@ export async function onRequestPost(context) {
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
-        JSON.stringify({ success: false, message: 'Error de configuración interna: HUBSPOT_TOKEN no definido.' }),
+        JSON.stringify({ success: false, message: 'Error de configuración interna: HUBSPOT_TOKEN no definido en Cloudflare.' }),
         { status: 500, headers: corsHeaders }
       );
     }
 
-    // 2. CORRECCIÓN DE URL: Búsqueda correcta del contacto en HubSpot CRM v3
+    // 2. Búsqueda correcta del contacto en HubSpot CRM v3
     const propertiesQuery = 'email,password_hash';
     const hubspotSearchUrl = `https://hubapi.com{encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
     
@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 3. Verificación simétrica mediante Bcrypt idéntica al flujo de inicio de sesión
+    // 3. Verificación usando la librería bcryptjs integrada
     const isPasswordValid = await bcrypt.compare(currentPassword, currentHash);
     if (!isPasswordValid) {
       return new Response(
@@ -72,10 +72,10 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 4. Generar nuevo hash con la misma configuración de sal (Salt rounds = 10)
+    // 4. Generar nuevo hash compatible
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // 5. CORRECCIÓN DE URL: Actualizar el password_hash en HubSpot mediante PATCH
+    // 5. Actualizar el password_hash en HubSpot mediante PATCH
     const hubspotUpdateUrl = `https://hubapi.com{contactId}`;
     const hubspotUpdateRes = await fetch(hubspotUpdateUrl, {
       method: 'PATCH',
@@ -110,6 +110,8 @@ export async function onRequestPost(context) {
   }
 }
 
+// Soporte obligatorio para peticiones de verificación previas (Pre-flight OPTIONS)
+// Esto evita errores 405 cuando el navegador valida los encabezados antes del POST
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
