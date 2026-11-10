@@ -1,10 +1,9 @@
 // functions/api/change-password.js
-import bcrypt from 'bcryptjs'; // Asegúrate de tener bcryptjs en las dependencias de tu proyecto Cloudflare
+import bcrypt from 'bcryptjs';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  // Encabezados CORS estándar para comunicación interna y segura
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -18,7 +17,6 @@ export async function onRequestPost(context) {
     const currentPassword = body.currentPassword;
     const newPassword = body.newPassword;
 
-    // 1. Validaciones básicas de entrada de datos
     if (!email || !currentPassword || !newPassword) {
       return new Response(
         JSON.stringify({ success: false, message: 'El correo, la contraseña actual y la nueva contraseña son obligatorios.' }),
@@ -26,7 +24,6 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 2. Extraer el token secreto de HubSpot de las variables de entorno de Cloudflare
     const token = env.HUBSPOT_TOKEN;
     if (!token) {
       return new Response(
@@ -35,7 +32,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 3. Consultar a HubSpot para obtener el hash de la contraseña actual guardada
+    // 1. Consultar a HubSpot
     const propertiesQuery = 'email,password_hash';
     const hubspotSearchUrl = `https://hubapi.com{encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
     
@@ -47,7 +44,17 @@ export async function onRequestPost(context) {
       }
     });
 
-    const contactData = await hubspotSearchRes.json();
+    // PROTECCIÓN: Leer primero como texto para evitar caídas si viene vacío
+    const searchResText = await hubspotSearchRes.text();
+    let contactData = {};
+    try {
+      contactData = searchResText ? JSON.parse(searchResText) : {};
+    } catch (e) {
+      return new Response(
+        JSON.stringify({ success: false, message: 'HubSpot devolvió una respuesta ilegible.' }),
+        { status: 502, headers: corsHeaders }
+      );
+    }
 
     if (!hubspotSearchRes.ok) {
       return new Response(
@@ -66,7 +73,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 4. Verificar con bcrypt si la contraseña actual ingresada coincide con el hash del CRM
+    // 2. Verificar contraseña actual con bcrypt
     const isPasswordValid = await bcrypt.compare(currentPassword, currentHash);
     if (!isPasswordValid) {
       return new Response(
@@ -75,13 +82,13 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 5. Generar el nuevo hash seguro para la nueva contraseña elegida
+    // 3. Generar nuevo hash
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // 6. Actualizar la propiedad de contraseña cifrada en HubSpot usando el ID único del contacto
+    // 4. Actualizar en HubSpot
     const hubspotUpdateUrl = `https://hubapi.com{contactId}`;
     const hubspotUpdateRes = await fetch(hubspotUpdateUrl, {
-      method: 'PATCH', // Usamos PATCH para actualizar parcialmente las propiedades del contacto
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -93,8 +100,16 @@ export async function onRequestPost(context) {
       })
     });
 
+    // PROTECCIÓN: Leer respuesta de actualización de forma segura
+    const updateResText = await hubspotUpdateRes.text();
+    let errorUpdateData = {};
+    try {
+      errorUpdateData = updateResText ? JSON.parse(updateResText) : {};
+    } catch (e) {
+      errorUpdateData = { message: 'Respuesta no analizable de HubSpot.' };
+    }
+
     if (!hubspotUpdateRes.ok) {
-      const errorUpdateData = await hubspotUpdateRes.json();
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -105,7 +120,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    // Respuesta final exitosa devuelta al formulario de la web
+    // Éxito rotundo: Siempre devolvemos un JSON estructurado
     return new Response(
       JSON.stringify({ success: true, message: 'Contraseña actualizada con éxito en la plataforma.' }),
       { status: 200, headers: corsHeaders }
@@ -119,7 +134,6 @@ export async function onRequestPost(context) {
   }
 }
 
-// Soporte mandatorio para peticiones de verificación previas de los navegadores (Pre-flight OPTIONS)
 export async function onRequestOptions() {
   return new Response(null, {
     status: 200,
