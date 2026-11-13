@@ -332,165 +332,347 @@
               <div class="col-lg-12">
                 <div class="meeting-single-item">
                   <div class="down-content">
-                    <!-- Harvard Online Style Hero Section -->
+                    <!-- Soft Skills & Human Performance -->
                     <section class="text-center text-lg-start bg-white">
                       <div class="container">
                         <div class="row">
-                          <div>
-                            <span
-                              class="badge bg-dark-blue text-white px-3 py-2 rounded-pill fw-bold text-uppercase mb-3"
-                              style="letter-spacing: 1px;">Educación Ejecutiva Superior</span>
-                            <h1 class="display-4 fw-bold mb-3">Aprende de los Mejores Líderes de la
-                              Industria de Latin America</h1>
-                            <p class="lead opacity-9 mb-4">
-                              Desarrolla visión estratégica, liderazgo de alto rendimiento y
-                              pensamiento directivo
-                              transformacional con la metodología de casos aplicados de Boardroom
-                              Business School.
-                            </p>
-                          </div>
+                          <h2 class="text-blue" id="topic-soft-skills">Soft Skills <span
+                              class="text-yellow">&amp;</span> Human Performance
+                          </h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Comunicación, inteligencia emocional, negociación,
+                                  pensamiento crítico,
+                                  adaptabilidad, resolución de conflictos y gestión del tiempo.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-soft-skills"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
                         </div>
-                      </div>
-                    </section>
-
-                    <!-- Course Search & Filter Bar (Harvard Online Style) -->
-                    <section class="text-center text-lg-start bg-white">
-                      <div class="container filter-container">
-                        <div class="filter-card">
-                          <form id="filter-form" onsubmit="return false;">
-                            <div class="row g-3 align-items-center">
-                              <div class="col-lg-4 col-md-12">
-                                <div class="input-group">
-                                  <span class="input-group-text bg-white border-end-0"><i
-                                      class="fas fa-search text-muted"></i></span>
-                                  <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
-                                    placeholder="Buscar por tema o programa...">
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-soft-skills" class="grid-eventos"></div>
                                 </div>
                               </div>
-                              <div class="col-lg-3 col-md-4">
-                                <select class="form-select" id="topicSelect">
-                                  <option value="all">Todos los Temas</option>
-                                  <option value="liderazgo">Liderazgo & Estrategia</option>
-                                  <option value="finanzas">Finanzas Corporativas</option>
-                                  <option value="tecnologia">Transformación Digital</option>
-                                  <option value="operaciones">Gestión Operativa</option>
-                                </select>
-                              </div>
-                              <div class="col-lg-3 col-md-4">
-                                <select class="form-select" id="levelSelect">
-                                  <option value="all">Todos los Niveles</option>
-                                  <option value="Directivos">Directivos & Fundadores</option>
-                                  <option value="Mandos Medios">Mandos Medios & Gerentes</option>
-                                  <option value="Supervisores">Supervisores & Mandos Operativos
-                                  </option>
-                                </select>
-                              </div>
-                              <div class="col-lg-2 col-md-4">
-                                <button type="button" id="resetFilters"
-                                  class="btn btn-outline-secondary w-100 rounded-pill">
-                                  <i class="fas fa-undo me-1"></i> Limpiar
-                                </button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </section>
-
-                    <!-- Academic Catalog Grid Section -->
-                    <section class="py-5 text-center text-lg-start bg-white" id="programas">
-                      <div class="container">
-
-                        <div class="text-center mb-5">
-                          <p class="text-uppercase text-primary fw-bold mb-1" style="letter-spacing: 1.5px;">
-                            OFERTA ACADÉMICA
-                            DESTACADA</p>
-                          <h2 class="fw-bold text-dark">Cursos Diseñados para tu Nivel Ejecutivo</h2>
-                        </div>
-
-                        <!-- SECCION DE EVENTOS -->
-                        <section class="upcoming-meetings" id="programas">
-                          <div class="container bg-white">
-                            <div class="row">
-                              <div id="lista-eventos" class="grid-eventos"></div>
-
-                              <div id="lista-eventos" class="grid-eventos">Final de eventos...</div>
-
-                              <script>
-                                const contenedor = document.getElementById('lista-eventos');
-
-                                // URL del Web Service en Render
-                                const URL_WEB_SERVICE = 'https://boardroom-bs-api.onrender.com/api/cursos';
-
-                                const hoy = new Date();
-                                const año = hoy.getFullYear();
-                                const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-                                const dia = String(hoy.getDate()).padStart(2, '0');
-                                const fechaHoyFormateada = `${año}-${mes}-${dia}`;
-
-                                // Función para recortar el texto a 300 caracteres máximo
-                                function recortarTexto(texto, limite = 300) {
-                                  if (!texto) return '';
-                                  return texto.length > limite ? texto.slice(0, limite) + '...' : texto;
-                                }
-
-                                fetch(URL_WEB_SERVICE)
-                                  .then(response => response.json())
-                                  .then(cursos => {
-                                    contenedor.innerHTML = '';
-
-                                    // Filtrado por fechas futuras o actuales
-                                    const cursosFiltrados = cursos.filter(curso => curso.fecha >= fechaHoyFormateada);
-
-                                    if (cursosFiltrados.length === 0) {
-                                      contenedor.innerHTML = `<p>No hay eventos próximos programados.</p>`;
-                                      return;
-                                    }
-
-                                    cursosFiltrados.forEach(curso => {
-                                      // Se aplica el recorte a la descripción del curso
-                                      const descripcionCorta = recortarTexto(curso.descripcion, 300);
-
-                                      const card = document.createElement('div');
-                                      card.className = 'card-evento';
-                                      card.innerHTML = `
-                                                                      <img src="${curso.imagen}" alt="${curso.titulo}" style="width:100%; height:150px; object-fit:cover; border-radius: 4px;">
-                                                                      <h2>${curso.titulo}</h2>
-                                                                      <p><strong>Fecha:</strong> ${curso.fecha}</p>
-                                                                      <p><strong>Instructor:</strong> ${curso.docente}</p>
-                                                                      <p><img src="assets/images/claustro/${curso.foto_docente}" alt="${curso.docente}" class="img-fluid rounded-circle" style="width: 50px; height: 50px; object-fit: cover;"></p>
-                                                                      <p><strong>Precio:</strong> ${curso.precio}</p>
-                                                                      <p><strong>Descripción:</strong> ${descripcionCorta}</p>
-                                                                      <p class="main-button-red pt-5 text-center text-white"><a target="_self" href="${curso.url}">más información</a></p>
-                                                                      <div class="row border-top border-bottom py-2 my-3 text-secondary small text-center g-0">
-                                                                        <div class="col-4 border-end"><i class="far fa-clock me-1"></i> ${curso.meses}</div>
-                                                                        <div class="col-4 border-end"><i class="fas fa-book-open me-1"></i> ${curso.horas}</div>
-                                                                        <div class="col-4"><i class="fas fa-globe me-1"></i> ${curso.modalidad}</div>
-                                                                      </div>
-                                                                    `;
-                                      contenedor.appendChild(card);
-                                    });
-
-                                    // Guardamos la respuesta del Web Service para la pantalla de detalle
-                                    localStorage.setItem('cursos_ws_cache', JSON.stringify(cursosFiltrados));
-                                  })
-                                  .catch(error => {
-                                    contenedor.innerHTML = `<p>Error de comunicación con el Web Service de Render.</p>`;
-                                    console.error(error);
-                                  });
-                              </script>
-                            </div>
+                            </section>
                           </div>
                         </section>
-
-                        <!-- No Results Alert -->
-                        <div id="no-results" class="alert alert-info text-center mt-4 d-none">
-                          No se encontraron programas que coincidan con los criterios de búsqueda
-                          seleccionados.
-                        </div>
-
                       </div>
                     </section>
+
+                    <!-- Leadership & Management -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-leadership">Leadership <span class="text-yellow">&amp;</span>
+                            Management</h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Liderazgo situacional, delegación, gestión de
+                                  equipos, accountability,
+                                  feedback y desarrollo de colaboradores.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-leadership"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-leadership" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Strategic & Business Skills -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-strategic">Strategic <span class="text-yellow">&amp;</span>
+                            Business Skills</h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Pensamiento estratégico, resolución de problemas,
+                                  gestión de proyectos,
+                                  ejecución estratégica y toma de decisiones.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-strategic"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-strategic" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Digital & Future Skills -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-digital">Digital <span class="text-yellow">&amp;</span> Future
+                            Skills</h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Alfabetización digital, inteligencia artificial,
+                                  colaboración
+                                  tecnológica, análisis de información y adaptación al cambio.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-digital"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-digital" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Commercial & Customer Excellence -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-commercial">Commercial <span class="text-yellow">&amp;</span>
+                            Customer Excellence
+                          </h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Ventas consultivas, orientación al cliente,
+                                  negociación comercial,
+                                  servicio y desarrollo de relaciones.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-commercial"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-commercial" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Administracion & Operaciones -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-administracion">Administracion <span
+                              class="text-yellow">&amp;</span>
+                            Operaciones
+                          </h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Gestión estratégica, optimización de procesos,
+                                  liderazgo de equipos, planificación de proyectos y eficiencia
+                                  organizacional.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-administracion"><span class="text-center">Explorar
+                                estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-administracion" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Finanzas & Contabilidad -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-finanzas">Finanzas <span class="text-yellow">&amp;</span>
+                            Contabilidad
+                          </h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Análisis financiero, control presupuestario, gestión
+                                  de riesgos, cumplimiento fiscal y toma de decisiones económicas.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-finanzas"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-finanzas" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- Recursos Humanos & Psicologia laboral -->
+                    <section class="text-center text-lg-start bg-white">
+                      <div class="container">
+                        <div class="row">
+                          <h2 class="text-blue" id="topic-rrhh">Recursos Humanos <span class="text-yellow">&amp;</span>
+                            Psicologia laboral
+                          </h2>
+                          <article class="card card-body bg-gray-300 text-white text-left">
+                            <div>
+                              <h3 class="h6"><span class="text-red">Atracción de talento, desarrollo organizacional,
+                                  cultura y clima laboral, bienestar emocional y gestión del desempeño.</span></h3>
+                            </div>
+                            <a role="button" class="" href="#lista-rrhh"><span class="text-center">Explorar estos
+                                Diplomados /
+                                Cursos</span></a>
+                          </article>
+                        </div>
+                        <section class="py-5 text-center text-lg-start bg-white">
+                          <div class="container">
+                            <section class="upcoming-meetings">
+                              <div class="container bg-white">
+                                <div class="row">
+                                  <div id="lista-rrhh" class="grid-eventos"></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </section>
+                      </div>
+                    </section>
+
+                    <!-- SCRIPT ÚNICO UNIFICADO PARA RENDERIZAR TODAS LAS SECCIONES -->
+                    <script>
+                      const URL_JSON_LOCAL = 'cursos/cursos.json';
+
+                      const hoy = new Date();
+                      const año = hoy.getFullYear();
+                      const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                      const dia = String(hoy.getDate()).padStart(2, '0');
+                      const fechaHoyFormateada = `${año}-${mes}-${dia}`;
+
+                      function recortarTexto(texto, limite = 100) {
+                        if (!texto) return '';
+                        return texto.length > limite ? texto.slice(0, limite) + '...' : texto;
+                      }
+
+                      function renderizarCursosEnContenedor(cursos, catalogoNombre, contenedorId) {
+                        const contenedor = document.getElementById(contenedorId);
+                        if (!contenedor) return;
+
+                        contenedor.innerHTML = '';
+
+                        const cursosFiltrados = cursos.filter(curso => {
+                          const coincideCatalogo = curso.catalogo && curso.catalogo.trim().toLowerCase() === catalogoNombre.trim().toLowerCase();
+                          const cumpleFecha = !curso.fecha || curso.fecha >= fechaHoyFormateada || curso.fecha === 'Proximamente';
+                          return coincideCatalogo && cumpleFecha;
+                        });
+
+                        if (cursosFiltrados.length === 0) {
+                          contenedor.innerHTML = `<p class="text-center py-4 text-muted">No hay programas disponibles en este catálogo.</p>`;
+                          return;
+                        }
+
+                        cursosFiltrados.forEach(curso => {
+                          const descripcionCorta = recortarTexto(curso.mainContent || curso.descripcion, 100);
+                          const tituloCurso = curso.curso || curso.titulo || 'Programa Ejecutivo';
+                          const enlaceCurso = curso.sourceUrl || curso.url || '#';
+
+                          const card = document.createElement('div');
+                          card.className = 'card-evento';
+                          card.innerHTML = `
+                          <a target="_self" href="${enlaceCurso}">
+                            <img class="text-center" src="${curso.imagen}" alt="${tituloCurso}" style="width:75%; height:100px; object-fit:cover; border-radius: 4px;">
+                            <p><i class="fas fa-file-text me-1"></i> ${curso.certificado || 'Reconocimiento'}</p>
+                            <h2>${tituloCurso}</h2>
+                            <p><strong>Fecha:</strong> ${curso.fecha || 'Proximamente'} | ${curso.horas}</p>
+                            <p><strong>Descripción:</strong> ${descripcionCorta}</p>
+
+                          </a>
+                          `;
+                          contenedor.appendChild(card);
+                        });
+                      }
+
+                      // Una sola petición que alimenta todas las secciones de la página
+                      fetch(URL_JSON_LOCAL)
+                        .then(response => {
+                          if (!response.ok) {
+                            throw new Error('No se pudo cargar el archivo cursos.json');
+                          }
+                          return response.json();
+                        })
+                        .then(cursos => {
+                          const listaCursos = Array.isArray(cursos) ? cursos : [cursos];
+
+                          // Distribuir cada curso a su sección correspondiente según el campo 'catalogo'
+                          renderizarCursosEnContenedor(listaCursos, 'Soft Skills & Human Performance', 'lista-soft-skills');
+                          renderizarCursosEnContenedor(listaCursos, 'Leadership & Management', 'lista-leadership');
+                          renderizarCursosEnContenedor(listaCursos, 'Strategic & Business Skills', 'lista-strategic');
+                          renderizarCursosEnContenedor(listaCursos, 'Digital & Future Skills', 'lista-digital');
+                          renderizarCursosEnContenedor(listaCursos, 'Commercial & Customer Excellence', 'lista-commercial');
+                          renderizarCursosEnContenedor(listaCursos, 'Administracion & Operaciones', 'lista-administracion');
+                          renderizarCursosEnContenedor(listaCursos, 'Finanzas & Contabilidad', 'lista-finanzas');
+                          renderizarCursosEnContenedor(listaCursos, 'Recursos Humanos & Psicologia laboral', 'lista-rrhh');
+
+                          localStorage.setItem('cursos_ws_cache', JSON.stringify(listaCursos));
+                        })
+                        .catch(error => {
+                          console.error('Error al cargar los datos locales de los cursos:', error);
+                        });
+                    </script>
+                    <!-- // <div class="row border-top border-bottom py-2 my-3 text-secondary small text-center g-0">
+                              // <div class="col-6 border-end"><i class="far fa-clock me-1"></i> ${curso.meses}</div>
+                              // <div class="col-6"><i class="fas fa-book-open me-1"></i> ${curso.horas}</div>
+                              // <div class="col-12"><i class="fas fa-globe me-1"></i> ${curso.modalidad}</div>
+                              // </div> -->
+
+
+
 
 
                     <div class="row bg-white">

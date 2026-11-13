@@ -2718,7 +2718,7 @@ html {
   color: #0A1631;
 }
 
-.tet-yellow {
+.text-yellow {
   color: #f5a425;
 }
 
@@ -2807,7 +2807,7 @@ html {
 
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
