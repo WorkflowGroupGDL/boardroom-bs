@@ -618,20 +618,19 @@
                         }
 
                         cursosFiltrados.forEach(curso => {
-                          const descripcionCorta = recortarTexto(curso.mainContent || curso.descripcion, 100);
+                          const descripcionCorta = recortarTexto(curso.descripcion || curso.descripcion, 100);
                           const tituloCurso = curso.curso || curso.titulo || 'Programa Ejecutivo';
                           const enlaceCurso = curso.sourceUrl || curso.url || '#';
 
                           const card = document.createElement('div');
                           card.className = 'card-evento';
                           card.innerHTML = `
-                          <a target="_self" href="${enlaceCurso}">
+                          <a target="_self" href="diplomados-detalles.html?id=${curso.id}">
                             <img class="text-center" src="${curso.imagen}" alt="${tituloCurso}" style="width:75%; height:100px; object-fit:cover; border-radius: 4px;">
                             <p><i class="fas fa-file-text me-1"></i> ${curso.certificado || 'Reconocimiento'}</p>
                             <h2>${tituloCurso}</h2>
                             <p><strong>Fecha:</strong> ${curso.fecha || 'Proximamente'} | ${curso.horas}</p>
                             <p><strong>Descripción:</strong> ${descripcionCorta}</p>
-
                           </a>
                           `;
                           contenedor.appendChild(card);

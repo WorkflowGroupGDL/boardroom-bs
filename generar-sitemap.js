@@ -43,7 +43,8 @@ const paginas = [
     'register',
     'strategic-execution-people-leadership',
     'strategic-leadership-program',
-    'terminos'
+    'terminos',
+    'diplomados-detalles'
 ];
 
 const dominioBase = 'https://boardroom-business.school';
