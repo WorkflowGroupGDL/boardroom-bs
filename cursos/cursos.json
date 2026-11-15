@@ -127,38 +127,40 @@
       "keywords": "essential management skills, curso habilidades de gestión, gestión empresarial, toma de decisiones estratégicas, liderazgo de equipos, formación para empresarios, desarrollo profesional"
     }
   },
-  {
-    "id": 5,
-    "catalogo": "Digital & Future Skills",
-    "titulo": "Ingeniería de Prompts para el día a día",
-    "mainContent": "",
-    "introducción": "",
-    "estructura": "",
-    "aprendizajes": "",
-    "metodología": "",
-    "perfil_participante": "",
-    "faq": "",
-    "fecha": "On demand Online",
-    "precio": "1,500 MXN",
-    "meses": "1 día",
-    "horas": "2 horas",
-    "clases": "1 clase",
-    "modalidad": "On demand Online",
-    "certificado": "Micro Certificado",
-    "dc3": "No",
-    "docente": "James Lass",
-    "foto_docente": "james.webp",
-    "url_docente": "james-lass.html",
-    "descripcion": "Cómo pedirle cosas a ChatGPT o Copilot para redactar correos, resumir reportes y crear tablas en 5 minutos.",
-    "imagen": "cursos/AI-prompt-engeniering.webp",
-    "url": "#",
-    "descripcion_larga": "",
-    "meta": {
-      "title": "Ingeniería de Prompts para el Día a Día | ChatGPT y Copilot",
-      "description": "Aprende cómo pedirle cosas a ChatGPT o Copilot para redactar correos, resumir reportes y crear tablas en 5 minutos. Mejora tu productividad diaria con IA.",
-      "keywords": "ingeniería de prompts, curso chatgpt, prompts para copilot, redactar correos con ia, resumir reportes con ia, productividad con inteligencia artificial, prompt engineering"
-    }
-  },
+  
+{
+  "id": 5,
+  "catalogo": "Digital & Future Skills",
+  "titulo": "Ingeniería de Prompts para el Día a Día",
+  "mainContent": "<strong>Aprende a utilizar ChatGPT y Microsoft Copilot para multiplicar tu productividad profesional.</strong><br><br>Descubre cómo dar instrucciones inteligentes a la inteligencia artificial para <strong>redactar correos, resumir reportes, crear tablas, organizar información y resolver tareas cotidianas en minutos.</strong><br><br>No necesitas conocimientos de programación ni experiencia previa con inteligencia artificial. Aprenderás técnicas prácticas para comunicarte eficazmente con la IA, obtener mejores resultados y aprovechar tu tiempo en actividades de mayor valor.<br><br><strong>Menos tareas repetitivas. Mejores resultados. Más productividad.</strong>",
+  "introducción": "La inteligencia artificial está transformando la manera en que trabajamos, tomamos decisiones y gestionamos información. Sin embargo, utilizar herramientas como ChatGPT o Microsoft Copilot no garantiza automáticamente mejores resultados: la verdadera diferencia está en saber dar instrucciones claras, proporcionar el contexto adecuado y evaluar las respuestas obtenidas.<br><br>En este workshop ejecutivo aprenderás los fundamentos de la <strong>Ingeniería de Prompts</strong> y cómo aplicarlos directamente a situaciones reales de tu jornada profesional.<br><br>Descubrirás cómo convertir instrucciones simples en solicitudes estructuradas que permitan a la IA comprender tus necesidades, generar respuestas más precisas y entregar resultados útiles para tu trabajo.<br><br>El objetivo no es convertirte en un especialista tecnológico, sino desarrollar una habilidad que todo profesional necesita: <strong>saber dirigir la inteligencia artificial para trabajar de manera más inteligente, eficiente y productiva.</strong>",
+  "estructura": "<strong>1. Comprender la nueva forma de trabajar con inteligencia artificial</strong><br>Fundamentos de la IA generativa, qué es un prompt, cómo interpretar sus capacidades y limitaciones y cómo utilizar la inteligencia artificial como asistente de productividad.<br><br><strong>2. Anatomía de un prompt efectivo</strong><br>Aprende a construir instrucciones utilizando el framework G-C-F-E-R: Goal (objetivo), Context (contexto), Source (fuente), Expectations (expectativas) y Restrictions (restricciones). Descubre cómo mejorar la precisión y utilidad de las respuestas.<br><br><strong>3. Aplicaciones ejecutivas inmediatas</strong><br><strong>Redacción de correos:</strong> crea comunicaciones profesionales, respuestas a clientes, solicitudes y seguimientos.<br><br><strong>Resumen de reportes:</strong> transforma documentos extensos en resúmenes ejecutivos, identifica hallazgos, riesgos y decisiones pendientes.<br><br><strong>Creación de tablas:</strong> organiza información, actividades, responsables, prioridades y fechas de seguimiento.<br><br><strong>4. Casos prácticos y laboratorio de prompts</strong><br>Resuelve situaciones empresariales utilizando ChatGPT y Copilot. Practica la construcción, evaluación y optimización de instrucciones mediante ejercicios individuales y grupales.<br><br><strong>5. Productividad, validación y uso responsable de la IA</strong><br>Aprende a identificar errores, verificar información, proteger datos empresariales y establecer un plan personal para incorporar la inteligencia artificial en tu rutina profesional.",
+  "aprendizajes": "<strong>Al finalizar este workshop serás capaz de:</strong><br><br>• Comprender los fundamentos de la ingeniería de prompts y la inteligencia artificial generativa.<br><br>• Diseñar instrucciones estructuradas para obtener resultados específicos utilizando ChatGPT y Microsoft Copilot.<br><br>• Redactar y mejorar correos profesionales en diferentes contextos empresariales.<br><br>• Resumir documentos, reportes e información extensa para convertirlos en contenido ejecutivo.<br><br>• Crear tablas para organizar información, actividades, responsables y prioridades.<br><br>• Solicitar análisis, comparaciones y recomendaciones de manera estructurada.<br><br>• Mejorar las respuestas de la IA mediante técnicas de refinamiento e iteración.<br><br>• Identificar errores, información no verificada y riesgos relacionados con la privacidad.<br><br>• Incorporar herramientas de inteligencia artificial a tus actividades profesionales para mejorar tu productividad.",
+  "metodología": "Workshop ejecutivo con enfoque <strong>teórico-práctico y aprendizaje experiencial</strong>. La sesión combina explicaciones conceptuales, demostraciones en vivo, ejercicios individuales, resolución de casos empresariales y aplicación inmediata de herramientas de inteligencia artificial.<br><br>Los participantes aprenderán mediante el framework G-C-F-E-R y realizarán ejercicios prácticos para redactar correos, resumir reportes y crear tablas utilizando ChatGPT y Microsoft Copilot.<br><br>Se aplicará una metodología de aprendizaje basada en la experimentación, el pensamiento crítico, la evaluación de resultados y la mejora continua de instrucciones.<br><br><strong>El enfoque es 100% aplicable al entorno profesional:</strong> cada participante desarrollará prompts que podrá adaptar y utilizar en sus actividades cotidianas.<br><br>La experiencia contempla una sesión intensiva online de 2 horas, con ejercicios guiados y un workbook práctico.",
+  "perfil_participante": "<strong>Dirigido a:</strong><br><br>• Directores generales y directivos.<br>• Gerentes y mandos medios.<br>• Ejecutivos y profesionales de cualquier sector.<br>• Emprendedores y empresarios.<br>• Profesionales de Recursos Humanos, Administración, Finanzas, Comercial y Operaciones.<br>• Consultores, asesores y especialistas que desean mejorar su productividad.<br>• Personas interesadas en incorporar la inteligencia artificial a sus actividades profesionales.<br><br><strong>No necesitas experiencia previa con ChatGPT, Copilot ni conocimientos de programación.</strong> El programa está diseñado para participantes principiantes y usuarios que desean aprovechar mejor las herramientas de IA.",
+  "faq": "<strong>1. ¿Necesito tener conocimientos previos de inteligencia artificial?</strong><br>No. El workshop está diseñado para principiantes y profesionales que ya utilizan herramientas de IA, pero desean obtener mejores resultados.<br><br><strong>2. ¿Qué herramientas aprenderé a utilizar?</strong><br>Trabajaremos principalmente con ChatGPT y Microsoft Copilot, explorando aplicaciones prácticas para tareas profesionales cotidianas.<br><br><strong>3. ¿Necesito saber programar?</strong><br>No. La ingeniería de prompts no requiere conocimientos de programación. Aprenderás a comunicar instrucciones claras y estructuradas mediante lenguaje natural.<br><br><strong>4. ¿Qué aprenderé a hacer durante el workshop?</strong><br>Aprenderás a redactar correos profesionales, resumir reportes, crear tablas, organizar información y mejorar las respuestas de la inteligencia artificial.<br><br><strong>5. ¿El curso es práctico?</strong><br>Sí. Incluye demostraciones en vivo, ejercicios individuales, casos empresariales y un laboratorio de prompts para aplicar inmediatamente lo aprendido.<br><br><strong>6. ¿Puedo aplicar lo aprendido en mi empresa?</strong><br>Por supuesto. Las herramientas y estructuras aprendidas pueden adaptarse a distintas áreas y actividades empresariales, respetando siempre las políticas de privacidad y seguridad de cada organización.<br><br><strong>7. ¿Recibiré algún certificado?</strong><br>Sí. Al completar los requisitos establecidos del programa recibirás un Micro Certificado de Boardroom Business School.<br><br><strong>8. ¿Cuál es la duración y modalidad?</strong><br>Es una sesión intensiva de 2 horas en modalidad online, disponible On demand.",
+  "fecha": "On demand Online",
+  "precio": "1,500 MXN",
+  "meses": "1 día",
+  "horas": "2 horas",
+  "clases": "1 clase",
+  "modalidad": "On demand Online",
+  "certificado": "Micro Certificado",
+  "dc3": "No",
+  "docente": "James Lass",
+  "foto_docente": "assets/images/claustro/james.webp",
+  "url_docente": "james-lass.html",
+  "descripcion": "Aprende a utilizar ChatGPT y Microsoft Copilot para redactar correos, resumir reportes y crear tablas en minutos. Desarrolla habilidades de ingeniería de prompts y mejora tu productividad profesional mediante inteligencia artificial.",
+  "imagen": "cursos/AI-prompt-engeniering.webp",
+  "url": "#",
+  "descripcion_larga": "<strong>INGENIERÍA DE PROMPTS PARA EL DÍA A DÍA</strong><br><br><strong>Transforma tu manera de trabajar con inteligencia artificial.</strong><br><br>La inteligencia artificial representa una nueva oportunidad para mejorar la productividad de profesionales y organizaciones. Sin embargo, obtener resultados útiles requiere algo más que escribir preguntas: es necesario aprender a comunicar objetivos, proporcionar contexto y establecer instrucciones precisas.<br><br>En este workshop ejecutivo de Boardroom Business School aprenderás a utilizar ChatGPT y Microsoft Copilot como asistentes de productividad para resolver actividades profesionales que normalmente consumen tiempo y esfuerzo.<br><br>Mediante ejercicios prácticos descubrirás cómo redactar correos profesionales, resumir documentos extensos, organizar información en tablas, analizar situaciones empresariales y mejorar las respuestas generadas por la IA.<br><br>Conocerás el framework G-C-F-E-R, una estructura práctica para construir prompts efectivos mediante cinco componentes: objetivo, contexto, fuente, expectativas y restricciones.<br><br>También aprenderás a evaluar los resultados, identificar posibles errores, proteger información confidencial y mantener el criterio humano en cada decisión.<br><br><strong>¿Qué obtendrás?</strong><br>• Técnicas prácticas de ingeniería de prompts.<br>• Plantillas reutilizables para tareas profesionales.<br>• Ejercicios de aplicación con ChatGPT y Copilot.<br>• Un workbook para continuar practicando.<br>• Un plan de acción para incorporar IA a tu jornada laboral.<br><br><strong>Una experiencia ejecutiva de 2 horas que puede transformar la manera en que gestionas tu trabajo.</strong><br><br><strong>BOARDROOM BUSINESS SCHOOL</strong><br>Conecta. Aprende. Transforma.",
+  "meta": {
+    "title": "Ingeniería de Prompts para el Día a Día | Boardroom Business School",
+    "description": "Aprende a utilizar ChatGPT y Microsoft Copilot para redactar correos, resumir reportes y crear tablas. Workshop ejecutivo online de 2 horas.",
+    "keywords": "Ingeniería de Prompts, ChatGPT, Microsoft Copilot, inteligencia artificial, productividad con IA, prompts para empresas, productividad ejecutiva, capacitación en inteligencia artificial, formación ejecutiva, Boardroom Business School"
+  }
+}
+,
   {
     "id": 6,
     "catalogo": "Leadership & Management",
@@ -215,7 +217,7 @@
   "foto_docente": "assets/images/claustro/james.webp",
   "url_docente": "james-lass.html",
   "descripcion": "Aprende a diseñar y liderar reuniones de 15 minutos con principios Scrum, Stand-up y gestión ágil. Optimiza el tiempo, mejora la coordinación y convierte las conversaciones en compromisos y resultados.",
-  "imagen": "assets/images/cursos/micro-reunioness.webp",
+  "imagen": "cursos/micro-reuniones.webp",
   "url": "#",
   "descripcion_larga": "<strong>Micro-reuniones Productivas: Scrum y Stand-up de 15 Minutos</strong><br><br>Una experiencia ejecutiva de aprendizaje diseñada para profesionales que buscan mejorar la productividad y coordinación de sus equipos mediante reuniones breves, estructuradas y orientadas a resultados.<br><br>Durante una sesión online de dos horas, los participantes conocerán los fundamentos de Scrum y Stand-up, aprenderán a distinguir sus aplicaciones y desarrollarán un modelo práctico para conducir reuniones de 15 minutos.<br><br>El programa integra análisis de casos, ejercicios de diagnóstico, simulación y herramientas de gestión visual para fortalecer la comunicación, identificar obstáculos, establecer responsables y mejorar el seguimiento de los compromisos.<br><br><strong>Dirigido a:</strong> supervisores, coordinadores, gerentes, directores y líderes de equipos.<br><strong>Duración:</strong> 2 horas.<br><strong>Modalidad:</strong> Online bajo demanda.<br><strong>Inversión:</strong> $1,500 MXN.<br><strong>Reconocimiento:</strong> Micro Certificado.<br><br><strong>Menos reuniones improductivas. Más coordinación. Más ejecución.</strong>",
   "meta": {
