@@ -111,6 +111,13 @@ function renderizarCurso(curso) {
         imgCurso.alt = curso.titulo || 'Imagen del programa';
     }
 
+    // Imagen adicional y botón de acción del curso
+    const imgCurso2 = document.getElementById('curso-imagen2');
+    if (imgCurso2 && curso.imagen2) {
+        imgCurso2.src = curso.imagen2;
+        imgCurso2.alt = curso.titulo || 'Imagen del programa';
+    }
+
     const btnInscripcion = document.getElementById('curso-url');
     if (btnInscripcion && curso.url) {
         btnInscripcion.href = curso.url;
@@ -118,6 +125,8 @@ function renderizarCurso(curso) {
 
     document.getElementById("curso-form-admision").value = curso.titulo;
     document.getElementById("curso-form-admision").readOnly = true;
+
+    asignarTexto('docente-descripcion', curso.descripcion_docente);
 }
 
 function mostrarError(mensaje) {

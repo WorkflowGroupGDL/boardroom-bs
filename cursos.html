@@ -610,7 +610,8 @@
                         const cursosFiltrados = cursos.filter(curso => {
                           const coincideCatalogo = curso.catalogo && curso.catalogo.trim().toLowerCase() === catalogoNombre.trim().toLowerCase();
                           const cumpleFecha = !curso.fecha || curso.fecha >= fechaHoyFormateada || curso.fecha === 'Proximamente';
-                          return coincideCatalogo && cumpleFecha;
+                          const estaActivo = curso.activo == 1; // Evalúa true tanto para 1 (número) como para "1" (texto)
+                          return coincideCatalogo && cumpleFecha && estaActivo;
                         });
 
                         if (cursosFiltrados.length === 0) {

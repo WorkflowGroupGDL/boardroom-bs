@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "activo": 1,
     "catalogo": "Soft Skills & Human Performance",
     "titulo": "Mujer Dorada Ejecutiva",
     "mainContent": "<h3>MÁS BENEFICIOS DE MUJER DORADA EJECUTIVA</h3>¿Por qué las empresas deben apostar por el talento femenino?En un entorno empresarial donde la innovación y la adaptabilidad determinan el éxito, el liderazgo femenino se posiciona como un diferenciador estratégico. No obstante, muchas organizaciones aún no aprovechan plenamente el potencial de sus colaboradoras en posiciones clave.<br><br>Mujer Dorada Ejecutiva surge como una solución integral para fortalecer el capital humano, incrementando la productividad, la competitividad y el compromiso, mediante el empoderamiento efectivo de mujeres líderes.<br><br>El valor comprobado del talento femenino en las organizaciones:<br><br>✅ Mayor rentabilidad y productividad: McKinsey & Company reporta que empresas con diversidad de género en alta dirección incrementan su rentabilidad hasta un 21%.<br>✅ Mejor toma de decisiones: Equipos diversos generan perspectivas amplias que impulsan soluciones innovadoras y estratégicas.<br>✅ Cultura organizacional sólida: El liderazgo femenino promueve empatía, colaboración y bienestar, fomentando un ambiente laboral armonioso y productivo.<br>✅ Retención de talento: Empresas que desarrollan profesionalmente a sus colaboradoras reducen rotación y aumentan compromiso.<br>✅ Atracción de oportunidades: Clientes y socios valoran cada vez más prácticas empresariales inclusivas y equitativas.<br><br><h4>¿Cómo impulsa “Mujer Dorada Ejecutiva” el crecimiento de tu empresa?</h4>El programa está diseñado para potenciar el liderazgo femenino a través de herramientas y estrategias prácticas que incluyen:<br><br>✨ Desarrollo de habilidades de liderazgo y toma de decisiones efectivas.<br>✨ Fortalecimiento de la confianza y comunicación asertiva.<br>✨ Gestión emocional y resiliencia ante retos profesionales.<br>✨ Balance entre vida personal y profesional para optimizar desempeño.<br>✨ Creación de redes colaborativas entre mujeres líderes.<br><br>Invertir en mujeres es invertir en el futuro.<br><br>Organizaciones que apuestan por el talento femenino no solo cumplen con estándares de equidad, sino que se posicionan como referentes innovadores, responsables y con visión estratégica a largo plazo.<br><br>Es el momento de impulsar el liderazgo femenino en tu empresa y maximizar su impacto en el mundo corporativo.<br><br>Mujer Dorada Ejecutiva es la clave para hacerlo realidad.<br><br>📢 ¡Conversemos sobre cómo transformar tu equipo con el poder del liderazgo femenino!",
@@ -21,8 +22,10 @@
     "docente": "Leticia Maldonado",
     "foto_docente": "assets/images/claustro/leticia.webp",
     "url_docente": "leticia-maldonado.html",
+    "descripcion_docente": "Liderazgo, Inteligencia Emocional, Cultura Organizacional, Coaching Ejecutivo, Mentoring",
     "descripcion": "El Diplomado es un programa exclusivo de formación y liderazgo diseñado para potenciar el talento, la visión estratégica y la marca personal de las mujeres en la alta dirección, integrando herramientas de inteligencia emocional, negociación de alto nivel y empoderamiento empresarial.",
-    "imagen": "cursos/mujerlibre_1.webp",
+    "imagen": "diplomados/mujerlibre_1.webp",
+    "imagen2": "diplomados/mujerlibre_2.webp",
     "url": "#",
     "descripcion_larga": "​",
     "meta": {
@@ -33,6 +36,7 @@
   },
   {
     "id": 2,
+    "activo": 1,
     "catalogo": "Leadership & Management",
     "titulo": "Liderazgo Ejecutivo",
     "mainContent": "En el competitivo mundo empresarial actual, los líderes necesitan más que talento innato para guiar a sus organizaciones hacia el éxito y la transformación. Elegir un curso de liderazgo ejecutivo de Vive Hoy puede marcar una diferencia significativa en tu carrera, en tu desempeño directivo y en los resultados de tu empresa. Aquí te presentamos las razones clave por las que nuestra formación de líderes empresariales es una inversión esencial: <br><br>Nuestros programas de liderazgo efectivo te enseñarán a desarrollar una visión estratégica clara y a planificar para el futuro de tu organización. Aprenderás a establecer objetivos a largo plazo y a crear planes concretos para alcanzarlos, potenciando tu autoliderazgo. <br><br>Mejorarás tu capacidad para la toma de decisiones estratégicas de manera rápida y fundamentada. Basarte en análisis detallados y datos te permitirá minimizar riesgos y maximizar oportunidades en cualquier nivel de la alta dirección. <br><br>Desarrollarás habilidades de liderazgo consciente para motivar e inspirar a tu equipo, fomentando un ambiente de trabajo positivo y productivo. Ser un líder que inspira confianza y entusiasmo es clave para el éxito organizacional y el bienestar de tu equipo. <br><br>Aprenderás técnicas avanzadas para la gestión de equipos ejecutivos de manera efectiva, incluyendo la delegación de tareas, la resolución de conflictos y la promoción de la colaboración. Un equipo bien gestionado es más eficiente y está más comprometido con los objetivos de la empresa y la cultura organizacional. <br><br>Nuestros cursos de liderazgo ejecutivo te ayudarán a fomentar la creatividad y la innovación dentro de tu organización. Aprenderás a crear un entorno que promueva nuevas ideas y soluciones innovadoras, esenciales para la transformación organizacional. <br><br>En un mundo en constante cambio y **transformación organizacional**, la adaptabilidad es crucial para el liderazgo ejecutivo. Desarrollarás la capacidad de adaptarte rápidamente a las nuevas tendencias y tecnologías, manteniendo a tu empresa a la vanguardia a través de un liderazgo consciente. Además, adquirirás habilidades de gestión estratégica para optimizar recursos financieros, aprendiendo a optimizar costos y maximizar ingresos. Una gestión financiera sólida es fundamental para la sostenibilidad a largo plazo de tu empresa. Mejorarás tu capacidad para analizar el desempeño de la empresa, identificando áreas de mejora y oportunidades de crecimiento. Tomar decisiones estratégicas e informadas es esencial para el éxito empresarial y el desarrollo de liderazgo. Finalmente, nuestros programas de liderazgo efectivo te brindarán la oportunidad de conectar con otros líderes y ejecutivos de alta dirección de diversas industrias. Estas conexiones valiosas abren nuevas oportunidades de negocio y colaboración, enriqueciendo tu perspectiva profesional y fomentando tu crecimiento como líder.",
@@ -43,7 +47,7 @@
     "perfil_participante": "Alta dirección y gerencia: Directivos, CEOs, gerentes, líderes empresariales y emprendedores de micro, pequeñas, medianas y grandes empresas.<br><br>Profesionales en crecimiento: Cualquier profesional que aspire a ocupar roles de alta dirección o mejorar sus habilidades directivas actuales (no se requiere experiencia previa en coaching).",
     "faq": "Programa en línea vía Zoom y autodidacta con seguimiento y constancia curricular.",
     "fecha": "Online",
-    "precio": "A consultar",
+    "precio": "29,590 MXN",
     "meses": "4 meses",
     "horas": "32 horas clases (96 a 128 horas de estudios)",
     "clases": "16 módulos",
@@ -53,8 +57,10 @@
     "docente": "James Lass",
     "foto_docente": "assets/images/claustro/james.webp",
     "url_docente": "james-lass.html",
+    "descripcion_docente": "Liderazgo, Alta Dirección, Management, Cultura Organizacional, Estructura y Procesos, Coaching Ejecutivo",
     "descripcion": "Diplomado en Liderazgo Ejecutivo Estratégico para CEOs y gerentes.",
-    "imagen": "cursos/liderazgoejecutivo3.webp",
+    "imagen": "diplomados/liderazgoejecutivo3.webp",
+    "imagen2": "diplomados/liderazgoejecutivo2.webp",
     "url": "https://vivehoy.com.mx",
     "descripcion_larga": "Programa integral de formación directiva impartido por James Lass y Leticia Maldonado.",
     "meta": {
