@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "activo": 1,
+    "titulo": "Cohorte Cero de Supervisores",
+    "fecha": "2027-01-26",
+    "lugar": "Online",
+    "precio": "3,000 MXN",
+    "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+    "imagen": "assets/images/programas/program-bfle.webp",
+    "url": "cohorte-cero-supervisores.html",
+    "descripcion_larga": "Forma parte del grupo fundador de supervisores y líderes operativos que participará en la edición cero de Boardroom Business School. Esta experiencia intensiva de 2 clases ejecutivas está enfocada en la resolución de problemas reales en tiempo real mediante la vivencia práctica del Método del Caso adaptada al liderazgo de primera línea.</b>"
+  },
+  {
+    "id": 2,
+    "activo": 1,
+    "titulo": "Cohorte Cero de Mandos Medios",
+    "fecha": "2027-01-27",
+    "lugar": "Online",
+    "precio": "3,000 MXN",
+    "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+    "imagen": "assets/images/programas/program-sepl.webp",
+    "url": "cohorte-cero-mandos-medios.html",
+    "descripcion_larga": "Se parte del grupo fundador de gerentes y jefes de área que participará en la edición cero del programa de Mandos Medios. Esta experiencia intensiva de 2 clases ejecutivas está enfocada en cerrar la brecha entre la estrategia directiva y la ejecución de equipos mediante el Método del Caso."
+  },
+  {
+    "id": 3,
+    "activo": 1,
+    "titulo": "Cohorte Cero de Directores",
+    "fecha": "2027-01-28",
+    "lugar": "Online",
+    "precio": "3,000 MXN",
+    "descripcion": "Exhibición de libros, firmas de autores y talleres de lectura.",
+    "imagen": "assets/images/programas/program-bslp.webp",
+    "url": "cohorte-cero-directores.html",
+    "descripcion_larga": "Forma parte del selecto grupo de veinte directivos y consejeros que integrará la edición cero oficial de Boardroom Business School. Esta experiencia exclusiva de 2 clases ejecutivas está centrada en decisiones estratégicas de alto nivel mediante el análisis riguroso con el Método del Caso."
+  }
+]
