@@ -12,7 +12,6 @@ const paginas = [
     'cohorte-cero',
     'programas',
     'diplomados',
-    'diplomados-detalles',
     'programas-in-house',
     'admisiones',
     'networking',
@@ -45,8 +44,7 @@ const paginas = [
     'strategic-execution-people-leadership',
     'strategic-leadership-program',
     'terminos',
-    'cursos',
-    'cursos-detalles'
+    'cursos'
 ];
 
 const dominioBase = 'https://boardroom-business.school';
