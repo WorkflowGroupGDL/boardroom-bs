@@ -1,117 +1,158 @@
 // functions/api/login.js
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-store'
+};
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  // Encabezados CORS para permitir peticiones seguras
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Content-Type': 'application/json'
-  };
+  let body;
 
   try {
-    const body = await request.json();
-    const email = body.email ? body.email.trim() : '';
+    body = await request.json();
+  } catch {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: 'La solicitud debe contener un JSON válido.'
+      }),
+      { status: 400, headers: corsHeaders }
+    );
+  }
 
-    if (!email) {
-      return new Response(
-        JSON.stringify({ success: false, message: 'El correo electrónico es requerido.' }),
-        { status: 400, headers: corsHeaders }
-      );
+  const email =
+    typeof body?.email === 'string'
+      ? body.email.trim().toLowerCase()
+      : '';
+
+  // No eliminar espacios de la contraseña.
+  const password =
+    typeof body?.password === 'string'
+      ? body.password
+      : '';
+
+  if (!email || !password) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: 'Email y contraseña requeridos.'
+      }),
+      { status: 400, headers: corsHeaders }
+    );
+  }
+
+  if (!env.AUTH_BACKEND_URL) {
+    console.error('AUTH_BACKEND_URL no está configurada.');
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: 'El servicio de autenticación no está configurado.'
+      }),
+      { status: 500, headers: corsHeaders }
+    );
+  }
+
+  try {
+    const loginUrl = new URL('/api/login', env.AUTH_BACKEND_URL);
+
+    if (loginUrl.protocol !== 'https:') {
+      throw new Error('El backend debe utilizar HTTPS.');
     }
 
-    // Obtener la variable de entorno desde la configuración de Cloudflare Pages
-    const token = env.HUBSPOT_TOKEN;
-
-    if (!token) {
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          message: 'Error de configuración: HUBSPOT_TOKEN no definido en Cloudflare.' 
-        }),
-        { status: 500, headers: corsHeaders }
-      );
-    }
-
-    // 1. Definimos las propiedades que queremos traer de vuelta
-    const propertiesNeeded = [
-      'firstname',
-      'lastname',
-      'email',
-      'phone',
-      'jobtitle',
-      'company',
-      'field_of_study',
-      'military_status',
-      'token',
-      'matricula_escolar'
-    ];
-    const propertiesQuery = propertiesNeeded.join(',');
-
-    // 2. CORRECCIÓN: Unimos todo en la URL real del fetch con "&properties="
-    const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
-    
-    const hubspotRes = await fetch(hubspotUrl, {
-      method: 'GET',
+    const backendResponse = await fetch(loginUrl.toString(), {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        password
+      }),
+      redirect: 'error'
     });
 
-    const data = await hubspotRes.json();
+    let data;
 
-    if (!hubspotRes.ok) {
+    try {
+      data = await backendResponse.json();
+    } catch {
+      console.error('El backend de login no devolvió JSON:', {
+        status: backendResponse.status
+      });
+
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Contacto no encontrado en HubSpot o credenciales inválidas.',
-          details: data
+          message:
+            'El servicio de autenticación devolvió una respuesta inválida.'
         }),
-        { status: hubspotRes.status, headers: corsHeaders }
+        { status: 502, headers: corsHeaders }
       );
     }
 
-    // Respuesta exitosa al cliente con todas las propiedades solicitadas
+    if (!backendResponse.ok || data?.success !== true) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message:
+            backendResponse.status === 401
+              ? 'Credenciales incorrectas.'
+              : 'No se pudo completar el inicio de sesión.'
+        }),
+        {
+          status: backendResponse.ok ? 502 : backendResponse.status,
+          headers: corsHeaders
+        }
+      );
+    }
+
+    if (typeof data.token !== 'string' || !data.user) {
+      console.error('La respuesta de login no incluye token o usuario.');
+
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message:
+            'El servicio de autenticación devolvió una respuesta incompleta.'
+        }),
+        { status: 502, headers: corsHeaders }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Login exitoso',
-        contact: {
-          id: data.id,
-          firstname: data.properties?.firstname || '',
-          lastname: data.properties?.lastname || '',
-          email: data.properties?.email || email,
-          phone: data.properties?.phone || '',
-          jobtitle: data.properties?.jobtitle || '',
-          company: data.properties?.company || '',
-          field_of_study: data.properties?.field_of_study || '',
-          military_status: data.properties?.military_status || '',
-          token: data.properties?.token || '',
-          matricula_escolar: data.properties?.matricula_escolar || ''
-        }
+        message: data.message || 'Inicio de sesión exitoso.',
+        token: data.token,
+        user: data.user
       }),
       { status: 200, headers: corsHeaders }
     );
+  } catch {
+    console.error(
+      'No fue posible conectar con el backend de autenticación.'
+    );
 
-  } catch (error) {
     return new Response(
-      JSON.stringify({ success: false, message: `Error del servidor: ${error.message}` }),
-      { status: 500, headers: corsHeaders }
+      JSON.stringify({
+        success: false,
+        message: 'No fue posible conectar con el servicio de autenticación.'
+      }),
+      { status: 502, headers: corsHeaders }
     );
   }
 }
 
-// Soporte para peticiones pre-flight CORS (OPTIONS)
 export async function onRequestOptions() {
   return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-    }
+    status: 204,
+    headers: corsHeaders
   });
 }

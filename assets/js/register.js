@@ -1,63 +1,117 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('registroForm');
-  const pass = document.getElementById('inputPassword');
-  const confirmPass = document.getElementById('confirmPassword');
-  const errorDiv = document.getElementById('errorPassword');
-  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-  ? 'http://localhost:3000' 
-  : 'https://boardroom-bs-api.onrender.com';
+// functions/api/login.js
 
-  function checkPasswords() {
-    if (confirmPass.value && pass.value !== confirmPass.value) {
-      errorDiv.style.display = 'block';
-      errorDiv.innerText = 'Las contraseñas no coinciden.';
-      return false;
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  // Encabezados CORS para permitir peticiones seguras
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    const body = await request.json();
+    const email = body.email ? body.email.trim() : '';
+
+    if (!email) {
+      return new Response(
+        JSON.stringify({ success: false, message: 'El correo electrónico es requerido.' }),
+        { status: 400, headers: corsHeaders }
+      );
     }
-    errorDiv.style.display = 'none';
-    errorDiv.innerText = '';
-    return true;
-  }
 
-  confirmPass.addEventListener('input', checkPasswords);
+    // Obtener la variable de entorno desde la configuración de Cloudflare Pages
+    const token = env.HUBSPOT_TOKEN;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!checkPasswords()) return;
+    if (!token) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          message: 'Error de configuración: HUBSPOT_TOKEN no definido en Cloudflare.' 
+        }),
+        { status: 500, headers: corsHeaders }
+      );
+    }
 
-    const firstname = document.getElementById('inputNombre').value;
-    const lastname = document.getElementById('inputApellido').value;
-    const email = document.getElementById('inputEmail').value;
-    const password = pass.value;
-    const phone = document.getElementById('inputTelefono').value;
-    const city = document.getElementById('inputCity').value;
-    const state = document.getElementById('inputState').value;
-    const country = document.getElementById('inputCountry').value;
-    const jobtitle = document.getElementById('inputJobTitle').value;  
-    const company = document.getElementById('inputCompany').value;
-    const field_of_study = document.getElementById('inputFieldOfStudy').value;
-    const hs_linkedin_url = document.getElementById('inputLinkedIn').value;
-    const asunto = document.getElementById('inputAsunto').value;
-    const mensaje = document.getElementById('inputMensaje').value;
+    // 1. Definimos las propiedades que queremos traer de vuelta
+    const propertiesNeeded = [
+      'firstname',
+      'lastname',
+      'email',
+      'phone',
+      'jobtitle',
+      'company',
+      'field_of_study',
+      'military_status',
+      'token',
+      'matricula_escolar'
+    ];
+    const propertiesQuery = propertiesNeeded.join(',');
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstname, lastname, email, password, phone, city, state, country, jobtitle, company, field_of_study, hs_linkedin_url, asunto, mensaje })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert(data.message);
-        window.location.href = 'login.html';
-      } else {
-        errorDiv.style.display = 'block';
-        errorDiv.innerText = data.message;
+    // 2. CORRECCIÓN: Unimos todo en la URL real del fetch con "&properties="
+    // const hubspotUrl = `https://api.hubapi.com/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;
+    const hubspotUrl = `https://api.hubapi.com/crm/objects/2026-03/contacts/${encodeURIComponent(email)}?idProperty=email&properties=${propertiesQuery}`;    
+    const hubspotRes = await fetch(hubspotUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
-    } catch (err) {
-      errorDiv.style.display = 'block';
-      errorDiv.innerText = 'Error al comunicar con la API de registro.';
+    });
+
+    const data = await hubspotRes.json();
+
+    if (!hubspotRes.ok) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: 'Contacto no encontrado en HubSpot o credenciales inválidas.',
+          details: data
+        }),
+        { status: hubspotRes.status, headers: corsHeaders }
+      );
+    }
+
+    // Respuesta exitosa al cliente con todas las propiedades solicitadas
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Login exitoso',
+        contact: {
+          id: data.id,
+          firstname: data.properties?.firstname || '',
+          lastname: data.properties?.lastname || '',
+          email: data.properties?.email || email,
+          phone: data.properties?.phone || '',
+          jobtitle: data.properties?.jobtitle || '',
+          company: data.properties?.company || '',
+          field_of_study: data.properties?.field_of_study || '',
+          military_status: data.properties?.military_status || '',
+          token: data.properties?.token || '',
+          matricula_escolar: data.properties?.matricula_escolar || ''
+        }
+      }),
+      { status: 200, headers: corsHeaders }
+    );
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ success: false, message: `Error del servidor: ${error.message}` }),
+      { status: 500, headers: corsHeaders }
+    );
+  }
+}
+
+// Soporte para peticiones pre-flight CORS (OPTIONS)
+export async function onRequestOptions() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     }
   });
-});
+}
