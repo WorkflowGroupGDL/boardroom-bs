@@ -360,6 +360,48 @@
     <!-- Lógica Única de Carga del Perfil y Logout -->
     <script src="auth-check.js"></script>
     <script>
+      // 1. Definimos las constantes y funciones auxiliares fuera para mantener el código limpio
+      const ESTADOS = {
+        ACTIVO: 'Activo',
+        INACTIVO: 'Inactivo',
+        ESPERA: 'Espera'
+      };
+
+      function actualizarEstatus(nuevoEstado) {
+        const statusElement = document.getElementById('user-status');
+        const clasesColor = {
+          'Activo': 'bg-success',
+          'Inactivo': 'bg-danger',
+          'Espera': 'bg-warning text-dark'
+        };
+
+        // Si el estado existe en el mapa lo usamos; si no, usamos 'Activo' por defecto
+        const estadoFinal = clasesColor[nuevoEstado] ? nuevoEstado : ESTADOS.ACTIVO;
+
+        statusElement.textContent = estadoFinal;
+        statusElement.className = `badge ${clasesColor[estadoFinal]}`;
+      }
+
+      function verificarEstatus() {
+        const statusElement = document.getElementById('user-status');
+        const estatusActual = statusElement.textContent.trim();
+
+        switch (estatusActual) {
+          case ESTADOS.ACTIVO:
+            console.log('El usuario tiene acceso permitido.');
+            break;
+          case ESTADOS.INACTIVO:
+            console.log('El usuario está bloqueado o dado de baja.');
+            break;
+          case ESTADOS.ESPERA:
+            console.log('El usuario está pendiente de aprobación.');
+            break;
+          default:
+            console.warn('Estado desconocido:', estatusActual);
+        }
+      }
+
+      // 2. Ejecutamos la lógica principal cuando el DOM y la autenticación estén listos
       document.addEventListener('DOMContentLoaded', async () => {
         const user = await requireAuth();
         if (!user) return;
@@ -374,65 +416,14 @@
         document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
         document.getElementById('user-company').innerText = user.empresa || 'Empresa no registrada';
         document.getElementById('user-program').innerText = user.field_of_study || 'Sin campo de estudio asignado';
-        document.getElementById('user-status').innerText = user.military_status || 'Activo';
+
+        // 3. Pasamos el valor de user.military_status aquí adentro
+        const estatusUsuario = user.military_status || ESTADOS.ACTIVO;
+        actualizarEstatus(estatusUsuario);
+        verificarEstatus();
       });
-
-      // 1. Seleccionamos el elemento del DOM
-      const statusElement = document.getElementById('user-status');
-
-      // 2. Definimos los estados válidos y sus acciones/estilos correspondientes
-      const ESTADOS = {
-        ACTIVO: 'Activo',
-        INACTIVO: 'Inactivo',
-        ESPERA: 'Espera'
-      };
-
-      // 3. Función para evaluar el estado actual
-      function verificarEstatus() {
-        // .trim() elimina espacios extra al inicio o final del texto
-        const estatusActual = statusElement.textContent.trim();
-
-        switch (estatusActual) {
-          case ESTADOS.ACTIVO:
-            console.log('El usuario tiene acceso permitido.');
-            // Lógica para estado Activo
-            break;
-
-          case ESTADOS.INACTIVO:
-            console.log('El usuario está bloqueado o dado de baja.');
-            // Lógica para estado Inactivo
-            break;
-
-          case ESTADOS.ESPERA:
-            console.log('El usuario está pendiente de aprobación.');
-            // Lógica para estado Espera
-            break;
-
-          default:
-            console.warn('Estado desconocido:', estatusActual);
-        }
-      }
-
-      // Ejecutar la validación
-      verificarEstatus();
-      actualizarEstatus(user.military_status);
-
-
-      function actualizarEstatus(nuevoEstado) {
-        // Mapa de colores según clases de Bootstrap
-        const clasesColor = {
-          'Activo': 'bg-success',
-          'Inactivo': 'bg-danger',
-          'Espera': 'bg-warning text-dark'
-        };
-
-        if (clasesColor[nuevoEstado]) {
-          statusElement.textContent = nuevoEstado;
-          // Reiniciamos las clases base y aplicamos el nuevo color
-          statusElement.className = `badge ${clasesColor[nuevoEstado]}`;
-        }
-      }
     </script>
+
 
   </body>
 
