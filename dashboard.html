@@ -100,30 +100,45 @@
         <div class="row">
           <div class="col-12">
             <nav class="main-nav">
-              <a target="_self" href="../index.html" class="logo">
+              <!-- ***** Logo Start ***** -->
+              <a target="_self" href="index.html" class="logo">
                 <img src="assets/images/logo/boardroom-horizontal_175x75.webp" alt="Boardroom Business School Logo">
               </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
               <ul class="nav">
-                <li><a target="_self" href="../index.html" class="active">Inicio</a></li>
+                <li><a target="_self" href="index.html" class="active">Inicio</a></li>
+                <!-- Multilevel Item: Conócenos -->
                 <li class="has-sub">
                   <a target="_self" href="#">Conócenos</a>
                   <ul class="sub-menu">
-                    <li><a target="_self" href="../nosotros.html">Nosotros</a></li>
-                    <li><a target="_self" href="../por-que-boardroom.html">Por qué Boardroom</a></li>
-                    <li><a target="_self" href="../historia.html">Nuestra Historia</a></li>
-                    <li><a target="_self" href="../equipo.html">Equipo Directivo</a></li>
-                    <li><a target="_self" href="../claustro.html">Claustro</a></li>
+                    <li><a target="_self" href="nosotros.html">Nosotros</a></li>
+                    <li><a target="_self" href="por-que-boardroom.html">Por qué Boardroom</a></li>
+                    <li><a target="_self" href="historia.html">Nuestra Historia</a></li>
+                    <li><a target="_self" href="equipo.html">Equipo Directivo</a></li>
+                    <li><a target="_self" href="claustro.html">Claustro</a></li>
+                    <li><a target="_self" href="alianzas.html">Alianzas</a></li>
                   </ul>
                 </li>
 
+                <!-- Multilevel Item: Programas -->
                 <li class="has-sub">
                   <a target="_self" href="#programas">Programas</a>
                   <ul class="sub-menu">
-                    <li><a target="_self" href="../cohorte-cero.html">Cohorte Cero</a></li>
-                    <li><a target="_self" href="../programas.html">Programas</a></li>
-                    <li><a target="_self" href="#">MBA</a></li>
-                    <li><a target="_self" href="../diplomados.html">Diplomados</a></li>
-                    <li><a target="_self" href="programas-in-house.html">In-House</a></li>
+                    <li class="has-sub">
+                      <a target="_self" href="#">Cohorte Cero</a>
+                      <ul class="sub-menu">
+                        <li><a target="_self" href="cohorte-cero-supervisores.html">Supervisores</a></li>
+                        <li><a target="_self" href="cohorte-cero-mandos-medios.html">Mandos Medios</a></li>
+                        <li><a target="_self" href="cohorte-cero-directores.html">Directores</a></li>
+                      </ul>
+                    </li>
+                    <li><a target="_self" href="programas.html">Programas</a></li>
+                    <li><a target="_self" href="#">MBA</a>
+                    <li><a target="_self" href="diplomados.html">Diplomados</a></li>
+                    <li><a target="_self" href="cursos.html">Cursos & Mini Cursos</a></li>
+                    <li><a target="_self" href="programas-in-house.html">In-House</a>
+                    </li>
                   </ul>
                 </li>
                 <li><a target="_self" href="admisiones.html">Admisiones</a></li>
@@ -138,12 +153,14 @@
                     <li><a target="_self" href="conferencias-y-catedras.html">Conferencias</a></li>
                   </ul>
                 </li>
-                <li><a target="_self" href="../becas.html">Becas</a></li>
-                <li><a target="_self" href="../contacto.html">Contacto</a></li>
+                <li><a target="_self" href="becas.html">Becas</a></li>
+                <li><a target="_self" href="incubadora.html">Incubadora</a></li>
+                <li><a target="_self" href="contacto.html">Contacto</a></li>
               </ul>
               <a class='menu-trigger'>
                 <span>Menu</span>
               </a>
+              <!-- ***** Menu End ***** -->
             </nav>
           </div>
         </div>
@@ -355,7 +372,7 @@
         document.getElementById('user-phone').innerText = user.phone || 'No registrado';
         document.getElementById('user-matricula').innerText = user.matricula_escolar || 'Sin Matrícula';
         document.getElementById('user-job').innerText = user.jobtitle || 'Puesto no registrado';
-        document.getElementById('user-company').innerText = user.company || 'Empresa no registrada';
+        document.getElementById('user-company').innerText = user.empresa || 'Empresa no registrada';
         document.getElementById('user-program').innerText = user.field_of_study || 'Sin campo de estudio asignado';
         document.getElementById('user-status').innerText = user.military_status || 'Activo';
       });

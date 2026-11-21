@@ -59,10 +59,10 @@ async function renderAuthNavigation(userData = null) {
     navContainer.innerHTML = `
       <span class="d-inline-flex align-items-center gap-2">
         <a href="dashboard.html" target="_self" class="text-white fw-bold text-decoration-none">
-          <i class="fa fa-user-circle"></i> ${displayName}
+          <i class="fa fa-user-circle"></i>&nbsp;&nbsp; ${displayName}
         </a>
         <a href="#" onclick="event.preventDefault(); logout();" class="text-white ms-2 text-decoration-none" title="Cerrar Sesión">
-          <i class="fa fa-sign-out-alt"></i> Salir
+          <i class="fa fa-sign-out-alt"></i>&nbsp;&nbsp; Salir
         </a>
       </span>
     `;
