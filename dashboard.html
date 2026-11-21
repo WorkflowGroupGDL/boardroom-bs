@@ -261,6 +261,12 @@
                       <p><strong>Estatus:</strong> <span id="user-status" class="badge bg-success">Activo</span></p>
                     </div>
                   </div>
+                  <div class="col-md-12">
+                    <div class="card p-3 border-0 shadow-sm">
+                      <h2>Mis cursos</h2>
+                      <ul id="user-courses"></ul>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -440,7 +446,54 @@
         verificarEstatus();
       });
     </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const user = await requireAuth();
+        if (!user) return;
 
+        const list = document.getElementById('user-courses');
+        if (!list) return;
+
+        list.textContent = 'Cargando cursos...';
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/my-courses`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${getToken()}`
+            },
+            cache: 'no-store'
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.success || !Array.isArray(data.courses)) {
+            throw new Error('No se pudieron consultar tus cursos.');
+          }
+
+          list.replaceChildren();
+
+          if (data.courses.length === 0) {
+            const item = document.createElement('li');
+            item.textContent = 'No tienes cursos inscritos.';
+            list.appendChild(item);
+            return;
+          }
+
+          for (const course of data.courses) {
+            const item = document.createElement('li');
+
+            item.textContent = course.code
+              ? `${course.name || 'Curso sin nombre'} (${course.code})`
+              : course.name || 'Curso sin nombre';
+
+            list.appendChild(item);
+          }
+        } catch {
+          list.textContent = 'No fue posible cargar tus cursos. Intenta nuevamente.';
+        }
+      });
+    </script>
 
   </body>
 
