@@ -1849,6 +1849,44 @@
     </script>
     <script src="auth-check.js"></script>
 
+    <!-- Modal de Bienvenida / Aviso -->
+    <div class="modal fade" id="modalInicio" tabindex="-1" aria-labelledby="modalInicioLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <!-- Encabezado con el botón X -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalInicioLabel">Aviso Importante</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+
+          <!-- Cuerpo del mensaje -->
+          <div class="modal-body">
+            <a href="workshops.html"><img src="assets/images/flyer/workshop1.webp" class="img-fluid rounded mb-4"
+                alt="Flyer Workshop Boardroom Business School" target="_self"></a>
+            </p>
+          </div>
+
+          <!-- Pie opcional del modal -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Seleccionamos el elemento del modal
+        const modalElemento = document.getElementById('modalInicio');
+
+        // Creamos la instancia de Bootstrap Modal y la mostramos
+        const miModal = new bootstrap.Modal(modalElemento);
+        //miModal.show();
+      });
+    </script>
+
+
   </body>
 
 </html>
