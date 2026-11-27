@@ -1162,7 +1162,7 @@ section.apply-now .item p {
 
 .accordions {
   border-radius: 20px;
-  padding: 40px;
+  padding: 20px;
   background-color: #fff;
   margin-left: 45px;
 }
@@ -2707,6 +2707,18 @@ html {
 }
 
 .color-principal-yellow {
+  background-color: #f5a425;
+}
+
+.bg-principal-blue {
+  background-color: #0A1631;
+}
+
+.bg-principal-red {
+  background-color: #8A2525;
+}
+
+.bg-principal-yellow {
   background-color: #f5a425;
 }
 
