@@ -2657,13 +2657,13 @@ html {
 }
 
 .equipo-card {
-  background-image: url(../images/service-item-bg.jpg);
+  background-image: url(../images/service-item-bg2.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   border-radius: 20px;
   text-align: center;
-  color: #fff;
+  color: #000;
   padding: 40px;
 }
 
@@ -2870,3 +2870,180 @@ html {
 .lista-enlaces a:hover:hover::after {
   width: 100%;
 }
+
+:root {
+  --bbs-navy: #0f2342;
+  --bbs-navy-soft: #1b3b6f;
+  --bbs-gold: #c59b27;
+  --bbs-surface: #f7f9fc;
+  --bbs-border: #e4e9f0;
+}
+
+body {
+  background-color: var(--bbs-surface);
+  color: #1f2937;
+}
+
+.bbs-section-title {
+  color: var(--bbs-navy);
+  font-weight: 700;
+}
+
+.bbs-card {
+  background: #ffffff;
+  border: 1px solid var(--bbs-border);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 35, 66, 0.05);
+}
+
+.bbs-gold-accent {
+  border-top: 4px solid var(--bbs-gold);
+}
+
+.bbs-navy-accent {
+  border-top: 4px solid var(--bbs-navy);
+}
+
+.bbs-btn-navy {
+  background-color: var(--bbs-navy);
+  border-color: var(--bbs-navy);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.bbs-btn-navy:hover {
+  background-color: var(--bbs-navy-soft);
+  border-color: var(--bbs-navy-soft);
+  color: #ffffff;
+}
+
+.bbs-btn-gold {
+  background-color: var(--bbs-gold);
+  border-color: var(--bbs-gold);
+  color: #111827;
+  font-weight: 700;
+}
+
+.bbs-btn-gold:hover {
+  background-color: #b1881b;
+  border-color: #b1881b;
+  color: #111827;
+}
+
+.bbs-faq-pills .nav-link {
+  color: var(--bbs-navy);
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--bbs-border);
+  background-color: #ffffff;
+}
+
+.bbs-faq-pills .nav-link.active {
+  background-color: var(--bbs-navy);
+  border-color: var(--bbs-navy);
+  color: #ffffff;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: rgba(15, 35, 66, 0.05);
+  color: var(--bbs-navy);
+  font-weight: 600;
+}
+
+.bbs-certainty-box {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+  border: 1px solid var(--bbs-border);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 35, 66, 0.05);
+}
+
+.bbs-step-pill {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bbs-navy);
+  background-color: rgba(197, 155, 39, 0.2);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+#preguntas-frecuentes,
+  #preguntas-frecuentes .container,
+  #preguntas-frecuentes .tab-content,
+  #preguntas-frecuentes .tab-pane,
+  #preguntas-frecuentes .accordion,
+  #preguntas-frecuentes .accordion-item,
+  #preguntas-frecuentes .accordion-collapse,
+  #preguntas-frecuentes .accordion-body {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  #preguntas-frecuentes .accordion-collapse:not(.show) {
+    display: none !important;
+  }
+
+  #preguntas-frecuentes .accordion-collapse.show {
+    display: block !important;
+  }
+
+  #preguntas-frecuentes .accordion-button {
+    white-space: normal !important;
+    text-align: left !important;
+    line-height: 1.45 !important;
+    padding: 1rem 1.25rem !important;
+    color: var(--bbs-navy, #0f2342) !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  #preguntas-frecuentes .accordion-button:not(.collapsed) {
+    background-color: rgba(15, 35, 66, 0.05) !important;
+    color: var(--bbs-navy, #0f2342) !important;
+  }
+
+  #preguntas-frecuentes .accordion-body {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.65 !important;
+    color: #1f2937 !important;
+    padding: 1rem 1.25rem 1.25rem !important;
+  }
+
+  #preguntas-frecuentes .nav-pills {
+    flex-wrap: wrap !important;
+  }
+
+  #preguntas-frecuentes .nav-pills .nav-link {
+    white-space: normal !important;
+    text-align: left !important;
+    line-height: 1.35 !important;
+  }
+
+  .header-area .logo img {
+    transition: opacity 0.2s ease;
+  }
+  
+  /* Estado inicial (arriba, sobre fondo oscuro): muestra logo para fondo oscuro */
+  .header-area .logo .logo-dark-bg {
+    display: inline-block;
+  }
+  
+  .header-area .logo .logo-light-bg {
+    display: none;
+  }
+  
+  /* Al hacer scroll (fondo blanco/sticky): muestra logo para fondo claro */
+  .header-area.is-scrolled .logo .logo-dark-bg,
+  .header-area.background-header .logo .logo-dark-bg {
+    display: none;
+  }
+  
+  .header-area.is-scrolled .logo .logo-light-bg,
+  .header-area.background-header .logo .logo-light-bg {
+    display: inline-block;
+  }

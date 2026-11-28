@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title id="dynamic-title">Detalle de Programa | Boardroom Business School</title>
+        <meta name="description" id="dynamic-description" content="Programa ejecutivo de Boardroom Business School.">
+
+        <!-- Bootstrap 5.2+ CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+        <style>
+            :root {
+                --bbs-navy: #0f2342;
+                --bbs-navy-light: #1b3b6f;
+                --bbs-gold: #c59b27;
+                --bbs-surface: #f8f9fb;
+                --bbs-border: #e5e9f0;
+            }
+
+            body {
+                background-color: var(--bbs-surface);
+                color: #1f2937;
+                font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            }
+
+            /* Encabezado ejecutivo */
+            .bbs-hero {
+                background: linear-gradient(135deg, var(--bbs-navy) 0%, var(--bbs-navy-light) 100%);
+                color: #ffffff;
+                padding: 3.5rem 0;
+                border-bottom: 4px solid var(--bbs-gold);
+            }
+
+            .bbs-badge-category {
+                background-color: rgba(197, 155, 39, 0.18);
+                color: #f3d06b;
+                border: 1px solid rgba(197, 155, 39, 0.45);
+                font-weight: 600;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                font-size: 0.78rem;
+                padding: 0.45rem 0.85rem;
+            }
+
+            .bbs-card {
+                background: #ffffff;
+                border: 1px solid var(--bbs-border);
+                border-radius: 12px;
+                box-shadow: 0 6px 24px rgba(15, 35, 66, 0.05);
+            }
+
+            .bbs-sticky-panel {
+                position: sticky;
+                top: 1.5rem;
+            }
+
+            .bbs-price-box {
+                background-color: #f4f6fa;
+                border-left: 4px solid var(--bbs-gold);
+                border-radius: 8px;
+                padding: 1rem 1.25rem;
+            }
+
+            .bbs-price-amount {
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: var(--bbs-navy);
+            }
+
+            .bbs-meta-list li {
+                padding: 0.6rem 0;
+                border-bottom: 1px solid #eef1f6;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.92rem;
+            }
+
+            .bbs-meta-list li:last-child {
+                border-bottom: none;
+            }
+
+            .bbs-nav-pills .nav-link {
+                color: var(--bbs-navy);
+                font-weight: 600;
+                border-radius: 8px;
+                padding: 0.65rem 1rem;
+                border: 1px solid transparent;
+            }
+
+            .bbs-nav-pills .nav-link.active {
+                background-color: var(--bbs-navy);
+                color: #ffffff;
+            }
+
+            .bbs-content-html {
+                line-height: 1.75;
+                font-size: 0.98rem;
+            }
+
+            .bbs-content-html strong {
+                color: var(--bbs-navy);
+            }
+
+            .bbs-btn-primary {
+                background-color: var(--bbs-navy);
+                border-color: var(--bbs-navy);
+                color: #ffffff;
+                font-weight: 600;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .bbs-btn-primary:hover {
+                background-color: var(--bbs-navy-light);
+                border-color: var(--bbs-navy-light);
+                color: #ffffff;
+            }
+
+            .bbs-btn-gold {
+                background-color: var(--bbs-gold);
+                border-color: var(--bbs-gold);
+                color: #111827;
+                font-weight: 700;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .bbs-btn-gold:hover {
+                background-color: #b38b1e;
+                border-color: #b38b1e;
+                color: #111827;
+            }
+
+            .bbs-instructor-img {
+                width: 76px;
+                height: 76px;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 3px solid var(--bbs-gold);
+            }
+
+            .bbs-course-img {
+                width: 100%;
+                max-height: 300px;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Selector rápido de prueba para cargar cursos uno por uno desde el JSON -->
+        <div class="bg-dark text-white py-2 border-bottom border-secondary">
+            <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <small class="text-light opacity-75">
+                    <i class="fas fa-sliders-h me-1 text-warning"></i> Vista previa de plantilla por curso:
+                </small>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="course-selector" class="visually-hidden">Seleccionar curso</label>
+                    <select id="course-selector" class="form-select form-select-sm bg-secondary text-white border-0"
+                        style="min-width: 280px;"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- HERO DEL CURSO -->
+        <header class="bbs-hero">
+            <div class="container">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="index.html"
+                                class="text-warning text-decoration-none">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="cursos.html"
+                                class="text-warning text-decoration-none">Cursos</a></li>
+                        <li class="breadcrumb-item active text-white-50" id="breadcrumb-title" aria-current="page">
+                            Programa</li>
+                    </ol>
+                </nav>
+
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <span class="badge rounded-pill bbs-badge-category mb-3" id="course-catalog">Categoría</span>
+                        <h1 class="display-6 fw-bold mb-3" id="course-title">Título del Programa</h1>
+                        <p class="lead text-white-50 mb-4" id="course-summary"></p>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="#inscripcion-rapida" id="btn-hero-enroll" class="btn bbs-btn-gold">
+                                <i class="fas fa-check-circle me-2"></i>Inscribirme ahora
+                            </a>
+                            <a href="#contenido-detallado" class="btn btn-outline-light">
+                                <i class="fas fa-list-ul me-2"></i>Ver estructura y temario
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="bbs-card p-2 bg-white">
+                            <img id="course-image-main" src="assets/images/cursos/marca-networking.webp"
+                                alt="Imagen del programa" class="bbs-course-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CUERPO PRINCIPAL DEL TEMPLATE -->
+        <main class="py-5" id="contenido-detallado">
+            <div class="container">
+                <div class="row g-4">
+
+                    <!-- COLUMNA IZQUIERDA: CONTENIDO ACADÉMICO Y PESTAÑAS -->
+                    <div class="col-lg-8">
+
+                        <!-- Resumen ejecutivo / Main Content -->
+                        <section class="bbs-card p-4 p-md-5 mb-4" id="section-main-content">
+                            <h2 class="h4 fw-bold mb-3" style="color: var(--bbs-navy);">Enfoque del Programa</h2>
+                            <div class="bbs-content-html" id="course-main-content"></div>
+                        </section>
+
+                        <!-- Pestañas organizadas por dimensión -->
+                        <section class="bbs-card p-4 p-md-5 mb-4">
+                            <ul class="nav nav-pills bbs-nav-pills gap-2 mb-4" id="courseTabs" role="tablist">
+                                <li class="nav-item" role="presentation" id="tab-item-intro">
+                                    <button class="nav-link active" id="intro-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-intro" type="button" role="tab">
+                                        Introducción
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="tab-item-estructura">
+                                    <button class="nav-link" id="estructura-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-estructura" type="button" role="tab">
+                                        Estructura y Temario
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="tab-item-aprendizajes">
+                                    <button class="nav-link" id="aprendizajes-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-aprendizajes" type="button" role="tab">
+                                        Aprendizajes
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="tab-item-metodologia">
+                                    <button class="nav-link" id="metodologia-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-metodologia" type="button" role="tab">
+                                        Metodología
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="tab-item-perfil">
+                                    <button class="nav-link" id="perfil-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-perfil" type="button" role="tab">
+                                        Perfil del Participante
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" id="tab-item-faq">
+                                    <button class="nav-link" id="faq-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pane-faq" type="button" role="tab">
+                                        Preguntas Frecuentes
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content bbs-content-html" id="courseTabsContent">
+                                <div class="tab-pane fade show active" id="pane-intro" role="tabpanel"></div>
+                                <div class="tab-pane fade" id="pane-estructura" role="tabpanel"></div>
+                                <div class="tab-pane fade" id="pane-aprendizajes" role="tabpanel"></div>
+                                <div class="tab-pane fade" id="pane-metodologia" role="tabpanel"></div>
+                                <div class="tab-pane fade" id="pane-perfil" role="tabpanel"></div>
+                                <div class="tab-pane fade" id="pane-faq" role="tabpanel"></div>
+                            </div>
+                        </section>
+
+                        <!-- Descripción extendida (si existe en el JSON) -->
+                        <section class="bbs-card p-4 p-md-5 mb-4" id="section-descripcion-larga">
+                            <h2 class="h4 fw-bold mb-3" style="color: var(--bbs-navy);">Detalles y Alcance</h2>
+                            <div class="bbs-content-html" id="course-descripcion-larga"></div>
+                        </section>
+
+                        <!-- Tarjeta del Docente -->
+                        <section class="bbs-card p-4 p-md-5" id="section-docente">
+                            <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-4">
+                                <img id="instructor-photo" src="assets/images/claustro/james.webp"
+                                    alt="Docente del programa" class="bbs-instructor-img">
+                                <div class="flex-grow-1">
+                                    <span class="text-uppercase small fw-bold text-muted">Claustro y Dirección de
+                                        Sesión</span>
+                                    <h3 class="h5 fw-bold mb-1 mt-1" id="instructor-name"
+                                        style="color: var(--bbs-navy);">Nombre del Docente</h3>
+                                    <p class="text-muted small mb-2" id="instructor-bio"></p>
+                                    <a id="instructor-link" href="#" class="btn btn-sm btn-outline-secondary">
+                                        Ver perfil del docente <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <!-- COLUMNA DERECHA: FICHA TÉCNICA, INVERSIÓN Y CONVERSIÓN -->
+                    <div class="col-lg-4">
+                        <aside class="bbs-card p-4 bbs-sticky-panel" id="inscripcion-rapida">
+                            <div class="bbs-price-box mb-4">
+                                <span class="d-block small text-muted">Inversión del programa</span>
+                                <span class="bbs-price-amount" id="course-price">$0 MXN</span>
+                            </div>
+
+                            <ul class="list-unstyled bbs-meta-list mb-4">
+                                <li>
+                                    <span class="text-muted"><i
+                                            class="far fa-calendar-alt me-2"></i>Disponibilidad</span>
+                                    <strong id="meta-fecha">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="far fa-clock me-2"></i>Duración total</span>
+                                    <strong id="meta-horas">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="fas fa-layer-group me-2"></i>Sesiones</span>
+                                    <strong id="meta-clases">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="fas fa-hourglass-half me-2"></i>Extensión</span>
+                                    <strong id="meta-meses">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="fas fa-laptop me-2"></i>Modalidad</span>
+                                    <strong id="meta-modalidad">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="fas fa-award me-2"></i>Reconocimiento</span>
+                                    <strong id="meta-certificado">-</strong>
+                                </li>
+                                <li>
+                                    <span class="text-muted"><i class="fas fa-file-alt me-2"></i>Constancia DC-3</span>
+                                    <strong id="meta-dc3">-</strong>
+                                </li>
+                            </ul>
+
+                            <div class="d-grid gap-2">
+                                <a href="admisiones.html" id="btn-enroll-cta" class="btn bbs-btn-gold">
+                                    <i class="fas fa-user-plus me-2"></i>Solicitar Inscripción
+                                </a>
+                                <a href="https://wa.me/523310646668" target="_blank" rel="noopener noreferrer"
+                                    class="btn bbs-btn-primary">
+                                    <i class="fab fa-whatsapp me-2"></i>Resolver dudas por WhatsApp
+                                </a>
+                            </div>
+
+                            <p class="small text-muted text-center mt-3 mb-0">
+                                Atención directa para inscripciones individuales y facturación empresarial.
+                            </p>
+                        </aside>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- Bootstrap 5 JS Bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            /**
+             * Renderiza UN curso del JSON dentro de la plantilla Bootstrap 5.
+             * Puedes llamar renderCourseTemplate(cursoObj) desde tu script al cargar cada curso.
+             */
+            function renderCourseTemplate(course) {
+                if (!course) return;
+
+                // SEO y título dinámico
+                const pageTitle = (course.meta && course.meta.title)
+                    ? course.meta.title
+                    : `${course.titulo} | Boardroom Business School`;
+                document.title = pageTitle;
+
+                const metaDesc = document.getElementById('dynamic-description');
+                if (metaDesc && course.meta && course.meta.description) {
+                    metaDesc.setAttribute('content', course.meta.description);
+                }
+
+                // Encabezado y breadcrumb
+                document.getElementById('breadcrumb-title').textContent = course.titulo || 'Programa';
+                document.getElementById('course-catalog').textContent = course.catalogo || 'Educación Ejecutiva';
+                document.getElementById('course-title').textContent = course.titulo || '';
+                document.getElementById('course-summary').textContent = course.descripcion || '';
+
+                // Imagen principal (soporta rutas relativas tipo "cursos/..." o "assets/images/...")
+                const mainImg = document.getElementById('course-image-main');
+                if (course.imagen) {
+                    mainImg.src = course.imagen.startsWith('assets/') ? course.imagen : `assets/images/${course.imagen}`;
+                    mainImg.alt = course.titulo || 'Imagen del programa';
+                }
+
+                // Precio y ficha técnica lateral
+                const rawPrice = (course.precio || '').trim();
+                document.getElementById('course-price').textContent = rawPrice.startsWith('$') ? rawPrice : `$${rawPrice}`;
+                document.getElementById('meta-fecha').textContent = course.fecha || 'Por confirmar';
+                document.getElementById('meta-horas').textContent = course.horas || '-';
+                document.getElementById('meta-clases').textContent = course.clases || '-';
+                document.getElementById('meta-meses').textContent = course.meses || '-';
+                document.getElementById('meta-modalidad').textContent = course.modalidad || '-';
+                document.getElementById('meta-certificado').textContent = course.certificado || '-';
+                document.getElementById('meta-dc3').textContent = course.dc3 || 'No';
+
+                // Helper para mostrar/ocultar bloques o pestañas si vienen vacíos en el JSON
+                function setHtmlOrHide(contentEl, wrapperEl, htmlValue) {
+                    const clean = (htmlValue || '').trim();
+                    if (clean) {
+                        contentEl.innerHTML = clean;
+                        if (wrapperEl) wrapperEl.classList.remove('d-none');
+                    } else {
+                        contentEl.innerHTML = '';
+                        if (wrapperEl) wrapperEl.classList.add('d-none');
+                    }
+                }
+
+                setHtmlOrHide(
+                    document.getElementById('course-main-content'),
+                    document.getElementById('section-main-content'),
+                    course.mainContent
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-intro'),
+                    document.getElementById('tab-item-intro'),
+                    course['introducción'] || course.introduccion
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-estructura'),
+                    document.getElementById('tab-item-estructura'),
+                    course.estructura
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-aprendizajes'),
+                    document.getElementById('tab-item-aprendizajes'),
+                    course.aprendizajes
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-metodologia'),
+                    document.getElementById('tab-item-metodologia'),
+                    course['metodología'] || course.metodologia
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-perfil'),
+                    document.getElementById('tab-item-perfil'),
+                    course.perfil_participante
+                );
+
+                setHtmlOrHide(
+                    document.getElementById('pane-faq'),
+                    document.getElementById('tab-item-faq'),
+                    course.faq
+                );
+
+                // Asegurar que la primera pestaña visible quede activa
+                const firstVisibleTab = document.querySelector('#courseTabs .nav-item:not(.d-none) .nav-link');
+                if (firstVisibleTab) {
+                    const tabInstance = new bootstrap.Tab(firstVisibleTab);
+                    tabInstance.show();
+                }
+
+                setHtmlOrHide(
+                    document.getElementById('course-descripcion-larga'),
+                    document.getElementById('section-descripcion-larga'),
+                    course.descripcion_larga
+                );
+
+                // Docente
+                const docenteSection = document.getElementById('section-docente');
+                if (course.docente) {
+                    docenteSection.classList.remove('d-none');
+                    document.getElementById('instructor-name').textContent = course.docente;
+                    document.getElementById('instructor-bio').textContent = course.descripcion_docente || '';
+                    if (course.foto_docente) {
+                        document.getElementById('instructor-photo').src = course.foto_docente;
+                        document.getElementById('instructor-photo').alt = course.docente;
+                    }
+                    const docLink = document.getElementById('instructor-link');
+                    if (course.url_docente && course.url_docente !== '#') {
+                        docLink.href = course.url_docente;
+                        docLink.classList.remove('d-none');
+                    } else {
+                        docLink.classList.add('d-none');
+                    }
+                } else {
+                    docenteSection.classList.add('d-none');
+                }
+            }
+
+            // Ejemplo de carga desde cursos.json (puedes apuntar a tu archivo local 'cursos.json')
+            fetch('cursos.json')
+                .then(res => res.json())
+                .then(courses => {
+                    const selector = document.getElementById('course-selector');
+                    courses.forEach((c, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = idx;
+                        opt.textContent = `#${c.id} - ${c.titulo} ${c.activo === 0 ? '(Inactivo)' : ''}`;
+                        selector.appendChild(opt);
+                    });
+
+                    // Cargar el primer curso activo por defecto (o el primero del arreglo)
+                    const defaultIndex = Math.max(0, courses.findIndex(c => c.activo === 1));
+                    selector.value = defaultIndex;
+                    renderCourseTemplate(courses[defaultIndex]);
+
+                    selector.addEventListener('change', (e) => {
+                        renderCourseTemplate(courses[Number(e.target.value)]);
+                    });
+                })
+                .catch(() => {
+                    // Si se abre sin servidor local, no rompe la página
+                });
+        </script>
+    </body>
+
+</html>

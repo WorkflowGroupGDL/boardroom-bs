@@ -197,8 +197,10 @@
                     <div class="col-12">
                         <nav class="main-nav">
                             <a target="_self" href="index.html" class="logo">
+                                <img src="assets/images/logo/boardroom-horizontal-fondo-negro_175x71.webp"
+                                    alt="Boardroom Business School Logo" class="logo-dark-bg" width="175" height="75">
                                 <img src="assets/images/logo/boardroom-horizontal_175x75.webp"
-                                    alt="Boardroom Business School Logo">
+                                    alt="Boardroom Business School Logo" class="logo-light-bg" width="175" height="75">
                             </a>
                             <ul class="nav">
                                 <li><a target="_self" href="index.html">Inicio</a></li>
@@ -277,8 +279,18 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h6>ADMISIÓNES</h6>
-                        <h1 class="text-white">PROCESO DE ADMISIÓN</h1>
+                        <p class="text-white mb-2">Sin trámites innecesarios ni letras chiquitas. Elige tu programa,
+                            revisa fechas y asegura tu lugar.</p>
+                        <h1 class="text-white text-uppercase">Todo lo que necesitas saber para iniciar tu programa con
+                            total certeza</h1>
+                        <div class="mt-4 d-flex flex-wrap justify-content-center gap-2">
+                            <a href="#solicitud-inscripcion" class="btn btn-white text-dark px-4">Ir directo a
+                                inscripción</a>
+                            <a href="https://wa.me/523310646668?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20admisiones%20en%20Boardroom%20Business%20School."
+                                target="_blank" rel="noopener noreferrer" class="btn btn-outline-light px-4">
+                                <i class="fab fa-whatsapp me-2"></i>Escribir por WhatsApp
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,856 +309,1415 @@
                 </div>
 
 
-                <!-- CRITERIOS DE ADMISIÓN / COMUNIDAD -->
-                <div class="container">
-                    <div class="section-header">
-                        <div class="subtitle">COMPOSICIÓN DE NIVELES</div>
-                        <h3>Perfil de la Comunidad Executive</h3>
-                    </div>
-                    <div class="col-md-12 text-center mb-4">
-                        <p class="text-dark">Nuestra comunidad está compuesta por líderes de alto nivel que aportan
-                            experiencia, visión estratégica y un compromiso con la excelencia en la toma de decisiones.
-                            Conoce la distribución de perfiles dentro de nuestra red directiva.</p>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-md-3 text-center color-principal-blue text-white mx-3 rounded-3">
-                            <div class="stat-number text-white ">45%</div>
-                            <h4 class="text-white">Alta Dirección & CEOs</h4>
-                            <p class="text-white">
-                                Tomadores de decisiones globales que definen el rumbo estratégico y gobierno de grandes
-                                empresas.
+                <!-- =========================================================
+                1. CALENDARIO DE PRÓXIMAS COHORTES
+                ========================================================= -->
+                <section class="py-5" id="calendario-cohortes">
+                    <div class="container">
+                        <div
+                            class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-2">
+                            <div>
+                                <span class="bbs-step-pill mb-2">Calendario Académico</span>
+                                <h2 class="h3 bbs-section-title mb-1">Próximas cohortes</h2>
+                                <p class="text-muted mb-0">
+                                    Elige el programa alineado a tu nivel de responsabilidad y aparta tu lugar en la
+                                    próxima
+                                    cohorte.
+                                </p>
+                            </div>
+                            <a href="#solicitud-inscripcion" class="btn btn-sm bbs-btn-navy">
+                                <i class="fas fa-arrow-down me-1"></i> Ir al formulario de inscripción
+                            </a>
+                        </div>
+
+                        <div class="bbs-card p-3 p-md-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Programa</th>
+                                            <th scope="col">Fecha de inicio</th>
+                                            <th scope="col">Días y horario en vivo</th>
+                                            <th scope="col">Duración</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col" class="text-end">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold" style="color: var(--bbs-navy);">Frontline
+                                                    Leadership
+                                                    Excellence</div>
+                                                <small class="text-muted">Supervisores y líderes de primera
+                                                    línea</small>
+                                            </td>
+                                            <td>19 de enero de 2027</td>
+                                            <td>Martes y jueves · 18:00 a 20:00 hrs (CST)</td>
+                                            <td>6 meses</td>
+                                            <td><span class="badge text-bg-success">Inscripciones abiertas</span></td>
+                                            <td class="text-end">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-dark-blue select-program-btn"
+                                                    data-program="frontline">
+                                                    Inscribirme
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold" style="color: var(--bbs-navy);">Strategic Execution
+                                                    &amp;
+                                                    People Leadership</div>
+                                                <small class="text-muted">Gerentes, coordinadores y mandos
+                                                    medios</small>
+                                            </td>
+                                            <td>20 de enero de 2027</td>
+                                            <td>Miércoles · 18:00 a 20:30 hrs (CST)</td>
+                                            <td>9 meses</td>
+                                            <td><span class="badge text-bg-warning text-dark">Últimos lugares</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-dark-blue select-program-btn"
+                                                    data-program="execution">
+                                                    Inscribirme
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold" style="color: var(--bbs-navy);">Boardroom Strategic
+                                                    Leadership Program™</div>
+                                                <small class="text-muted">Directores, empresarios y alta
+                                                    dirección</small>
+                                            </td>
+                                            <td>21 de enero de 2027</td>
+                                            <td>Jueves · 17:30 a 20:00 hrs (CST)</td>
+                                            <td>12 meses</td>
+                                            <td><span class="badge text-bg-warning text-dark">Últimos lugares</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-dark-blue select-program-btn"
+                                                    data-program="strategic">
+                                                    Inscribirme
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="small text-muted mt-3 mb-0">
+                                * Si buscas una fecha específica para tu equipo o empresa, solicita una cohorte
+                                <strong>In-Company</strong> al iniciar tu registro.
                             </p>
                         </div>
-                        <div class="col-md-3 text-center color-principal-yellow text-dark  mx-3 rounded-3">
-                            <div class="stat-number">30%</div>
-                            <h4>Mandos Intermedios</h4>
-                            <p>Líderes en ascenso estratégico con responsabilidad directa sobre áreas clave y
-                                transformación.
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                2. INVERSIÓN Y FACILIDADES DE PAGO
+                ========================================================= -->
+                <section class="py-5 bg-white border-top border-bottom" id="inversion-pagos">
+                    <div class="container">
+                        <div class="mb-4">
+                            <span class="bbs-step-pill mb-2">Transparencia Financiera</span>
+                            <h2 class="h3 bbs-section-title mb-1">Inversión y facilidades de pago</h2>
+                            <p class="text-muted mb-0">
+                                Condiciones claras para personas y empresas, sin cargos ocultos y con opciones
+                                flexibles.
                             </p>
                         </div>
-                        <div class="col-md-3 text-center color-principal-red text-white mx-3 rounded-3">
-                            <div class="stat-number text-white">25%</div>
-                            <h4 class="text-white">Emprendedores Seriales</h4>
-                            <p class="text-white">
-                                Fundadores de alto impacto dedicados a escalar organizaciones y modelos de negocio
-                                disruptivos.
+
+                        <div class="row g-4">
+                            <div class="col-md-6 col-xl-3">
+                                <div class="bbs-card bbs-navy-accent p-4 h-100">
+                                    <h3 class="h5 fw-bold mb-3" style="color: var(--bbs-navy);">Inversión por programa
+                                    </h3>
+                                    <p class="small text-muted">
+                                        Cada programa se cotiza según su duración, profundidad metodológica y nivel de
+                                        acompañamiento:
+                                    </p>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li class="mb-2"><strong>Frontline Leadership (6 meses):</strong> inversión
+                                            enfocada en
+                                            liderazgo operativo y gestión de equipos.</li>
+                                        <li class="mb-2"><strong>Strategic Execution (9 meses):</strong> inversión
+                                            orientada a
+                                            ejecución estratégica y mandos medios.</li>
+                                        <li class="mb-0"><strong>Strategic Leadership (12 meses):</strong> programa
+                                            ejecutivo
+                                            integral de alta dirección y transformación.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="bbs-card bbs-gold-accent p-4 h-100">
+                                    <h3 class="h5 fw-bold mb-3" style="color: var(--bbs-navy);">Pago en exhibición o
+                                        mensualidades</h3>
+                                    <p class="small text-muted">
+                                        Elige la modalidad que mejor se adapte a tu flujo personal o presupuestal:
+                                    </p>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li class="mb-2"><strong>Pago en una exhibición:</strong> liquida el programa
+                                            completo
+                                            al inicio con condiciones preferenciales.</li>
+                                        <li class="mb-0"><strong>Parcialidades mensuales:</strong> distribuye tu
+                                            inversión en
+                                            mensualidades acordadas durante la vigencia del programa.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="bbs-card bbs-navy-accent p-4 h-100">
+                                    <h3 class="h5 fw-bold mb-3" style="color: var(--bbs-navy);">Inscripción anticipada y
+                                        grupos
+                                    </h3>
+                                    <p class="small text-muted">
+                                        Aprovecha beneficios especiales al planificar con anticipación o inscribir a
+                                        varios
+                                        líderes:
+                                    </p>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li class="mb-2"><strong>Inscripción anticipada:</strong> condiciones
+                                            preferenciales al
+                                            apartar tu lugar antes del cierre de convocatoria.</li>
+                                        <li class="mb-0"><strong>Grupos empresariales:</strong> tarifas y esquemas
+                                            escalonados
+                                            cuando una empresa inscribe a varios ejecutivos o supervisores.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="bbs-card bbs-gold-accent p-4 h-100">
+                                    <h3 class="h5 fw-bold mb-3" style="color: var(--bbs-navy);">Facturación fiscal
+                                        (CFDI)</h3>
+                                    <p class="small text-muted">
+                                        Emitimos comprobantes fiscales conforme a la normativa vigente en México:
+                                    </p>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li class="mb-2"><strong>Empresas:</strong> factura fiscal a nombre de tu razón
+                                            social
+                                            con envío de XML y PDF para deducción/capacitación.</li>
+                                        <li class="mb-0"><strong>Personas físicas:</strong> comprobante a tu RFC y datos
+                                            fiscales tras confirmar tu pago.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                3. PREGUNTAS FRECUENTES (FAQ) ORGANIZADAS POR TEMA
+                ========================================================= -->
+                <section class="py-5" id="preguntas-frecuentes">
+                    <div class="container">
+                        <div class="mb-4">
+                            <span class="bbs-step-pill mb-2">Resuelve tus Dudas</span>
+                            <h2 class="h3 bbs-section-title mb-1">Preguntas frecuentes</h2>
+                            <p class="text-muted mb-0">
+                                Información directa sobre programas, metodología, constancias, pagos y patrocinio
+                                empresarial.
                             </p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- ETAPAS DEL PROCESO -->
-                <div class="container py-5">
-                    <div class="section-header">
-                        <div class="subtitle">TU CAMINO A LA CIMA</div>
-                        <h3>Proceso Selección de Candidatos</h3>
-                    </div>
-                    <div class="col-md-12 text-center mb-4">
-                        <p class="text-dark">Nuestra comunidad está compuesta por líderes de alto nivel que aportan
-                            experiencia, visión estratégica y un compromiso con la excelencia en la toma de decisiones.
-                            Conoce la distribución de perfiles dentro de nuestra red directiva.</p>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-md-3 text-center color-principal-red text-white mx-3 rounded-3">
-                            <div class="step-number">01</div>
-                            <div class="step-content">
-                                <h4 class="text-white">Aplicación de Perfil</h4>
-                                <p class="text-white">Envío de perfil profesional, antecedentes ejecutivos y trayectoria
-                                    en
-                                    mesas
-                                    directivas o
-                                    posiciones C-Suite.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center color-principal-yellow text-dark  mx-3 rounded-3">
-                            <div class="step-number">02</div>
-                            <div class="step-content">
-                                <h4>Evaluación de Gobierno Corporativo</h4>
-                                <p>Entrevista directiva y análisis de casos con el comité de admisiones encabezado por
-                                    nuestro
-                                    claustro directivo.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center color-principal-blue text-white mx-3 rounded-3">
-                            <div class="step-number text-white">03</div>
-                            <div class="step-content">
-                                <h4 class="text-white">Aceptación e Inmersión</h4>
-                                <p class="text-white">Confirmación del dictamen de admisión e ingreso directo a las
-                                    mesas
-                                    redondas
-                                    exclusivas y red
-                                    Alumni.</p>
-                            </div>
-                        </div>
-                    </div>
+                        <ul class="nav nav-pills bbs-faq-pills gap-2 mb-4" id="faqThemeTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="faq-programas-tab" data-bs-toggle="pill"
+                                    data-bs-target="#faq-programas" type="button" role="tab">
+                                    Sobre los programas
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="faq-metodologia-tab" data-bs-toggle="pill"
+                                    data-bs-target="#faq-metodologia" type="button" role="tab">
+                                    Sobre la metodología
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="faq-certificados-tab" data-bs-toggle="pill"
+                                    data-bs-target="#faq-certificados" type="button" role="tab">
+                                    Sobre certificados y validez
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="faq-pagos-tab" data-bs-toggle="pill"
+                                    data-bs-target="#faq-pagos" type="button" role="tab">
+                                    Sobre pagos y empresas
+                                </button>
+                            </li>
+                        </ul>
 
+                        <div class="tab-content bbs-card p-3 p-md-4" id="faqThemeTabsContent">
 
-                </div>
-
-
-        </section>
-
-        <!-- ***** Section: Contacto y Postulación ***** -->
-        <section class="contact-us" id="contact">
-            <div class="container bg-white">
-                <div class="row pt-5">
-                    <div class="col-lg-9 align-self-center">
-                        <div class="row">
-                            <div class="col-lg-12">
-
-                                <!-- Formulario Único para Auth -->
-                                <form id="registroForm" class="justify-content-center">
-                                    <!-- Tarjeta del Formulario -->
-                                    <div class="col-md-12 justify-content-center ">
-                                        <div class="card border-0 rounded-4" id="card">
-                                            <div class="card-header text-center bg-transparent border-0 pb-0">
-                                                <h2 class="text-center fw-bold text-dark mb-3 h3" id="form-title">Inicio
-                                                    Proceso de Admisión
-                                                </h2>
-                                            </div>
-                                            <input type="hidden" name="inputMensaje" id="inputMensaje"
-                                                value="Nuevo registro en la página de Boardroom Business School">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" class="form-control rounded-3 bg-light"
-                                                            id="inputNombre" placeholder="Nombre" required>
-                                                        <label for="inputNombre">Nombre</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" class="form-control rounded-3 bg-light"
-                                                            id="inputApellido" placeholder="Apellido" required>
-                                                        <label for="inputApellido">Apellido</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="email" class="form-control rounded-3 bg-light"
-                                                            id="inputEmail" placeholder="Correo electrónico" required>
-                                                        <label for="inputEmail">Correo electrónico</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="number" class="form-control rounded-3 bg-light"
-                                                            id="inputTelefono"
-                                                            placeholder="Celular incluye código de área y Pais"
-                                                            required>
-                                                        <label for="inputTelefono">Celular</label>
-                                                    </div>
-                                                </div>
+                            <!-- TEMA 1: SOBRE LOS PROGRAMAS -->
+                            <div class="tab-pane fade show active" id="faq-programas" role="tabpanel">
+                                <div class="accordion" id="accordionProgramas">
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#prog1">
+                                                ¿Cómo sé qué programa me corresponde?
+                                            </button>
+                                        </h3>
+                                        <div id="prog1" class="accordion-collapse collapse show"
+                                            data-bs-parent="#accordionProgramas">
+                                            <div class="accordion-body">
+                                                Elige según tu responsabilidad actual y el salto que buscas:
+                                                <strong>Frontline
+                                                    Leadership Excellence (6 meses)</strong> está diseñado para
+                                                supervisores y
+                                                líderes de primera línea; <strong>Strategic Execution &amp; People
+                                                    Leadership (9
+                                                    meses)</strong> para gerentes, coordinadores y mandos medios; y
+                                                <strong>Boardroom Strategic Leadership Program™ (12 meses)</strong> para
+                                                directores, empresarios y alta dirección. Si tienes duda entre dos
+                                                niveles, un
+                                                asesor académico te orienta antes de inscribirte.
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" class="form-control rounded-3 bg-light"
-                                                        id="inputCity" placeholder="Ciudad" required>
-                                                    <label for="inputCity">Ciudad</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" class="form-control rounded-3 bg-light"
-                                                        id="inputState" placeholder="Estado" required>
-                                                    <label for="inputState">Estado</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <select name="inputCountry" id="inputCountry"
-                                                        class="form-control rounded-3 bg-light" required>
-                                                        <option value="" disabled selected hidden>SELECCIONA UNA
-                                                            OPCIÓN...*
-                                                        </option>
-                                                        <option value="Afghanistan">Afghanistan</option>
-
-                                                        <option value="Åland Islands">Åland Islands</option>
-
-                                                        <option value="Albania">Albania</option>
-
-                                                        <option value="Algeria">Algeria</option>
-
-                                                        <option value="American Samoa">American Samoa</option>
-
-                                                        <option value="Andorra">Andorra</option>
-
-                                                        <option value="Angola">Angola</option>
-
-                                                        <option value="Anguilla">Anguilla</option>
-
-                                                        <option value="Antarctica">Antarctica</option>
-
-                                                        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-
-                                                        <option value="Argentina">Argentina</option>
-
-                                                        <option value="Armenia">Armenia</option>
-
-                                                        <option value="Aruba">Aruba</option>
-
-                                                        <option value="Australia">Australia</option>
-
-                                                        <option value="Austria">Austria</option>
-
-                                                        <option value="Azerbaijan">Azerbaijan</option>
-
-                                                        <option value="Bahamas">Bahamas</option>
-
-                                                        <option value="Bahrain">Bahrain</option>
-
-                                                        <option value="Bangladesh">Bangladesh</option>
-
-                                                        <option value="Barbados">Barbados</option>
-
-                                                        <option value="Belarus">Belarus</option>
-
-                                                        <option value="Belgium">Belgium</option>
-
-                                                        <option value="Belize">Belize</option>
-
-                                                        <option value="Benin">Benin</option>
-
-                                                        <option value="Bermuda">Bermuda</option>
-
-                                                        <option value="Bhutan">Bhutan</option>
-
-                                                        <option value="Bolivia">Bolivia</option>
-
-                                                        <option value="Bosnia and Herzegovina">Bosnia and Herzegovina
-                                                        </option>
-
-                                                        <option value="Botswana">Botswana</option>
-
-                                                        <option value="Bouvet Island">Bouvet Island</option>
-
-                                                        <option value="Brazil">Brazil</option>
-
-                                                        <option value="British Indian Ocean Territory">British Indian
-                                                            Ocean
-                                                            Territory</option>
-
-                                                        <option value="Brunei Darussalam">Brunei Darussalam</option>
-
-                                                        <option value="Bulgaria">Bulgaria</option>
-
-                                                        <option value="Burkina Faso">Burkina Faso</option>
-
-                                                        <option value="Burundi">Burundi</option>
-
-                                                        <option value="Cambodia">Cambodia</option>
-
-                                                        <option value="Cameroon">Cameroon</option>
-
-                                                        <option value="Canada">Canada</option>
-
-                                                        <option value="Cape Verde">Cape Verde</option>
-
-                                                        <option value="Cayman Islands">Cayman Islands</option>
-
-                                                        <option value="Central African Republic">Central African
-                                                            Republic
-                                                        </option>
-
-                                                        <option value="Chad">Chad</option>
-
-                                                        <option value="Chile">Chile</option>
-
-                                                        <option value="China">China</option>
-
-                                                        <option value="Christmas Island">Christmas Island</option>
-
-                                                        <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands
-                                                        </option>
-
-                                                        <option value="Colombia">Colombia</option>
-
-                                                        <option value="Comoros">Comoros</option>
-
-                                                        <option value="Congo">Congo</option>
-
-                                                        <option value="Congo, The Democratic Republic of The">Congo, The
-                                                            Democratic Republic of The
-                                                        </option>
-
-                                                        <option value="Cook Islands">Cook Islands</option>
-
-                                                        <option value="Costa Rica">Costa Rica</option>
-
-                                                        <option value="Cote D'ivoire">Cote D'ivoire</option>
-
-                                                        <option value="Croatia">Croatia</option>
-
-                                                        <option value="Cuba">Cuba</option>
-
-                                                        <option value="Cyprus">Cyprus</option>
-
-                                                        <option value="Czech Republic">Czech Republic</option>
-
-                                                        <option value="Denmark">Denmark</option>
-
-                                                        <option value="Djibouti">Djibouti</option>
-
-                                                        <option value="Dominica">Dominica</option>
-
-                                                        <option value="Dominican Republic">Dominican Republic</option>
-
-                                                        <option value="Ecuador">Ecuador</option>
-
-                                                        <option value="Egypt">Egypt</option>
-
-                                                        <option value="El Salvador">El Salvador</option>
-
-                                                        <option value="Equatorial Guinea">Equatorial Guinea</option>
-
-                                                        <option value="Eritrea">Eritrea</option>
-
-                                                        <option value="Estonia">Estonia</option>
-
-                                                        <option value="Ethiopia">Ethiopia</option>
-
-                                                        <option value="Falkland Islands (Malvinas)">Falkland Islands
-                                                            (Malvinas)</option>
-
-                                                        <option value="Faroe Islands">Faroe Islands</option>
-
-                                                        <option value="Fiji">Fiji</option>
-
-                                                        <option value="Finland">Finland</option>
-
-                                                        <option value="France">France</option>
-
-                                                        <option value="French Guiana">French Guiana</option>
-
-                                                        <option value="French Polynesia">French Polynesia</option>
-
-                                                        <option value="French Southern Territories">French Southern
-                                                            Territories</option>
-
-                                                        <option value="Gabon">Gabon</option>
-
-                                                        <option value="Gambia">Gambia</option>
-
-                                                        <option value="Georgia">Georgia</option>
-
-                                                        <option selected="selected" value="Germany">Germany</option>
-
-                                                        <option value="Ghana">Ghana</option>
-
-                                                        <option value="Gibraltar">Gibraltar</option>
-
-                                                        <option value="Greece">Greece</option>
-
-                                                        <option value="Greenland">Greenland</option>
-
-                                                        <option value="Grenada">Grenada</option>
-
-                                                        <option value="Guadeloupe">Guadeloupe</option>
-
-                                                        <option value="Guam">Guam</option>
-
-                                                        <option value="Guatemala">Guatemala</option>
-
-                                                        <option value="Guernsey">Guernsey</option>
-
-                                                        <option value="Guinea">Guinea</option>
-
-                                                        <option value="Guinea-bissau">Guinea-bissau</option>
-
-                                                        <option value="Guyana">Guyana</option>
-
-                                                        <option value="Haiti">Haiti</option>
-
-                                                        <option value="Heard Island and Mcdonald Islands">Heard Island
-                                                            and
-                                                            Mcdonald Islands</option>
-
-                                                        <option value="Holy See (Vatican City State)">Holy See (Vatican
-                                                            City
-                                                            State)</option>
-
-                                                        <option value="Honduras">Honduras</option>
-
-                                                        <option value="Hong Kong">Hong Kong</option>
-
-                                                        <option value="Hungary">Hungary</option>
-
-                                                        <option value="Iceland">Iceland</option>
-
-                                                        <option value="India">India</option>
-
-                                                        <option value="Indonesia">Indonesia</option>
-
-                                                        <option value="Iran, Islamic Republic of">Iran, Islamic Republic
-                                                            of
-                                                        </option>
-
-                                                        <option value="Iraq">Iraq</option>
-
-                                                        <option value="Ireland">Ireland</option>
-
-                                                        <option value="Isle of Man">Isle of Man</option>
-
-                                                        <option value="Israel">Israel</option>
-
-                                                        <option value="Italy">Italy</option>
-
-                                                        <option value="Jamaica">Jamaica</option>
-
-                                                        <option value="Japan">Japan</option>
-
-                                                        <option value="Jersey">Jersey</option>
-
-                                                        <option value="Jordan">Jordan</option>
-
-                                                        <option value="Kazakhstan">Kazakhstan</option>
-
-                                                        <option value="Kenya">Kenya</option>
-
-                                                        <option value="Kiribati">Kiribati</option>
-
-                                                        <option value="Korea, Democratic People's Republic of">Korea,
-                                                            Democratic People's Republic of
-                                                        </option>
-
-                                                        <option value="Korea, Republic of">Korea, Republic of</option>
-
-                                                        <option value="Kuwait">Kuwait</option>
-
-                                                        <option value="Kyrgyzstan">Kyrgyzstan</option>
-
-                                                        <option value="Lao People's Democratic Republic">Lao People's
-                                                            Democratic Republic</option>
-
-                                                        <option value="Latvia">Latvia</option>
-
-                                                        <option value="Lebanon">Lebanon</option>
-
-                                                        <option value="Lesotho">Lesotho</option>
-
-                                                        <option value="Liberia">Liberia</option>
-
-                                                        <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya
-                                                        </option>
-
-                                                        <option value="Liechtenstein">Liechtenstein</option>
-
-                                                        <option value="Lithuania">Lithuania</option>
-
-                                                        <option value="Luxembourg">Luxembourg</option>
-
-                                                        <option value="Macao">Macao</option>
-
-                                                        <option value="Macedonia, The Former Yugoslav Republic of">
-                                                            Macedonia, The Former Yugoslav
-                                                            Republic
-                                                            of</option>
-
-                                                        <option value="Madagascar">Madagascar</option>
-
-                                                        <option value="Malawi">Malawi</option>
-
-                                                        <option value="Malaysia">Malaysia</option>
-
-                                                        <option value="Maldives">Maldives</option>
-
-                                                        <option value="Mali">Mali</option>
-
-                                                        <option value="Malta">Malta</option>
-
-                                                        <option value="Marshall Islands">Marshall Islands</option>
-
-                                                        <option value="Martinique">Martinique</option>
-
-                                                        <option value="Mauritania">Mauritania</option>
-
-                                                        <option value="Mauritius">Mauritius</option>
-
-                                                        <option value="Mayotte">Mayotte</option>
-
-                                                        <option value="Mexico">Mexico</option>
-
-                                                        <option value="Micronesia, Federated States of">Micronesia,
-                                                            Federated States of</option>
-
-                                                        <option value="Moldova, Republic of">Moldova, Republic of
-                                                        </option>
-
-                                                        <option value="Monaco">Monaco</option>
-
-                                                        <option value="Mongolia">Mongolia</option>
-
-                                                        <option value="Montenegro">Montenegro</option>
-
-                                                        <option value="Montserrat">Montserrat</option>
-
-                                                        <option value="Morocco">Morocco</option>
-
-                                                        <option value="Mozambique">Mozambique</option>
-
-                                                        <option value="Myanmar">Myanmar</option>
-
-                                                        <option value="Namibia">Namibia</option>
-
-                                                        <option value="Nauru">Nauru</option>
-
-                                                        <option value="Nepal">Nepal</option>
-
-                                                        <option value="Netherlands">Netherlands</option>
-
-                                                        <option value="Netherlands Antilles">Netherlands Antilles
-                                                        </option>
-
-                                                        <option value="New Caledonia">New Caledonia</option>
-
-                                                        <option value="New Zealand">New Zealand</option>
-
-                                                        <option value="Nicaragua">Nicaragua</option>
-
-                                                        <option value="Niger">Niger</option>
-
-                                                        <option value="Nigeria">Nigeria</option>
-
-                                                        <option value="Niue">Niue</option>
-
-                                                        <option value="Norfolk Island">Norfolk Island</option>
-
-                                                        <option value="Northern Mariana Islands">Northern Mariana
-                                                            Islands
-                                                        </option>
-
-                                                        <option value="Norway">Norway</option>
-
-                                                        <option value="Oman">Oman</option>
-
-                                                        <option value="Pakistan">Pakistan</option>
-
-                                                        <option value="Palau">Palau</option>
-
-                                                        <option value="Palestinian Territory, Occupied">Palestinian
-                                                            Territory, Occupied</option>
-
-                                                        <option value="Panama">Panama</option>
-
-                                                        <option value="Papua New Guinea">Papua New Guinea</option>
-
-                                                        <option value="Paraguay">Paraguay</option>
-
-                                                        <option value="Peru">Peru</option>
-
-                                                        <option value="Philippines">Philippines</option>
-
-                                                        <option value="Pitcairn">Pitcairn</option>
-
-                                                        <option value="Poland">Poland</option>
-
-                                                        <option value="Portugal">Portugal</option>
-
-                                                        <option value="Puerto Rico">Puerto Rico</option>
-
-                                                        <option value="Qatar">Qatar</option>
-
-                                                        <option value="Reunion">Reunion</option>
-
-                                                        <option value="Romania">Romania</option>
-
-                                                        <option value="Russian Federation">Russian Federation</option>
-
-                                                        <option value="Rwanda">Rwanda</option>
-
-                                                        <option value="Saint Helena">Saint Helena</option>
-
-                                                        <option value="Saint Kitts and Nevis">Saint Kitts and Nevis
-                                                        </option>
-
-                                                        <option value="Saint Lucia">Saint Lucia</option>
-
-                                                        <option value="Saint Pierre and Miquelon">Saint Pierre and
-                                                            Miquelon
-                                                        </option>
-
-                                                        <option value="Saint Vincent and The Grenadines">Saint Vincent
-                                                            and
-                                                            The Grenadines</option>
-
-                                                        <option value="Samoa">Samoa</option>
-
-                                                        <option value="San Marino">San Marino</option>
-
-                                                        <option value="Sao Tome and Principe">Sao Tome and Principe
-                                                        </option>
-
-                                                        <option value="Saudi Arabia">Saudi Arabia</option>
-
-                                                        <option value="Senegal">Senegal</option>
-
-                                                        <option value="Serbia">Serbia</option>
-
-                                                        <option value="Seychelles">Seychelles</option>
-
-                                                        <option value="Sierra Leone">Sierra Leone</option>
-
-                                                        <option value="Singapore">Singapore</option>
-
-                                                        <option value="Slovakia">Slovakia</option>
-
-                                                        <option value="Slovenia">Slovenia</option>
-
-                                                        <option value="Solomon Islands">Solomon Islands</option>
-
-                                                        <option value="Somalia">Somalia</option>
-
-                                                        <option value="South Africa">South Africa</option>
-
-                                                        <option value="South Georgia and The South Sandwich Islands">
-                                                            South
-                                                            Georgia and The South
-                                                            Sandwich
-                                                            Islands</option>
-
-                                                        <option value="Spain">Spain</option>
-
-                                                        <option value="Sri Lanka">Sri Lanka</option>
-
-                                                        <option value="Sudan">Sudan</option>
-
-                                                        <option value="Suriname">Suriname</option>
-
-                                                        <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen
-                                                        </option>
-
-                                                        <option value="Swaziland">Swaziland</option>
-
-                                                        <option value="Sweden">Sweden</option>
-
-                                                        <option value="Switzerland">Switzerland</option>
-
-                                                        <option value="Syrian Arab Republic">Syrian Arab Republic
-                                                        </option>
-
-                                                        <option value="Taiwan, Province of China">Taiwan, Province of
-                                                            China
-                                                        </option>
-
-                                                        <option value="Tajikistan">Tajikistan</option>
-
-                                                        <option value="Tanzania, United Republic of">Tanzania, United
-                                                            Republic of</option>
-
-                                                        <option value="Thailand">Thailand</option>
-
-                                                        <option value="Timor-leste">Timor-leste</option>
-
-                                                        <option value="Togo">Togo</option>
-
-                                                        <option value="Tokelau">Tokelau</option>
-
-                                                        <option value="Tonga">Tonga</option>
-
-                                                        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-
-                                                        <option value="Tunisia">Tunisia</option>
-
-                                                        <option value="Turkey">Turkey</option>
-
-                                                        <option value="Turkmenistan">Turkmenistan</option>
-
-                                                        <option value="Turks and Caicos Islands">Turks and Caicos
-                                                            Islands
-                                                        </option>
-
-                                                        <option value="Tuvalu">Tuvalu</option>
-
-                                                        <option value="Uganda">Uganda</option>
-
-                                                        <option value="Ukraine">Ukraine</option>
-
-                                                        <option value="United Arab Emirates">United Arab Emirates
-                                                        </option>
-
-                                                        <option value="United Kingdom">United Kingdom</option>
-
-                                                        <option value="United States">United States</option>
-
-                                                        <option value="United States Minor Outlying Islands">United
-                                                            States
-                                                            Minor Outlying Islands
-                                                        </option>
-
-                                                        <option value="Uruguay">Uruguay</option>
-
-                                                        <option value="Uzbekistan">Uzbekistan</option>
-
-                                                        <option value="Vanuatu">Vanuatu</option>
-
-                                                        <option value="Venezuela">Venezuela</option>
-
-                                                        <option value="Viet Nam">Viet Nam</option>
-
-                                                        <option value="Virgin Islands, British">Virgin Islands, British
-                                                        </option>
-
-                                                        <option value="Virgin Islands, U.S.">Virgin Islands, U.S.
-                                                        </option>
-
-                                                        <option value="Wallis and Futuna">Wallis and Futuna</option>
-
-                                                        <option value="Western Sahara">Western Sahara</option>
-
-                                                        <option value="Yemen">Yemen</option>
-
-                                                        <option value="Zambia">Zambia</option>
-
-                                                        <option value="Zimbabwe">Zimbabwe</option>
-
-                                                    </select>
-                                                    <label for="inputCountry">País</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" class="form-control rounded-3 bg-light"
-                                                        id="inputJobTitle" placeholder="Cargo" required>
-                                                    <label for="inputJobTitle">Cargo</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" class="form-control rounded-3 bg-light"
-                                                        id="inputCompany" placeholder="Empresa" required>
-                                                    <label for="inputCompany">Empresa</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <select name="inputAsunto" id="inputAsunto"
-                                                        class="form-control rounded-3 bg-light" required>
-                                                        <option value="" disabled selected hidden>SELECCIONA UNA
-                                                            OPCIÓN...*
-                                                        </option>
-                                                        <option value="Admisión">Admisión</option>
-                                                    </select>
-                                                    <label for="inputCompany">Asunto</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <select name="field_of_study" id="field_of_study"
-                                                class="form-control rounded-3 bg-light" required>
-                                                <option value="" disabled selected hidden>SELECCIONA UNA OPCIÓN...*
-                                                </option>
-                                                <option value="PROGRAMA COHORTE-CERO PARA FUNDADORES DIRECTORES">
-                                                    PROGRAMA COHORTE-CERO
-                                                    PARA
-                                                    FUNDADORES DIRECTORES
-                                                </option>
-                                                <option value="PROGRAMA COHORTE-CERO PARA FUNDADORES MANDOS MEDIOS">
-                                                    PROGRAMA COHORTE-CERO
-                                                    PARA
-                                                    FUNDADORES MANDOS MEDIOS
-                                                </option>
-                                                <option value="PROGRAMA COHORTE-CERO PARA FUNDADORES SUPERVISORES">
-                                                    PROGRAMA COHORTE-CERO
-                                                    PARA
-                                                    FUNDADORES SUPERVISORES
-                                                </option>
-                                                <option
-                                                    value="STRATEGIC LEADERSHIP PROGRAM -
-                                                                                                                                        DIRECTORE">
-                                                    STRATEGIC
-                                                    LEADERSHIP PROGRAM -
-                                                    DIRECTORES</option>
-                                                <option
-                                                    value="STRATEGIC EXECUTION & PEOPLE LEADERSHIP PROGRAM - MANAGEMENT">
-                                                    STRATEGIC
-                                                    EXECUTION & PEOPLE LEADERSHIP PROGRAM - MANAGEMENT
-                                                </option>
-                                                <option
-                                                    value="FRONTLINE LEADERSHIP
-                                                                                                                                        EXCELLENCE PROGRAM - SUPERVISORES">
-                                                    FRONTLINE
-                                                    LEADERSHIP
-                                                    EXCELLENCE PROGRAM - SUPERVISORES</option>
-                                            </select>
-                                            <label for="inputFieldOfStudy">Área de Estudio</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control rounded-3 bg-light"
-                                                id="inputLinkedIn" placeholder="URL de tu perfil de LinkedIn">
-                                            <label for="inputLinkedIn">URL de tu perfil de LinkedIn</label>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-floating mb-3">
-                                                    <input type="password" class="form-control rounded-3 bg-light"
-                                                        id="inputPassword" placeholder="Contraseña" minlength="6"
-                                                        required>
-                                                    <label for="inputPassword">Contraseña</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating mb-3">
-                                                    <input type="password" class="form-control rounded-3 bg-light"
-                                                        id="confirmPassword" placeholder="Confirmar Contraseña"
-                                                        minlength="6" required>
-                                                    <label for="confirmPassword">Confirmar Contraseña</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="errorPassword" class="small mb-3 text-danger fw-bold"></div>
-                                        <button class="w-50 btn btn-dark-blue rounded-3 fw-bold text-center"
-                                            type="submit">Iniciar
-                                            Proceso</button>
                                     </div>
-                                </form>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#prog2">
+                                                ¿Qué pasa si no puedo asistir a una sesión en vivo?
+                                            </button>
+                                        </h3>
+                                        <div id="prog2" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionProgramas">
+                                            <div class="accordion-body">
+                                                Entendemos que surgen imprevistos operativos o viajes de negocio.
+                                                Contarás con
+                                                acceso a los materiales y grabaciones o resúmenes de apoyo de la sesión
+                                                para
+                                                ponerte al corriente, además de mantener el seguimiento de tus
+                                                herramientas y
+                                                entregables aplicados.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#prog3">
+                                                ¿Cuánto tiempo a la semana necesito dedicar?
+                                            </button>
+                                        </h3>
+                                        <div id="prog3" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionProgramas">
+                                            <div class="accordion-body">
+                                                Además de las sesiones programadas en vivo, recomendamos reservar un
+                                                bloque
+                                                semanal moderado para lectura o preparación previa y para aplicar las
+                                                herramientas o compromisos directamente en tu puesto de trabajo. La
+                                                exigencia
+                                                está pensada para ejecutivos y líderes activos sin detener tu operación
+                                                diaria.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="right-info">
-                            <ul>
-                                <li>
-                                    <h6>Teléfono Directo</h6>
-                                    <span>+52 481 155 0466</span>
-                                </li>
-                                <li>
-                                    <h6>Modalidad</h6>
-                                    <span>En línea/online/hibrida</span>
-                                </li>
-                                <li>
-                                    <h6>Ubicación / Sede</h6>
-                                    <span>Guadalajara, Jalisco, México</span>
-                                </li>
-                                <li>
-                                    <h6>Pista de aprendizaje</h6>
-                                    <span>Certificado + DC-3 STPS (en Programas)</span>
-                                    <span>Reconocimientos de Participación (en Workshops)</span>
-                                </li>
-                                <li>
-                                    <span><a class="btn-outline-light text-white"
-                                            href="https://wa.me/524811550466?text=Hola%20buen%20d%C3%ADa.%20Quiere%20llenar%20el%20formulario%20de%20Admisi%C3%B3n,%20pero%20tengo%20una%20pregunta.">Pregunta
-                                            por whatsapp</a></span>
-                                    <span></span>
-                                </li>
-                            </ul>
+
+                            <!-- TEMA 2: SOBRE LA METODOLOGÍA -->
+                            <div class="tab-pane fade" id="faq-metodologia" role="tabpanel">
+                                <div class="accordion" id="accordionMetodologia">
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#met1">
+                                                ¿Necesito tener experiencia previa con el método del caso?
+                                            </button>
+                                        </h3>
+                                        <div id="met1" class="accordion-collapse collapse show"
+                                            data-bs-parent="#accordionMetodologia">
+                                            <div class="accordion-body">
+                                                No. Te guiamos paso a paso para analizar situaciones empresariales,
+                                                identificar
+                                                supuestos, contrastar alternativas y defender decisiones. Lo importante
+                                                es tu
+                                                disposición para participar, debatir con respeto y relacionar cada caso
+                                                con tu
+                                                realidad laboral.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#met2">
+                                                ¿Cómo se evalúa el programa?
+                                            </button>
+                                        </h3>
+                                        <div id="met2" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionMetodologia">
+                                            <div class="accordion-body">
+                                                No nos limitamos a exámenes memorísticos. Evaluamos tu participación
+                                                activa, el
+                                                análisis y criterio en los casos y ejercicios, la aplicación de
+                                                herramientas
+                                                prácticas y el avance en tus compromisos o proyectos llevados a la
+                                                empresa.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#met3">
+                                                ¿Tendré acompañamiento de un mentor?
+                                            </button>
+                                        </h3>
+                                        <div id="met3" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionMetodologia">
+                                            <div class="accordion-body">
+                                                Sí. Nuestros programas incorporan guía docente, espacios de
+                                                retroalimentación y
+                                                mecanismos de mentoría o seguimiento según el diseño del programa, con
+                                                el
+                                                objetivo de ayudarte a transferir lo aprendido a tu gestión y fortalecer
+                                                tu
+                                                autonomía directiva.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TEMA 3: SOBRE CERTIFICADOS Y VALIDEZ -->
+                            <div class="tab-pane fade" id="faq-certificados" role="tabpanel">
+                                <div class="accordion" id="accordionCertificados">
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#cert1">
+                                                ¿Qué documento recibo al concluir?
+                                            </button>
+                                        </h3>
+                                        <div id="cert1" class="accordion-collapse collapse show"
+                                            data-bs-parent="#accordionCertificados">
+                                            <div class="accordion-body">
+                                                Al concluir el programa y cumplir con los requisitos académicos y de
+                                                participación establecidos, recibes una constancia o certificado emitido
+                                                por
+                                                <strong>Boardroom Business School</strong> que acredita tu formación
+                                                ejecutiva.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#cert2">
+                                                ¿Cuál es su alcance profesional?
+                                            </button>
+                                        </h3>
+                                        <div id="cert2" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionCertificados">
+                                            <div class="accordion-body">
+                                                Es un documento de educación ejecutiva y desarrollo profesional que
+                                                respalda tu
+                                                capacitación, herramientas aplicadas y participación en el programa. En
+                                                Boardroom hablamos con total claridad: se trata de formación ejecutiva
+                                                práctica
+                                                y no equivale a un grado académico oficial (licenciatura, maestría o MBA
+                                                con
+                                                RVOE) ni implica acreditaciones externas distintas a las expresamente
+                                                informadas.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TEMA 4: SOBRE PAGOS Y EMPRESAS -->
+                            <div class="tab-pane fade" id="faq-pagos" role="tabpanel">
+                                <div class="accordion" id="accordionPagos">
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#pag1">
+                                                ¿Puedo solicitar que mi empresa patrocine mi lugar?
+                                            </button>
+                                        </h3>
+                                        <div id="pag1" class="accordion-collapse collapse show"
+                                            data-bs-parent="#accordionPagos">
+                                            <div class="accordion-body">
+                                                Sí. Al iniciar tu solicitud de admisión puedes indicarnos que tu
+                                                participación
+                                                será patrocinada por tu empresa y te proporcionamos la información del
+                                                programa,
+                                                cotización o ficha ejecutiva para facilitar la autorización con
+                                                Dirección o
+                                                Recursos Humanos.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#pag2">
+                                                ¿Emiten factura?
+                                            </button>
+                                        </h3>
+                                        <div id="pag2" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionPagos">
+                                            <div class="accordion-body">
+                                                Sí, emitimos factura fiscal (CFDI) tanto para empresas como para
+                                                personas
+                                                físicas una vez confirmados los datos fiscales y el comprobante de pago
+                                                correspondiente.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#pag3">
+                                                ¿Cuál es la política de cambios o cancelaciones?
+                                            </button>
+                                        </h3>
+                                        <div id="pag3" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionPagos">
+                                            <div class="accordion-body">
+                                                Si necesitas cambiar de cohorte, transferir tu lugar a otro participante
+                                                calificado de tu organización o solicitar una cancelación antes del
+                                                inicio del
+                                                programa, nuestro equipo de admisiones revisa tu caso bajo condiciones
+                                                claras y
+                                                transparentes informadas al momento de tu inscripción.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
-                </div>
-                <br><br>
-            </div>
-            <!-- Botón Scroll to Top sin JS -->
-            <a target="_self" href="#top" class="btn btn-danger btn-lg rounded-circle" id="btn-back-to-top"
-                title="Volver arriba">
-                ↑
-            </a>
+                </section>
+
+                <!-- =========================================================
+                4. PANTALLA DIVIDIDA: TU FORMULARIO (#registroForm) + CERTEZA
+                ========================================================= -->
+                <section class="py-5 bg-white border-top" id="solicitud-inscripcion">
+                    <div class="container">
+                        <div class="row g-4 align-items-start text-start">
+
+                            <!-- COLUMNA IZQUIERDA: FORMULARIO (#registroForm) ALINEADO ARRIBA -->
+                            <div class="col-lg-7 align-self-start text-start">
+                                <div class="bbs-card p-4 p-md-5">
+                                    <!-- Formulario Único para Auth -->
+                                    <form id="registroForm" class="justify-content-center">
+                                        <!-- Tarjeta del Formulario -->
+                                        <div class="col-md-12 justify-content-center ">
+                                            <div class="card border-0 rounded-4" id="card">
+                                                <div class="card-header text-center bg-transparent border-0 pb-0">
+                                                    <h2 class="text-center fw-bold text-dark mb-3 h3" id="form-title">
+                                                        Inicio
+                                                        Proceso de Admisión
+                                                    </h2>
+                                                </div>
+                                                <input type="hidden" name="inputMensaje" id="inputMensaje"
+                                                    value="Nuevo registro en la página de Boardroom Business School">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="text" class="form-control rounded-3 bg-light"
+                                                                id="inputNombre" placeholder="Nombre" required>
+                                                            <label for="inputNombre">Nombre</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="text" class="form-control rounded-3 bg-light"
+                                                                id="inputApellido" placeholder="Apellido" required>
+                                                            <label for="inputApellido">Apellido</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="email" class="form-control rounded-3 bg-light"
+                                                                id="inputEmail" placeholder="Correo electrónico"
+                                                                required>
+                                                            <label for="inputEmail">Correo
+                                                                electrónico</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="number" class="form-control rounded-3 bg-light"
+                                                                id="inputTelefono"
+                                                                placeholder="Celular incluye código de área y Pais"
+                                                                required>
+                                                            <label for="inputTelefono">Celular</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control rounded-3 bg-light"
+                                                            id="inputCity" placeholder="Ciudad" required>
+                                                        <label for="inputCity">Ciudad</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control rounded-3 bg-light"
+                                                            id="inputState" placeholder="Estado" required>
+                                                        <label for="inputState">Estado</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <select name="inputCountry" id="inputCountry"
+                                                            class="form-control rounded-3 bg-light" required>
+                                                            <option value="" disabled selected hidden>
+                                                                SELECCIONA UNA
+                                                                OPCIÓN...*
+                                                            </option>
+                                                            <option value="Afghanistan">Afghanistan
+                                                            </option>
+
+                                                            <option value="Åland Islands">Åland Islands
+                                                            </option>
+
+                                                            <option value="Albania">Albania</option>
+
+                                                            <option value="Algeria">Algeria</option>
+
+                                                            <option value="American Samoa">American
+                                                                Samoa</option>
+
+                                                            <option value="Andorra">Andorra</option>
+
+                                                            <option value="Angola">Angola</option>
+
+                                                            <option value="Anguilla">Anguilla</option>
+
+                                                            <option value="Antarctica">Antarctica
+                                                            </option>
+
+                                                            <option value="Antigua and Barbuda">Antigua
+                                                                and Barbuda</option>
+
+                                                            <option value="Argentina">Argentina</option>
+
+                                                            <option value="Armenia">Armenia</option>
+
+                                                            <option value="Aruba">Aruba</option>
+
+                                                            <option value="Australia">Australia</option>
+
+                                                            <option value="Austria">Austria</option>
+
+                                                            <option value="Azerbaijan">Azerbaijan
+                                                            </option>
+
+                                                            <option value="Bahamas">Bahamas</option>
+
+                                                            <option value="Bahrain">Bahrain</option>
+
+                                                            <option value="Bangladesh">Bangladesh
+                                                            </option>
+
+                                                            <option value="Barbados">Barbados</option>
+
+                                                            <option value="Belarus">Belarus</option>
+
+                                                            <option value="Belgium">Belgium</option>
+
+                                                            <option value="Belize">Belize</option>
+
+                                                            <option value="Benin">Benin</option>
+
+                                                            <option value="Bermuda">Bermuda</option>
+
+                                                            <option value="Bhutan">Bhutan</option>
+
+                                                            <option value="Bolivia">Bolivia</option>
+
+                                                            <option value="Bosnia and Herzegovina">
+                                                                Bosnia and Herzegovina
+                                                            </option>
+
+                                                            <option value="Botswana">Botswana</option>
+
+                                                            <option value="Bouvet Island">Bouvet Island
+                                                            </option>
+
+                                                            <option value="Brazil">Brazil</option>
+
+                                                            <option value="British Indian Ocean Territory">
+                                                                British Indian
+                                                                Ocean
+                                                                Territory</option>
+
+                                                            <option value="Brunei Darussalam">Brunei
+                                                                Darussalam</option>
+
+                                                            <option value="Bulgaria">Bulgaria</option>
+
+                                                            <option value="Burkina Faso">Burkina Faso
+                                                            </option>
+
+                                                            <option value="Burundi">Burundi</option>
+
+                                                            <option value="Cambodia">Cambodia</option>
+
+                                                            <option value="Cameroon">Cameroon</option>
+
+                                                            <option value="Canada">Canada</option>
+
+                                                            <option value="Cape Verde">Cape Verde
+                                                            </option>
+
+                                                            <option value="Cayman Islands">Cayman
+                                                                Islands</option>
+
+                                                            <option value="Central African Republic">
+                                                                Central African
+                                                                Republic
+                                                            </option>
+
+                                                            <option value="Chad">Chad</option>
+
+                                                            <option value="Chile">Chile</option>
+
+                                                            <option value="China">China</option>
+
+                                                            <option value="Christmas Island">Christmas
+                                                                Island</option>
+
+                                                            <option value="Cocos (Keeling) Islands">
+                                                                Cocos (Keeling) Islands
+                                                            </option>
+
+                                                            <option value="Colombia">Colombia</option>
+
+                                                            <option value="Comoros">Comoros</option>
+
+                                                            <option value="Congo">Congo</option>
+
+                                                            <option value="Congo, The Democratic Republic of The">
+                                                                Congo, The
+                                                                Democratic Republic of The
+                                                            </option>
+
+                                                            <option value="Cook Islands">Cook Islands
+                                                            </option>
+
+                                                            <option value="Costa Rica">Costa Rica
+                                                            </option>
+
+                                                            <option value="Cote D'ivoire">Cote D'ivoire
+                                                            </option>
+
+                                                            <option value="Croatia">Croatia</option>
+
+                                                            <option value="Cuba">Cuba</option>
+
+                                                            <option value="Cyprus">Cyprus</option>
+
+                                                            <option value="Czech Republic">Czech
+                                                                Republic</option>
+
+                                                            <option value="Denmark">Denmark</option>
+
+                                                            <option value="Djibouti">Djibouti</option>
+
+                                                            <option value="Dominica">Dominica</option>
+
+                                                            <option value="Dominican Republic">Dominican
+                                                                Republic</option>
+
+                                                            <option value="Ecuador">Ecuador</option>
+
+                                                            <option value="Egypt">Egypt</option>
+
+                                                            <option value="El Salvador">El Salvador
+                                                            </option>
+
+                                                            <option value="Equatorial Guinea">Equatorial
+                                                                Guinea</option>
+
+                                                            <option value="Eritrea">Eritrea</option>
+
+                                                            <option value="Estonia">Estonia</option>
+
+                                                            <option value="Ethiopia">Ethiopia</option>
+
+                                                            <option value="Falkland Islands (Malvinas)">
+                                                                Falkland Islands
+                                                                (Malvinas)</option>
+
+                                                            <option value="Faroe Islands">Faroe Islands
+                                                            </option>
+
+                                                            <option value="Fiji">Fiji</option>
+
+                                                            <option value="Finland">Finland</option>
+
+                                                            <option value="France">France</option>
+
+                                                            <option value="French Guiana">French Guiana
+                                                            </option>
+
+                                                            <option value="French Polynesia">French
+                                                                Polynesia</option>
+
+                                                            <option value="French Southern Territories">
+                                                                French Southern
+                                                                Territories</option>
+
+                                                            <option value="Gabon">Gabon</option>
+
+                                                            <option value="Gambia">Gambia</option>
+
+                                                            <option value="Georgia">Georgia</option>
+
+                                                            <option selected="selected" value="Germany">
+                                                                Germany</option>
+
+                                                            <option value="Ghana">Ghana</option>
+
+                                                            <option value="Gibraltar">Gibraltar</option>
+
+                                                            <option value="Greece">Greece</option>
+
+                                                            <option value="Greenland">Greenland</option>
+
+                                                            <option value="Grenada">Grenada</option>
+
+                                                            <option value="Guadeloupe">Guadeloupe
+                                                            </option>
+
+                                                            <option value="Guam">Guam</option>
+
+                                                            <option value="Guatemala">Guatemala</option>
+
+                                                            <option value="Guernsey">Guernsey</option>
+
+                                                            <option value="Guinea">Guinea</option>
+
+                                                            <option value="Guinea-bissau">Guinea-bissau
+                                                            </option>
+
+                                                            <option value="Guyana">Guyana</option>
+
+                                                            <option value="Haiti">Haiti</option>
+
+                                                            <option value="Heard Island and Mcdonald Islands">
+                                                                Heard Island
+                                                                and
+                                                                Mcdonald Islands</option>
+
+                                                            <option value="Holy See (Vatican City State)">
+                                                                Holy See (Vatican
+                                                                City
+                                                                State)</option>
+
+                                                            <option value="Honduras">Honduras</option>
+
+                                                            <option value="Hong Kong">Hong Kong</option>
+
+                                                            <option value="Hungary">Hungary</option>
+
+                                                            <option value="Iceland">Iceland</option>
+
+                                                            <option value="India">India</option>
+
+                                                            <option value="Indonesia">Indonesia</option>
+
+                                                            <option value="Iran, Islamic Republic of">
+                                                                Iran, Islamic Republic
+                                                                of
+                                                            </option>
+
+                                                            <option value="Iraq">Iraq</option>
+
+                                                            <option value="Ireland">Ireland</option>
+
+                                                            <option value="Isle of Man">Isle of Man
+                                                            </option>
+
+                                                            <option value="Israel">Israel</option>
+
+                                                            <option value="Italy">Italy</option>
+
+                                                            <option value="Jamaica">Jamaica</option>
+
+                                                            <option value="Japan">Japan</option>
+
+                                                            <option value="Jersey">Jersey</option>
+
+                                                            <option value="Jordan">Jordan</option>
+
+                                                            <option value="Kazakhstan">Kazakhstan
+                                                            </option>
+
+                                                            <option value="Kenya">Kenya</option>
+
+                                                            <option value="Kiribati">Kiribati</option>
+
+                                                            <option value="Korea, Democratic People's Republic of">
+                                                                Korea,
+                                                                Democratic People's Republic of
+                                                            </option>
+
+                                                            <option value="Korea, Republic of">Korea,
+                                                                Republic of</option>
+
+                                                            <option value="Kuwait">Kuwait</option>
+
+                                                            <option value="Kyrgyzstan">Kyrgyzstan
+                                                            </option>
+
+                                                            <option value="Lao People's Democratic Republic">
+                                                                Lao People's
+                                                                Democratic Republic</option>
+
+                                                            <option value="Latvia">Latvia</option>
+
+                                                            <option value="Lebanon">Lebanon</option>
+
+                                                            <option value="Lesotho">Lesotho</option>
+
+                                                            <option value="Liberia">Liberia</option>
+
+                                                            <option value="Libyan Arab Jamahiriya">
+                                                                Libyan Arab Jamahiriya
+                                                            </option>
+
+                                                            <option value="Liechtenstein">Liechtenstein
+                                                            </option>
+
+                                                            <option value="Lithuania">Lithuania</option>
+
+                                                            <option value="Luxembourg">Luxembourg
+                                                            </option>
+
+                                                            <option value="Macao">Macao</option>
+
+                                                            <option value="Macedonia, The Former Yugoslav Republic of">
+                                                                Macedonia, The Former Yugoslav
+                                                                Republic
+                                                                of</option>
+
+                                                            <option value="Madagascar">Madagascar
+                                                            </option>
+
+                                                            <option value="Malawi">Malawi</option>
+
+                                                            <option value="Malaysia">Malaysia</option>
+
+                                                            <option value="Maldives">Maldives</option>
+
+                                                            <option value="Mali">Mali</option>
+
+                                                            <option value="Malta">Malta</option>
+
+                                                            <option value="Marshall Islands">Marshall
+                                                                Islands</option>
+
+                                                            <option value="Martinique">Martinique
+                                                            </option>
+
+                                                            <option value="Mauritania">Mauritania
+                                                            </option>
+
+                                                            <option value="Mauritius">Mauritius</option>
+
+                                                            <option value="Mayotte">Mayotte</option>
+
+                                                            <option value="Mexico">Mexico</option>
+
+                                                            <option value="Micronesia, Federated States of">
+                                                                Micronesia,
+                                                                Federated States of</option>
+
+                                                            <option value="Moldova, Republic of">
+                                                                Moldova, Republic of
+                                                            </option>
+
+                                                            <option value="Monaco">Monaco</option>
+
+                                                            <option value="Mongolia">Mongolia</option>
+
+                                                            <option value="Montenegro">Montenegro
+                                                            </option>
+
+                                                            <option value="Montserrat">Montserrat
+                                                            </option>
+
+                                                            <option value="Morocco">Morocco</option>
+
+                                                            <option value="Mozambique">Mozambique
+                                                            </option>
+
+                                                            <option value="Myanmar">Myanmar</option>
+
+                                                            <option value="Namibia">Namibia</option>
+
+                                                            <option value="Nauru">Nauru</option>
+
+                                                            <option value="Nepal">Nepal</option>
+
+                                                            <option value="Netherlands">Netherlands
+                                                            </option>
+
+                                                            <option value="Netherlands Antilles">
+                                                                Netherlands Antilles
+                                                            </option>
+
+                                                            <option value="New Caledonia">New Caledonia
+                                                            </option>
+
+                                                            <option value="New Zealand">New Zealand
+                                                            </option>
+
+                                                            <option value="Nicaragua">Nicaragua</option>
+
+                                                            <option value="Niger">Niger</option>
+
+                                                            <option value="Nigeria">Nigeria</option>
+
+                                                            <option value="Niue">Niue</option>
+
+                                                            <option value="Norfolk Island">Norfolk
+                                                                Island</option>
+
+                                                            <option value="Northern Mariana Islands">
+                                                                Northern Mariana
+                                                                Islands
+                                                            </option>
+
+                                                            <option value="Norway">Norway</option>
+
+                                                            <option value="Oman">Oman</option>
+
+                                                            <option value="Pakistan">Pakistan</option>
+
+                                                            <option value="Palau">Palau</option>
+
+                                                            <option value="Palestinian Territory, Occupied">
+                                                                Palestinian
+                                                                Territory, Occupied</option>
+
+                                                            <option value="Panama">Panama</option>
+
+                                                            <option value="Papua New Guinea">Papua New
+                                                                Guinea</option>
+
+                                                            <option value="Paraguay">Paraguay</option>
+
+                                                            <option value="Peru">Peru</option>
+
+                                                            <option value="Philippines">Philippines
+                                                            </option>
+
+                                                            <option value="Pitcairn">Pitcairn</option>
+
+                                                            <option value="Poland">Poland</option>
+
+                                                            <option value="Portugal">Portugal</option>
+
+                                                            <option value="Puerto Rico">Puerto Rico
+                                                            </option>
+
+                                                            <option value="Qatar">Qatar</option>
+
+                                                            <option value="Reunion">Reunion</option>
+
+                                                            <option value="Romania">Romania</option>
+
+                                                            <option value="Russian Federation">Russian
+                                                                Federation</option>
+
+                                                            <option value="Rwanda">Rwanda</option>
+
+                                                            <option value="Saint Helena">Saint Helena
+                                                            </option>
+
+                                                            <option value="Saint Kitts and Nevis">Saint
+                                                                Kitts and Nevis
+                                                            </option>
+
+                                                            <option value="Saint Lucia">Saint Lucia
+                                                            </option>
+
+                                                            <option value="Saint Pierre and Miquelon">
+                                                                Saint Pierre and
+                                                                Miquelon
+                                                            </option>
+
+                                                            <option value="Saint Vincent and The Grenadines">
+                                                                Saint Vincent
+                                                                and
+                                                                The Grenadines</option>
+
+                                                            <option value="Samoa">Samoa</option>
+
+                                                            <option value="San Marino">San Marino
+                                                            </option>
+
+                                                            <option value="Sao Tome and Principe">Sao
+                                                                Tome and Principe
+                                                            </option>
+
+                                                            <option value="Saudi Arabia">Saudi Arabia
+                                                            </option>
+
+                                                            <option value="Senegal">Senegal</option>
+
+                                                            <option value="Serbia">Serbia</option>
+
+                                                            <option value="Seychelles">Seychelles
+                                                            </option>
+
+                                                            <option value="Sierra Leone">Sierra Leone
+                                                            </option>
+
+                                                            <option value="Singapore">Singapore</option>
+
+                                                            <option value="Slovakia">Slovakia</option>
+
+                                                            <option value="Slovenia">Slovenia</option>
+
+                                                            <option value="Solomon Islands">Solomon
+                                                                Islands</option>
+
+                                                            <option value="Somalia">Somalia</option>
+
+                                                            <option value="South Africa">South Africa
+                                                            </option>
+
+                                                            <option
+                                                                value="South Georgia and The South Sandwich Islands">
+                                                                South
+                                                                Georgia and The South
+                                                                Sandwich
+                                                                Islands</option>
+
+                                                            <option value="Spain">Spain</option>
+
+                                                            <option value="Sri Lanka">Sri Lanka</option>
+
+                                                            <option value="Sudan">Sudan</option>
+
+                                                            <option value="Suriname">Suriname</option>
+
+                                                            <option value="Svalbard and Jan Mayen">
+                                                                Svalbard and Jan Mayen
+                                                            </option>
+
+                                                            <option value="Swaziland">Swaziland</option>
+
+                                                            <option value="Sweden">Sweden</option>
+
+                                                            <option value="Switzerland">Switzerland
+                                                            </option>
+
+                                                            <option value="Syrian Arab Republic">Syrian
+                                                                Arab Republic
+                                                            </option>
+
+                                                            <option value="Taiwan, Province of China">
+                                                                Taiwan, Province of
+                                                                China
+                                                            </option>
+
+                                                            <option value="Tajikistan">Tajikistan
+                                                            </option>
+
+                                                            <option value="Tanzania, United Republic of">
+                                                                Tanzania, United
+                                                                Republic of</option>
+
+                                                            <option value="Thailand">Thailand</option>
+
+                                                            <option value="Timor-leste">Timor-leste
+                                                            </option>
+
+                                                            <option value="Togo">Togo</option>
+
+                                                            <option value="Tokelau">Tokelau</option>
+
+                                                            <option value="Tonga">Tonga</option>
+
+                                                            <option value="Trinidad and Tobago">Trinidad
+                                                                and Tobago</option>
+
+                                                            <option value="Tunisia">Tunisia</option>
+
+                                                            <option value="Turkey">Turkey</option>
+
+                                                            <option value="Turkmenistan">Turkmenistan
+                                                            </option>
+
+                                                            <option value="Turks and Caicos Islands">
+                                                                Turks and Caicos
+                                                                Islands
+                                                            </option>
+
+                                                            <option value="Tuvalu">Tuvalu</option>
+
+                                                            <option value="Uganda">Uganda</option>
+
+                                                            <option value="Ukraine">Ukraine</option>
+
+                                                            <option value="United Arab Emirates">United
+                                                                Arab Emirates
+                                                            </option>
+
+                                                            <option value="United Kingdom">United
+                                                                Kingdom</option>
+
+                                                            <option value="United States">United States
+                                                            </option>
+
+                                                            <option value="United States Minor Outlying Islands">
+                                                                United
+                                                                States
+                                                                Minor Outlying Islands
+                                                            </option>
+
+                                                            <option value="Uruguay">Uruguay</option>
+
+                                                            <option value="Uzbekistan">Uzbekistan
+                                                            </option>
+
+                                                            <option value="Vanuatu">Vanuatu</option>
+
+                                                            <option value="Venezuela">Venezuela</option>
+
+                                                            <option value="Viet Nam">Viet Nam</option>
+
+                                                            <option value="Virgin Islands, British">
+                                                                Virgin Islands, British
+                                                            </option>
+
+                                                            <option value="Virgin Islands, U.S.">Virgin
+                                                                Islands, U.S.
+                                                            </option>
+
+                                                            <option value="Wallis and Futuna">Wallis and
+                                                                Futuna</option>
+
+                                                            <option value="Western Sahara">Western
+                                                                Sahara</option>
+
+                                                            <option value="Yemen">Yemen</option>
+
+                                                            <option value="Zambia">Zambia</option>
+
+                                                            <option value="Zimbabwe">Zimbabwe</option>
+
+                                                        </select>
+                                                        <label for="inputCountry">País</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control rounded-3 bg-light"
+                                                            id="inputJobTitle" placeholder="Cargo" required>
+                                                        <label for="inputJobTitle">Cargo</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control rounded-3 bg-light"
+                                                            id="inputCompany" placeholder="Empresa" required>
+                                                        <label for="inputCompany">Empresa</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-floating mb-3">
+                                                        <select name="inputAsunto" id="inputAsunto"
+                                                            class="form-control rounded-3 bg-light" required>
+                                                            <option value="" disabled selected hidden>
+                                                                SELECCIONA UNA
+                                                                OPCIÓN...*
+                                                            </option>
+                                                            <option value="Admisión">Admisión</option>
+                                                        </select>
+                                                        <label for="inputCompany">Asunto</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <select name="field_of_study" id="field_of_study"
+                                                    class="form-control rounded-3 bg-light" required>
+                                                    <option value="" disabled selected hidden>SELECCIONA
+                                                        UNA OPCIÓN...*
+                                                    </option>
+                                                    <option value="PROGRAMA COHORTE-CERO PARA FUNDADORES DIRECTORES">
+                                                        PROGRAMA COHORTE-CERO
+                                                        PARA
+                                                        FUNDADORES DIRECTORES
+                                                    </option>
+                                                    <option
+                                                        value="STRATEGIC LEADERSHIP PROGRAM -
+                                                                                                                                                                    DIRECTORE">
+                                                        STRATEGIC
+                                                        LEADERSHIP PROGRAM -
+                                                        DIRECTORES</option>
+                                                    <option
+                                                        value="STRATEGIC EXECUTION & PEOPLE LEADERSHIP PROGRAM - MANAGEMENT">
+                                                        STRATEGIC
+                                                        EXECUTION & PEOPLE LEADERSHIP PROGRAM -
+                                                        MANAGEMENT
+                                                    </option>
+                                                    <option
+                                                        value="FRONTLINE LEADERSHIP
+                                                                                                                                                                    EXCELLENCE PROGRAM - SUPERVISORES">
+                                                        FRONTLINE
+                                                        LEADERSHIP
+                                                        EXCELLENCE PROGRAM - SUPERVISORES</option>
+                                                </select>
+                                                <label for="inputFieldOfStudy">Área de Estudio</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control rounded-3 bg-light"
+                                                    id="inputLinkedIn" placeholder="URL de tu perfil de LinkedIn">
+                                                <label for="inputLinkedIn">URL de tu perfil de
+                                                    LinkedIn</label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="password" class="form-control rounded-3 bg-light"
+                                                            id="inputPassword" placeholder="Contraseña" minlength="6"
+                                                            required>
+                                                        <label for="inputPassword">Contraseña</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="password" class="form-control rounded-3 bg-light"
+                                                            id="confirmPassword" placeholder="Confirmar Contraseña"
+                                                            minlength="6" required>
+                                                        <label for="confirmPassword">Confirmar
+                                                            Contraseña</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="errorPassword" class="small mb-3 text-danger fw-bold"></div>
+                                            <button class="w-50 btn btn-dark-blue rounded-3 fw-bold text-center"
+                                                type="submit">Iniciar
+                                                Proceso</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <!-- COLUMNA DERECHA: RESUMEN DE CERTEZA Y CERO RIESGO -->
+                            <div class="col-lg-5">
+                                <aside class="bbs-certainty-box p-4 p-md-5">
+                                    <span class="badge text-bg-light border text-dark mb-2">Resumen del programa</span>
+                                    <h3 class="h5 fw-bold mb-2" id="summaryProgramTitle"
+                                        style="color: var(--bbs-navy);">
+                                        Frontline Leadership Excellence
+                                    </h3>
+                                    <p class="small text-muted mb-3" id="summaryProgramFocus">
+                                        Desarrolla liderazgo operativo, comunicación, delegación y seguimiento para
+                                        supervisores
+                                        y líderes de primera línea.
+                                    </p>
+
+                                    <div class="d-flex flex-wrap gap-2 mb-4">
+                                        <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2"
+                                            id="summaryDuration">
+                                            <i class="far fa-clock me-1"></i> Duración: 6 meses
+                                        </span>
+                                        <span class="badge bg-info-subtle text-info-emphasis px-3 py-2"
+                                            id="summaryModality">
+                                            <i class="fas fa-video me-1"></i> Modalidad: Online en vivo
+                                        </span>
+                                    </div>
+
+                                    <hr>
+
+                                    <h4 class="h6 fw-bold mb-3" style="color: var(--bbs-navy);">Qué incluye tu
+                                        inscripción</h4>
+                                    <ul class="list-unstyled small mb-4">
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Sesiones
+                                                en
+                                                vivo:</strong> interacción directa, análisis y discusión guiada.</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Casos y
+                                                materiales:</strong> situaciones empresariales, lecturas y guías de
+                                            estudio.
+                                        </li>
+                                        <li class="mb-2"><i
+                                                class="fas fa-check text-success me-2"></i><strong>Herramientas
+                                                aplicables:</strong> modelos y matrices listos para usar en tu rol.</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Mentoría
+                                                y
+                                                seguimiento:</strong> retroalimentación y transferencia a tu puesto.
+                                        </li>
+                                        <li class="mb-2"><i
+                                                class="fas fa-check text-success me-2"></i><strong>Constancia:</strong>
+                                            acreditación emitida por Boardroom Business School.</li>
+                                        <li class="mb-0"><i class="fas fa-check text-success me-2"></i><strong>Acceso a
+                                                comunidad:</strong> intercambio entre pares y red empresarial.</li>
+                                    </ul>
+
+                                    <div class="p-3 rounded-3 bg-white border mb-4">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <i class="fas fa-headset text-warning fs-5 mt-1"></i>
+                                            <p class="small mb-0 text-dark">
+                                                <strong>Atención humana garantizada:</strong> Al enviar tu solicitud, un
+                                                asesor
+                                                académico te contactará en menos de 24 horas hábiles para confirmar tu
+                                                lugar,
+                                                resolver cualquier duda y enviarte tu enlace de pago o factura.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <a href="https://wa.me/523310646668?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20ayuda%20con%20mi%20inscripci%C3%B3n%20en%20Boardroom%20Business%20School."
+                                            target="_blank" rel="noopener noreferrer"
+                                            class="btn btn-success fw-semibold py-2">
+                                            <i class="fab fa-whatsapp me-2 fs-5 align-middle"></i>
+                                            ¿Prefieres inscribirte con ayuda ahora mismo? Escríbenos por WhatsApp
+                                        </a>
+                                    </div>
+                                </aside>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Botón Scroll to Top sin JS -->
+                <a target="_self" href="#top" class="btn btn-danger btn-lg rounded-circle" id="btn-back-to-top"
+                    title="Volver arriba">
+                    ↑
+                </a>
+
         </section>
+
+
 
 
 
@@ -1258,6 +1829,100 @@
         <!-- Lógica de control -->
         <script src="auth-check.js"></script>
         <script src="assets/js/register.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const yearEl = document.getElementById('current-year');
+                if (yearEl) {
+                    yearEl.textContent = new Date().getFullYear();
+                }
+
+                const programDetails = {
+                    frontline: {
+                        title: 'Frontline Leadership Excellence',
+                        duration: 'Duración: 6 meses',
+                        modality: 'Modalidad: Online en vivo',
+                        focus: 'Desarrolla liderazgo operativo, comunicación, delegación y seguimiento para supervisores y líderes de primera línea.'
+                    },
+                    execution: {
+                        title: 'Strategic Execution & People Leadership',
+                        duration: 'Duración: 9 meses',
+                        modality: 'Modalidad: Online en vivo',
+                        focus: 'Conecta estrategia, KPIs, coordinación entre áreas y desarrollo de equipos para gerentes y mandos medios.'
+                    },
+                    strategic: {
+                        title: 'Boardroom Strategic Leadership Program™',
+                        duration: 'Duración: 12 meses',
+                        modality: 'Modalidad: Online en vivo',
+                        focus: 'Fortalece el criterio directivo, la toma de decisiones bajo presión y la transformación sostenible para alta dirección y empresarios.'
+                    }
+                };
+
+                const programSelectSummary = document.getElementById('programSelectSummary');
+                const inputMensaje = document.getElementById('inputMensaje');
+                const statusAlert = document.getElementById('registroStatusAlert');
+
+                function updateSummaryBox(key) {
+                    const info = programDetails[key] || programDetails.frontline;
+
+                    const titleEl = document.getElementById('summaryProgramTitle');
+                    const durationEl = document.getElementById('summaryDuration');
+                    const modalityEl = document.getElementById('summaryModality');
+                    const focusEl = document.getElementById('summaryProgramFocus');
+
+                    if (titleEl) titleEl.textContent = info.title;
+                    if (durationEl) durationEl.innerHTML = `<i class="far fa-clock me-1"></i> ${info.duration}`;
+                    if (modalityEl) modalityEl.innerHTML = `<i class="fas fa-video me-1"></i> ${info.modality}`;
+                    if (focusEl) focusEl.textContent = info.focus;
+                    if (inputMensaje) {
+                        inputMensaje.value = `Solicitud de admisión en Boardroom Business School - Programa: ${info.title}`;
+                    }
+                }
+
+                if (programSelectSummary) {
+                    programSelectSummary.addEventListener('change', (e) => updateSummaryBox(e.target.value));
+                }
+
+                // Delegación de eventos para botones "Inscribirme" en #calendario-cohortes
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.select-program-btn');
+                    if (!btn) return;
+
+                    const key = btn.getAttribute('data-program');
+                    if (programSelectSummary) {
+                        programSelectSummary.value = key;
+                    }
+                    updateSummaryBox(key);
+
+                    const targetEl =
+                        document.getElementById('solicitud-inscripcion') ||
+                        document.getElementById('registroForm') ||
+                        document.getElementById('contact');
+
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+
+                // Consulta opcional contra tu endpoint /functions/api/login.js
+                window.consultarContactoLogin = async function (email) {
+                    const loginUrl = typeof LOGIN_API_URL !== 'undefined' ? LOGIN_API_URL : '/api/login';
+                    const res = await fetch(loginUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    return res.json();
+                };
+
+                window.showAlert = function (type, htmlMessage) {
+                    if (!statusAlert) return;
+                    statusAlert.className = `alert alert-${type} mt-3 mb-0`;
+                    statusAlert.innerHTML = htmlMessage;
+                    statusAlert.classList.remove('d-none');
+                };
+            });
+        </script>
     </body>
 
 </html>

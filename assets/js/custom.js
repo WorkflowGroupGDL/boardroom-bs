@@ -319,3 +319,19 @@ function getIp(callback) {
 }
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.header-area');
+    const scrollThreshold = 60;
+
+    function toggleHeaderLogoOnScroll() {
+      if (!header) return;
+      if (window.scrollY > scrollThreshold) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+    }
+
+    toggleHeaderLogoOnScroll();
+    window.addEventListener('scroll', toggleHeaderLogoOnScroll, { passive: true });
+  });
